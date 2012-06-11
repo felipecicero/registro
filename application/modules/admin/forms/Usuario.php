@@ -31,7 +31,7 @@ class Admin_Form_Usuario extends Zend_Form
     		  ->setAttrib('maxlength', '60')
     		  ->addValidator('Db_NoRecordExists', false,
                  array(
-                     'table' => 'cap_usuarios',
+                     'table' => 'car_usuarios',
                      'field' => 'email'
                  )
              );
@@ -46,7 +46,7 @@ class Admin_Form_Usuario extends Zend_Form
     	      ->setAttrib('maxlength', '20')
     	      ->addValidator('Db_NoRecordExists', false,
                  array(
-                     'table' => 'cap_usuarios',
+                     'table' => 'car_usuarios',
                      'field' => 'login'
                  )
              	);

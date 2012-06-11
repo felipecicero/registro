@@ -64,6 +64,10 @@
             <modelFile modelName="Cartorio"/>
             <modelFile modelName="Usuario"/>
             <modelFile modelName="Perfil"/>
+            <modelFile modelName="Acl"/>
+            <modelFile modelName="Permissao"/>
+            <modelFile modelName="Recurso"/>
+            <modelFile modelName="Papel"/>
           </modelsDirectory>
           <viewsDirectory>
             <viewScriptsDirectory>

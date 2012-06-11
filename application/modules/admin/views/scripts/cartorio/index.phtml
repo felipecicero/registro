@@ -1,4 +1,39 @@
-<br /><br />
-<div id="view-content">
-	<p>View script for controller <b>Cartorio</b> and script/action name <b>index</b></p>
-</div>
+<a href="<?php echo $this->url(array('module' => 'registro', 'controller' => 'index', 'action' => 'index'), null, true); ?>" id="back-link">voltar</a>
+
+<h1>Administração</h1>
+<hr />
+<div id="messenger"><?php echo $this->flashMessenger();?></div>
+
+<ul id="menu-grid">
+	<?php $m_cartorio = new Cartorio();
+		  $cartorio = $m_cartorio->getCartorio();
+		  //print_r($cartorio->idCartorio);exit;
+		  if(!isset($cartorio->idCartorio) ){
+	?>	
+	<li>
+		<a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'cartorio','action' => 'cadastrarcartorio'), null, true); ?>" title="Cadastrar dados a respeito do cartório.">
+			<img src="<?php echo $this->baseUrl(); ?>/css/icons/cartorio.png" />
+			<br/>
+			Cadastrar Cartório
+		</a>
+	</li>
+	<?php } ?>
+	<li>
+		<a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'cartorio','action' => 'bancos'), null, true); ?>" title="Inserir bancos, agências e contas bancárias.">
+			<img src="<?php echo $this->baseUrl(); ?>/css/icons/bancos.png" />
+			<br/>
+			Bancos e contas
+		</a>
+	</li>
+	
+	
+	<li>
+		<a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'cartorio','action' => 'editarcartorio'), null, true); ?>" title="Editar dados a respeito do cartório.">
+			<img src="<?php echo $this->baseUrl(); ?>/css/icons/cartorio.png" />
+			<br/>
+			Editar Cartório
+		</a>
+	</li>
+	
+</ul>
+

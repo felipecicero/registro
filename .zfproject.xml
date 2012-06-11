@@ -37,6 +37,16 @@
             </controllerFile>
             <controllerFile controllerName="Cartorio">
               <actionMethod actionName="index"/>
+              <actionMethod actionName="cadastrarcartorio"/>
+              <actionMethod actionName="editarcartorio"/>
+              <actionMethod actionName="bancos"/>
+              <actionMethod actionName="cadastrarbanco"/>
+              <actionMethod actionName="editarbanco"/>
+              <actionMethod actionName="deletarbanco"/>
+              <actionMethod actionName="cadastraragencia"/>
+              <actionMethod actionName="deletaragencia"/>
+              <actionMethod actionName="editaragencia"/>
+              <actionMethod actionName="agencias"/>
             </controllerFile>
             <controllerFile controllerName="Perfil">
               <actionMethod actionName="index"/>
@@ -58,6 +68,9 @@
             <formFile formName="Login"/>
             <formFile formName="Editarusuario"/>
             <formFile formName="Perfil"/>
+            <formFile formName="Cartorio"/>
+            <formFile formName="Banco"/>
+            <formFile formName="Agencia"/>
           </formsDirectory>
           <layoutsDirectory enabled="false"/>
           <modelsDirectory>
@@ -68,6 +81,10 @@
             <modelFile modelName="Permissao"/>
             <modelFile modelName="Recurso"/>
             <modelFile modelName="Papel"/>
+            <modelFile modelName="Estado"/>
+            <modelFile modelName="Banco"/>
+            <modelFile modelName="Cidade"/>
+            <modelFile modelName="Agencia"/>
           </modelsDirectory>
           <viewsDirectory>
             <viewScriptsDirectory>
@@ -115,6 +132,36 @@
               </viewControllerScriptsDirectory>
               <viewControllerScriptsDirectory forControllerName="Usuario">
                 <viewScriptFile forActionName="usuarios"/>
+              </viewControllerScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="Cartorio">
+                <viewScriptFile forActionName="cadastrarcartorio"/>
+              </viewControllerScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="Cartorio">
+                <viewScriptFile forActionName="editarcartorio"/>
+              </viewControllerScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="Cartorio">
+                <viewScriptFile forActionName="bancos"/>
+              </viewControllerScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="Cartorio">
+                <viewScriptFile forActionName="cadastrarbanco"/>
+              </viewControllerScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="Cartorio">
+                <viewScriptFile forActionName="editarbanco"/>
+              </viewControllerScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="Cartorio">
+                <viewScriptFile forActionName="deletarbanco"/>
+              </viewControllerScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="Cartorio">
+                <viewScriptFile forActionName="cadastraragencia"/>
+              </viewControllerScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="Cartorio">
+                <viewScriptFile forActionName="deletaragencia"/>
+              </viewControllerScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="Cartorio">
+                <viewScriptFile forActionName="editaragencia"/>
+              </viewControllerScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="Cartorio">
+                <viewScriptFile forActionName="agencias"/>
               </viewControllerScriptsDirectory>
             </viewScriptsDirectory>
             <viewHelpersDirectory/>

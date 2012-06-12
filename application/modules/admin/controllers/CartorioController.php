@@ -16,8 +16,11 @@ class Admin_CartorioController extends Zend_Controller_Action
     private $model_custa = null;
 
     private $model_feriado = null;
+
+    private $model_abrangencia = null;
 	
-	private $model_abrangencia = null;
+	private $model_selos = null;	
+	
 
     public function init()
     {
@@ -42,6 +45,7 @@ class Admin_CartorioController extends Zend_Controller_Action
 		$this->model_emolumento = new Emolumento();
 		$this->model_feriado = new Feriado();
 		$this->model_abrangencia = new Abrangencias();
+		$this->model_selos = new Selo();
 		
 		$this->view->setEncoding('ISO-8859-1');//para nao dar problemas com acentuação dos formulários
     }
@@ -878,5 +882,108 @@ class Admin_CartorioController extends Zend_Controller_Action
 
         $this->view->form = $form;
     }
+
+    public function selosAction()
+    {    	
+    	$select =  $this -> model_selos -> select() 
+                   		 -> setIntegrityCheck(false);
+        
+    	$data = $this -> model_selos -> fetchAll($select);
+    	
+        $this -> view -> selos = $data;
+    }
+
+    public function cadastrarseloAction()
+    {
+        $form = new Admin_Form_Selo();
+
+        if ( $this->_request->isPost()){
+        	
+        	$data = array(
+        		'tipo' => str_replace(',', '.', str_replace('.', '', $this->_request->getPost('tipo'))),
+				'serie' => str_replace(',', '.', str_replace('.', '', $this->_request->getPost('serie'))),
+				'numeroinicial' => str_replace(',', '.', str_replace('.', '', $this->_request->getPost('numeroinicial'))),
+        		'numerofinal' => str_replace(',', '.', str_replace('.', '', $this->_request->getPost('numerofinal'))),
+        		'notafiscal' => str_replace(',', '.', str_replace('.', '', $this->_request->getPost('notafiscal'))),
+        		'data_nota' => str_replace(',', '.', str_replace('.', '', $this->_request->getPost('data_nota'))),
+        		'data_inclusao' => date('Y-m-d h:i:s'), 
+        		'quantidade' => $this->_request->getPost('numerofinal') - $this->_request->getPost('numeroinicial')
+            );
+            
+            if($data['numeroinicial'] >= $data['numerofinal']){
+        			ZendX_JQuery_FlashMessenger::addMessage('O número inicial não deve ser maior que o final.', 'error');    	
+            }
+            else if($this->model_selos->insert($data))
+           			 ZendX_JQuery_FlashMessenger::addMessage('Dados cadastrados com sucesso.');
+        	else 
+		           	 ZendX_JQuery_FlashMessenger::addMessage('Problemas ao cadastrar os dados.', 'error');
+        }
+        
+        $this->view->form = $form;
+    }
+
+    public function editarseloAction()
+    {
+        $form = new Admin_Form_Selo();
+    	
+   		if ( $this->_request->isPost()){           
+            $data = array(
+        		'tipo' => str_replace(',', '.', str_replace('.', '', $this->_request->getPost('tipo'))),
+				'serie' => str_replace(',', '.', str_replace('.', '', $this->_request->getPost('serie'))),
+				'numeroinicial' => str_replace(',', '.', str_replace('.', '', $this->_request->getPost('numeroinicial'))),
+        		'numerofinal' => str_replace(',', '.', str_replace('.', '', $this->_request->getPost('numerofinal'))),
+        		'notafiscal' => str_replace(',', '.', str_replace('.', '', $this->_request->getPost('notafiscal'))),
+        		'data_nota' => str_replace(',', '.', str_replace('.', '', $this->_request->getPost('data_nota')))
+            );
+
+            if($data['numeroinicial'] >= $data['numerofinal']){
+        			ZendX_JQuery_FlashMessenger::addMessage('O número inicial não deve ser maior que o final.', 'error');    	
+            }
+            else if ( $form->isValid($data) )
+            {
+                if($this->model_selos->update($data, "idSelos = " . (int) $this->_request->getPost('idSelos')))
+	            		ZendX_JQuery_FlashMessenger::addMessage('Dados alterados com sucesso.');
+	            else 
+	            		ZendX_JQuery_FlashMessenger::addMessage('Problemas ao alterados os dados.', 'error');
+            	
+                $this->_redirect('/admin/cartorio/selos'); 
+            }
+        }
+        
+    	$id      = (int) $this->_getParam('idSelos');     	    	      
+        $result  = $this->model_selos->find($id);
+        $data    = $result->current(); 
+        //$this->_helper->Util->_pvar($data);        
+		//$data['valor'] = str_replace(',', '.', str_replace('.', '', $data['valor']));
+		
+        if ( null === $data ){
+            ZendX_JQuery_FlashMessenger::addMessage('Lote não encontrado!.', 'notice');
+            return false;
+        }
+        
+        $form->setAsEditForm($data);
+
+        $this->view->form = $form;
+    }
+
+    public function deletarseloAction()
+    {
+       // verificamos se realmente foi informado algum ID
+        if ( $this->_hasParam('idSelos') == false )
+        {
+            $this->_redirect('admin/cartorio/selos');
+        }
+ 
+        $id = (int) $this->_getParam('idSelos');
+        $where = $this->model_custa->getAdapter()->quoteInto('idSelos = ?', $id);
+        if($this->model_selos->delete($where)){
+        	ZendX_JQuery_FlashMessenger::addMessage('Lote de selos deletado com sucesso.');        
+        }
+        else{
+        	ZendX_JQuery_FlashMessenger::addMessage('Problemas ao deletar os dados.', 'error');
+        }
+        $this->_redirect('admin/cartorio/selos');
+    }
+
 
 }

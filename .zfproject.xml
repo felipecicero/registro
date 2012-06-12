@@ -68,6 +68,10 @@
               <actionMethod actionName="cadastrarabrangencia"/>
               <actionMethod actionName="deletarabrangencia"/>
               <actionMethod actionName="editarabrangencia"/>
+              <actionMethod actionName="selos"/>
+              <actionMethod actionName="cadastrarselo"/>
+              <actionMethod actionName="editarselo"/>
+              <actionMethod actionName="deletarselo"/>
             </controllerFile>
             <controllerFile controllerName="Perfil">
               <actionMethod actionName="index"/>
@@ -97,6 +101,7 @@
             <formFile formName="Custa"/>
             <formFile formName="Feriado"/>
             <formFile formName="Abrangencias"/>
+            <formFile formName="Selo"/>
           </formsDirectory>
           <layoutsDirectory enabled="false"/>
           <modelsDirectory>
@@ -117,6 +122,8 @@
             <modelFile modelName="Vigencia"/>
             <modelFile modelName="Feriado"/>
             <modelFile modelName="Abrangencias"/>
+            <modelFile modelName="Selo"/>
+            <modelFile modelName="ControleSelo"/>
           </modelsDirectory>
           <viewsDirectory>
             <viewScriptsDirectory>
@@ -254,6 +261,18 @@
               </viewControllerScriptsDirectory>
               <viewControllerScriptsDirectory forControllerName="Cartorio">
                 <viewScriptFile forActionName="editarabrangencia"/>
+              </viewControllerScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="Cartorio">
+                <viewScriptFile forActionName="selos"/>
+              </viewControllerScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="Cartorio">
+                <viewScriptFile forActionName="cadastrarselo"/>
+              </viewControllerScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="Cartorio">
+                <viewScriptFile forActionName="editarselo"/>
+              </viewControllerScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="Cartorio">
+                <viewScriptFile forActionName="deletarselo"/>
               </viewControllerScriptsDirectory>
             </viewScriptsDirectory>
             <viewHelpersDirectory/>

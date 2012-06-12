@@ -19,7 +19,6 @@
           <layoutScriptFile layoutName="layout"/>
         </layoutScriptsDirectory>
       </layoutsDirectory>
-      <modelsDirectory/>
       <modulesDirectory>
         <moduleDirectory moduleName="admin">
           <apisDirectory enabled="false"/>
@@ -47,6 +46,20 @@
               <actionMethod actionName="deletaragencia"/>
               <actionMethod actionName="editaragencia"/>
               <actionMethod actionName="agencias"/>
+              <actionMethod actionName="getagencias"/>
+              <actionMethod actionName="getcidades"/>
+              <actionMethod actionName="vigencias"/>
+              <actionMethod actionName="cadastrarvigencia"/>
+              <actionMethod actionName="deletarvigencia"/>
+              <actionMethod actionName="editarvigencia"/>
+              <actionMethod actionName="emolumentos"/>
+              <actionMethod actionName="cadastraremolumento"/>
+              <actionMethod actionName="editaremolumento"/>
+              <actionMethod actionName="deletaremolumento"/>
+              <actionMethod actionName="custas"/>
+              <actionMethod actionName="cadastrarcusta"/>
+              <actionMethod actionName="editarcusta"/>
+              <actionMethod actionName="deletarcusta"/>
             </controllerFile>
             <controllerFile controllerName="Perfil">
               <actionMethod actionName="index"/>
@@ -71,6 +84,9 @@
             <formFile formName="Cartorio"/>
             <formFile formName="Banco"/>
             <formFile formName="Agencia"/>
+            <formFile formName="Vigencia"/>
+            <formFile formName="Emolumento"/>
+            <formFile formName="Custa"/>
           </formsDirectory>
           <layoutsDirectory enabled="false"/>
           <modelsDirectory>
@@ -85,6 +101,10 @@
             <modelFile modelName="Banco"/>
             <modelFile modelName="Cidade"/>
             <modelFile modelName="Agencia"/>
+            <modelFile modelName="Endereco"/>
+            <modelFile modelName="Custa"/>
+            <modelFile modelName="Emolumento"/>
+            <modelFile modelName="Vigencia"/>
           </modelsDirectory>
           <viewsDirectory>
             <viewScriptsDirectory>
@@ -163,6 +183,42 @@
               <viewControllerScriptsDirectory forControllerName="Cartorio">
                 <viewScriptFile forActionName="agencias"/>
               </viewControllerScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="Cartorio">
+                <viewScriptFile forActionName="vigencias"/>
+              </viewControllerScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="Cartorio">
+                <viewScriptFile forActionName="cadastrarvigencia"/>
+              </viewControllerScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="Cartorio">
+                <viewScriptFile forActionName="deletarvigencia"/>
+              </viewControllerScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="Cartorio">
+                <viewScriptFile forActionName="editarvigencia"/>
+              </viewControllerScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="Cartorio">
+                <viewScriptFile forActionName="emolumentos"/>
+              </viewControllerScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="Cartorio">
+                <viewScriptFile forActionName="cadastraremolumento"/>
+              </viewControllerScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="Cartorio">
+                <viewScriptFile forActionName="editaremolumento"/>
+              </viewControllerScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="Cartorio">
+                <viewScriptFile forActionName="deletaremolumento"/>
+              </viewControllerScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="Cartorio">
+                <viewScriptFile forActionName="custas"/>
+              </viewControllerScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="Cartorio">
+                <viewScriptFile forActionName="cadastrarcusta"/>
+              </viewControllerScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="Cartorio">
+                <viewScriptFile forActionName="editarcusta"/>
+              </viewControllerScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="Cartorio">
+                <viewScriptFile forActionName="deletarcusta"/>
+              </viewControllerScriptsDirectory>
             </viewScriptsDirectory>
             <viewHelpersDirectory/>
             <viewFiltersDirectory/>
@@ -189,6 +245,12 @@
           </viewControllerScriptsDirectory>
           <viewControllerScriptsDirectory forControllerName="Error">
             <viewScriptFile forActionName="error"/>
+          </viewControllerScriptsDirectory>
+          <viewControllerScriptsDirectory forControllerName="Cartorio">
+            <viewScriptFile forActionName="getagencias"/>
+          </viewControllerScriptsDirectory>
+          <viewControllerScriptsDirectory forControllerName="Cartorio">
+            <viewScriptFile forActionName="getcidades"/>
           </viewControllerScriptsDirectory>
         </viewScriptsDirectory>
         <viewHelpersDirectory/>

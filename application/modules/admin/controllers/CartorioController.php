@@ -8,6 +8,12 @@ class Admin_CartorioController extends Zend_Controller_Action
     private $model_cartorio = null;
 
     private $model_agencia = null;
+	
+	private $model_vigencia = null;
+	
+	private $model_emolumento = null;
+	
+	private $model_custa = null;
 
     public function init()
     {
@@ -24,9 +30,14 @@ class Admin_CartorioController extends Zend_Controller_Action
 	    
        	parent::init();
 		
+		$this->model_vigencia = new Vigencia();
+		$this->model_custa = new Custa();
 		$this->model_cartorio = new Cartorio();
 		$this->model_banco = new Banco();
 		$this->model_agencia = new Agencia();
+		$this->model_emolumento = new Emolumento();
+		
+		 $this->view->setEncoding('ISO-8859-1');//para nao dar problemas com acentuação dos formulários
     }
 
     public function indexAction()
@@ -333,8 +344,366 @@ class Admin_CartorioController extends Zend_Controller_Action
         $this->view->agencias = $data;
     }
 
+    public function getagenciasAction()
+    {
+       $this->_helper->layout ()->disableLayout ();
+	   $this->_helper->viewRenderer->setNoRender ();
+
+	       	
+	   $id = (int) $this->_getParam('idBanco');
+	   $id = $_GET['id'];
+       $model_agencia = new Agencia();
+       $agencias = $model_agencia->findForSelect($id)->toArray();
+       $combo = "<option value='0'>Carregando ... </option>";
+
+       if (count($agencias) > 0) {           
+       	   $combo = array ();
+           $combo .= '<option value = "">Selecione a Agência</option>';
+           foreach ( $agencias as $lista ) {           	
+                  		$combo .= '<option value="' . $lista ['idAgencia'] . '">' . $lista['codigo'] . " - " . $lista ['descricao'] . '</option>';
+           }
+      }
+      
+      echo $combo;
+    }
+
+    public function getcidadesAction()
+    {
+       $this->_helper->layout ()->disableLayout ();
+	   $this->_helper->viewRenderer->setNoRender ();
+
+	       	
+	   $id = (int) $this->_getParam('idEstado');
+	   $id = $_GET['id'];
+       $model_cidade = new Cidade();
+       $cidades = $model_cidade->findForSelect($id)->toArray();
+   	   //print_r($cidades);
+       $combo = "<option value='0'>Carregando ... </option>";
+
+       if (count($cidades) > 0) {
+           
+       	   $combo = array ();
+           $combo .= '<option value = "">Selecione a Cidade</option>';
+           foreach ( $cidades as $lista ) {           	
+           			if($lista ['idCidade'] == 9899){
+                  		$combo .= '<option value="' . $lista ['idCidade'] . '" selected="selected">' . $lista ['nome'] . '</option>';
+           			}
+                  	else{
+                  		$combo .= '<option value="' . $lista ['idCidade'] . '">' . $lista ['nome'] . '</option>';           
+                  	}
+           }
+      }
+      
+      echo $combo;
+    }
+
+    public function cadastrarendereco($data, $id = '')
+    {
+    	 $model_endereco = new Endereco();
+    	 
+    	if($id){
+    		$data['cep'] = preg_replace('/[^0-9]/', '', $data['cep']);
+    		$model_endereco->update($data, "idEndereco = " . $id);
+    	}
+    	else{
+			$data['cep'] = preg_replace('/[^0-9]/', '', $data['cep']);
+
+        	$model_endereco->insert($data);
+        	return $model_endereco->getAdapter()->lastInsertId();
+    	}
+    	
+    	return true;
+		
+    }
+
+    public function vigenciasAction()
+    {
+        $select =  $this->model_vigencia->select() 
+                   		->setIntegrityCheck(false)               			
+              			->order(array('vigencia DESC'));
+        
+    	$data = $this->model_vigencia->fetchAll($select);
+    	
+        $this->view->vigencias = $data;
+    }
+
+    public function cadastrarvigenciaAction()
+    {
+        $this->model_vigencia->getLastVigencia();
+        $form = new Admin_Form_Vigencia();
+        
+        if ( $this->_request->isPost()){
+	        	$data = array(
+	        		'vigencia'  => $this->_request->getPost('vigencia'),	            	
+	            );
+	            	
+	            if ( $form->isValid($data) ){
+	            	$data['vigencia'] = implode("-", array_reverse(explode("/", $data['vigencia'])));
+		             	            	
+	            	
+	            	if($this->model_vigencia->insert($data))
+	            		ZendX_JQuery_FlashMessenger::addMessage('Dados cadastrados com sucesso.');
+	           		 else 
+	            		ZendX_JQuery_FlashMessenger::addMessage('Problemas ao cadastrar os dados.', 'error');	                
+	                $this->_redirect('admin/cartorio/vigencias');
+	            }
+        }
+        
+        $form->vigencia->setValue(date('d/m/Y'));
+        $this->view->form = $form;
+    }
+
+    public function deletarvigenciaAction()
+    {
+        // verificamos se realmente foi informado algum ID
+        if ( $this->_hasParam('idVigencia') == false )
+        {
+            $this->_redirect('admin/cartorio/vigencias');
+        }
+ 
+        $id = (int) $this->_getParam('idVigencia');
+        $where = $this->model_vigencia->getAdapter()->quoteInto('idVigencia = ?', $id);
+         
+        if($this->model_vigencia->delete($where))
+            ZendX_JQuery_FlashMessenger::addMessage('Dados deletados com sucesso.');
+        else 
+            ZendX_JQuery_FlashMessenger::addMessage('Problemas ao deletar os dados.', 'error');
+        
+        $this->_redirect('admin/cartorio/vigencias');
+    }
+
+    public function editarvigenciaAction()
+    {
+        // action body
+    }
+
+    public function emolumentosAction()
+    {
+        $idVigencia      = (int) $this->_getParam('idVigencia');    	
+    	$select =  $this->model_emolumento->select() 
+                   		->setIntegrityCheck(false)
+                   		->where("idVigencia = ?", $idVigencia)               			
+              			->order(array('emolumento'));
+        
+    	$data = $this->model_emolumento->fetchAll($select);
+    	
+        $this->view->emolumentos = $data;
+    }
+
+    public function cadastraremolumentoAction()
+    {
+        $form = new Admin_Form_Emolumento();
+        $idVigencia = (int) $this->_getParam('idVigencia');
+
+        if ( $this->_request->isPost()){
+        	
+        	$data = array(
+        		'idVigencia'  => $idVigencia,
+        		'valor_inicial' => str_replace(',', '.', str_replace('.', '', $this->_request->getPost('valor_inicial'))),
+				'valor_final' => str_replace(',', '.', str_replace('.', '', $this->_request->getPost('valor_final'))),
+				'emolumento' => str_replace(',', '.', str_replace('.', '', $this->_request->getPost('emolumento')))
+            );
+        	
+            if($this->model_emolumento->insert($data))
+           			 ZendX_JQuery_FlashMessenger::addMessage('Dados cadastrados com sucesso.');
+        	else 
+           	 ZendX_JQuery_FlashMessenger::addMessage('Problemas ao cadastrar os dados.', 'error');
+        }
+        
+        $form->idVigencia->setValue($idVigencia);
+        $this->view->form = $form;
+    }
+
+    public function editaremolumentoAction()
+    {
+        $form = new Admin_Form_Emolumento();
+    	
+   		if ( $this->_request->isPost()){           
+            $data = array(
+                'emolumento' => $this->_request->getPost('emolumento'),
+        		'valor_inicial' => $this->_request->getPost('valor_inicial'),
+				'valor_final' => $this->_request->getPost('valor_final')
+            );
+
+            if ( $form->isValid($data) )
+            {
+            	$data['valor_inicial'] = str_replace(',', '.', str_replace('.', '', $this->_request->getPost('valor_inicial')));
+				$data['valor_final'] = str_replace(',', '.', str_replace('.', '', $this->_request->getPost('valor_final')));
+				$data['emolumento'] = str_replace(',', '.', str_replace('.', '', $this->_request->getPost('emolumento')));
+            	
+                if($this->model_emolumento->update($data, "idEmolumento = " . (int) $this->_request->getPost('idEmolumento')))
+           			 ZendX_JQuery_FlashMessenger::addMessage('Dados alterados com sucesso.');
+	        	else 
+	           	 	 ZendX_JQuery_FlashMessenger::addMessage('Problemas ao alterar os dados.', 'error');
+                
+                $this->_redirect('/admin/cartorio/emolumentos/idVigencia/' . $this->_getParam('idVigencia'));
+            }
+        }
+        
+    	$id      = (int) $this->_getParam('idEmolumento');     	    	      
+        $result  = $this->model_emolumento->find($id);
+        $data    = $result->current();         
+		
+        if ( null === $data ){
+        	ZendX_JQuery_FlashMessenger::addMessage('Emolumento não encontrado!', 'notice');
+            return false;
+        }
+        
+        $data->valor_inicial = $this->_helper->Util->valor($data->valor_inicial);
+        $data->valor_final = $this->_helper->Util->valor($data->valor_final);
+        $data->emolumento = $this->_helper->Util->valor($data->emolumento);
+        $form->setAsEditForm($data);
+
+        $this->view->form = $form;
+    }
+
+    public function deletaremolumentoAction()
+    {
+        // verificamos se realmente foi informado algum ID
+        if ( $this->_hasParam('idEmolumento') == false )
+        {
+            $this->_redirect('/admin/cartorio/emolumentos/idVigencia/' . $this->_getParam('idVigencia'));
+        }
+ 
+        $id = (int) $this->_getParam('idEmolumento');
+        $where = $this->model_emolumento->getAdapter()->quoteInto('idEmolumento = ?', $id);
+        
+        if($this->model_emolumento->delete($where))
+            ZendX_JQuery_FlashMessenger::addMessage('Dados deletados com sucesso.');
+        else 
+            ZendX_JQuery_FlashMessenger::addMessage('Problemas ao deletar os dados.', 'error');
+            
+        $this->_redirect('/admin/cartorio/emolumentos/idVigencia/' . $this->_getParam('idVigencia'));
+    }
+
+    public function custasAction()
+    {
+        $idVigencia      = (int) $this->_getParam('idVigencia');
+    	
+    	$select =  $this->model_custa->select() 
+                   		->setIntegrityCheck(false)
+                   		->where("idVigencia = ?", $idVigencia)               			
+              			->order(array('nome'));
+        
+    	$data = $this->model_custa->fetchAll($select);
+    	
+        $this->view->custas = $data;
+    }
+
+    public function cadastrarcustaAction()
+    {
+        $form = new Admin_Form_Custa();
+        $idVigencia      = (int) $this->_getParam('idVigencia');
+
+        if ( $this->_request->isPost()){
+        	
+        	$data = array(
+        		'idVigencia'  => $idVigencia,
+                'nome' => $this->_request->getPost('nome'),
+        		'valor' => str_replace(',', '.', str_replace('.', '', $this->_request->getPost('valor')))	            	
+            );
+        	
+            
+            if($this->model_custa->insert($data))
+	            		ZendX_JQuery_FlashMessenger::addMessage('Dados cadastrados com sucesso.');
+            else 
+            	ZendX_JQuery_FlashMessenger::addMessage('Problemas ao cadastrar os dados.', 'error');	                
+
+        }
+        
+        //$form->idVigencia->setValue($idVigencia);
+        $this->view->form = $form;
+    }
+
+    public function editarcustaAction()
+    {
+        $form = new Admin_Form_Custa();
+    	
+   		if ( $this->_request->isPost()){           
+            $data = array(
+            	'nome'  => $this->_request->getPost('nome'),
+                'valor' => $this->_request->getPost('valor')
+            );
+
+            if ( $form->isValid($data) )
+            {
+            	$data['valor'] = str_replace(',', '.', str_replace('.', '', $data['valor']));
+                
+                if($this->model_custa->update($data, "idCusta = " . (int) $this->_request->getPost('idCusta')))
+	            		ZendX_JQuery_FlashMessenger::addMessage('Dados alterados com sucesso.');
+	            else 
+	            		ZendX_JQuery_FlashMessenger::addMessage('Problemas ao alterados os dados.', 'error');
+            	
+                $this->_redirect('/admin/cartorio/custas/idVigencia/' . $this->_getParam('idVigencia')); 
+            }
+        }
+        
+    	$id      = (int) $this->_getParam('idCusta');     	    	      
+        $result  = $this->model_custa->find($id);
+        $data    = $result->current(); 
+        //$this->_helper->Util->_pvar($data);        
+		//$data['valor'] = str_replace(',', '.', str_replace('.', '', $data['valor']));
+		
+        if ( null === $data ){
+            ZendX_JQuery_FlashMessenger::addMessage('Custa não encontrada!.', 'notice');
+            return false;
+        }
+        
+        $data->valor = $this->_helper->Util->valor($data->valor);
+        $form->setAsEditForm($data);
+
+        $this->view->form = $form;
+    }
+
+    public function deletarcustaAction()
+    {
+        // verificamos se realmente foi informado algum ID
+        if ( $this->_hasParam('idCusta') == false )
+        {
+            $this->_redirect('admin/cartorio/custas');
+        }
+ 
+        $id = (int) $this->_getParam('idCusta');
+        $where = $this->model_custa->getAdapter()->quoteInto('idCusta = ?', $id);
+        if($this->model_custa->delete($where)){
+        	ZendX_JQuery_FlashMessenger::addMessage('Custa deletada com sucesso.');        
+        }
+        else{
+        	ZendX_JQuery_FlashMessenger::addMessage('Custa deletada com sucesso.');
+        }
+        $this->_redirect('admin/cartorio/custas');
+    }
+
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

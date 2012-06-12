@@ -25,7 +25,13 @@
 			Bancos e contas
 		</a>
 	</li>
-	
+	<li>
+		<a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'cartorio','action' => 'vigencias'), null, true); ?>" title="Inserir custas e emolumentos.">
+			<img src="<?php echo $this->baseUrl(); ?>/css/icons/custas.png" />
+			<br/>
+			Custas
+		</a>
+	</li>
 	
 	<li>
 		<a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'cartorio','action' => 'editarcartorio'), null, true); ?>" title="Editar dados a respeito do cartório.">

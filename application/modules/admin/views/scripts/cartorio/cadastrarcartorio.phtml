@@ -15,7 +15,7 @@ $(function() {
     	var id = $(this).val();		    	    			     
 
     	$.ajax({
-    		url:"<?php echo $this->url(array('modulo' => 'admin', 'controller'=>'importador', 'action'=>'getagencias'), null, true); ?>",
+    		url:"<?php echo $this->url(array('module' => 'admin', 'controller' => 'cartorio', 'action' => 'getagencias'), null, true); ?>",
     		dataType:'html',
     		encoding: 'utf-8',
    			data:{id: id},
@@ -31,7 +31,7 @@ $(function() {
     	var id = $(this).val();		    	    			     
 
     	$.ajax({
-    		url:"<?php echo $this->url(array('modulo' => 'admin', 'controller'=>'importador' , 'action'=>'getcidades'), null, true); ?>",
+    		url:"<?php echo $this->url(array('module' => 'admin', 'controller' => 'cartorio', 'action' => 'getcidades'), null, true); ?>",
 			dataType:'html',
 			encoding: 'utf-8',
 				data:{id: id},

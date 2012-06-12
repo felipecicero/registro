@@ -60,6 +60,14 @@
               <actionMethod actionName="cadastrarcusta"/>
               <actionMethod actionName="editarcusta"/>
               <actionMethod actionName="deletarcusta"/>
+              <actionMethod actionName="feriados"/>
+              <actionMethod actionName="cadastrarferiado"/>
+              <actionMethod actionName="editarferiado"/>
+              <actionMethod actionName="deletarferiado"/>
+              <actionMethod actionName="abrangencias"/>
+              <actionMethod actionName="cadastrarabrangencia"/>
+              <actionMethod actionName="deletarabrangencia"/>
+              <actionMethod actionName="editarabrangencia"/>
             </controllerFile>
             <controllerFile controllerName="Perfil">
               <actionMethod actionName="index"/>
@@ -87,6 +95,8 @@
             <formFile formName="Vigencia"/>
             <formFile formName="Emolumento"/>
             <formFile formName="Custa"/>
+            <formFile formName="Feriado"/>
+            <formFile formName="Abrangencias"/>
           </formsDirectory>
           <layoutsDirectory enabled="false"/>
           <modelsDirectory>
@@ -105,6 +115,8 @@
             <modelFile modelName="Custa"/>
             <modelFile modelName="Emolumento"/>
             <modelFile modelName="Vigencia"/>
+            <modelFile modelName="Feriado"/>
+            <modelFile modelName="Abrangencias"/>
           </modelsDirectory>
           <viewsDirectory>
             <viewScriptsDirectory>
@@ -218,6 +230,30 @@
               </viewControllerScriptsDirectory>
               <viewControllerScriptsDirectory forControllerName="Cartorio">
                 <viewScriptFile forActionName="deletarcusta"/>
+              </viewControllerScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="Cartorio">
+                <viewScriptFile forActionName="feriados"/>
+              </viewControllerScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="Cartorio">
+                <viewScriptFile forActionName="cadastrarferiado"/>
+              </viewControllerScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="Cartorio">
+                <viewScriptFile forActionName="editarferiado"/>
+              </viewControllerScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="Cartorio">
+                <viewScriptFile forActionName="deletarferiado"/>
+              </viewControllerScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="Cartorio">
+                <viewScriptFile forActionName="abrangencias"/>
+              </viewControllerScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="Cartorio">
+                <viewScriptFile forActionName="cadastrarabrangencia"/>
+              </viewControllerScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="Cartorio">
+                <viewScriptFile forActionName="deletarabrangencia"/>
+              </viewControllerScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="Cartorio">
+                <viewScriptFile forActionName="editarabrangencia"/>
               </viewControllerScriptsDirectory>
             </viewScriptsDirectory>
             <viewHelpersDirectory/>

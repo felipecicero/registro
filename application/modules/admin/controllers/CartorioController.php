@@ -8,12 +8,16 @@ class Admin_CartorioController extends Zend_Controller_Action
     private $model_cartorio = null;
 
     private $model_agencia = null;
+
+    private $model_vigencia = null;
+
+    private $model_emolumento = null;
+
+    private $model_custa = null;
+
+    private $model_feriado = null;
 	
-	private $model_vigencia = null;
-	
-	private $model_emolumento = null;
-	
-	private $model_custa = null;
+	private $model_abrangencia = null;
 
     public function init()
     {
@@ -36,8 +40,10 @@ class Admin_CartorioController extends Zend_Controller_Action
 		$this->model_banco = new Banco();
 		$this->model_agencia = new Agencia();
 		$this->model_emolumento = new Emolumento();
+		$this->model_feriado = new Feriado();
+		$this->model_abrangencia = new Abrangencias();
 		
-		 $this->view->setEncoding('ISO-8859-1');//para nao dar problemas com acentuação dos formulários
+		$this->view->setEncoding('ISO-8859-1');//para nao dar problemas com acentuação dos formulários
     }
 
     public function indexAction()
@@ -674,5 +680,203 @@ class Admin_CartorioController extends Zend_Controller_Action
         $this->_redirect('admin/cartorio/custas');
     }
 
+    public function feriadosAction()
+    {
+        $select =  $this -> model_feriado->select()              			
+              			 -> order(array('date'));
+        
+    	$data = $this->model_feriado->fetchAll($select);
+    	
+        $this->view->feriados = $data;
+    }
+
+    public function cadastrarferiadoAction()
+    {
+        $form = new Admin_Form_Feriado();
+        
+        if ( $this->_request->isPost()){
+	        	$data = array(
+		        	'idFeriado'  => $this->_request->getPost('idFeriado'),
+		        	'date'  => $this->_request->getPost('date'),
+	                'descricao' => $this->_request->getPost('descricao')	            	
+	            );
+	
+	            if ( $form->isValid($data) )
+	            {
+	            	$data['date'] = implode("-", array_reverse(explode("/", $data['date'])));
+	            	
+	            	$this->model_feriado->insert($data);	                
+	                ZendX_JQuery_FlashMessenger::addMessage('Dados cadastrados com sucesso.');
+	            }
+	            
+	            $form = new Admin_Form_Feriado();
+        }
+        
+        $this->view->form = $form;
+    }
+
+    public function editarferiadoAction()
+    {
+        $form = new Admin_Form_Feriado();
+    	
+   		if ( $this->_request->isPost()){           
+            $data = array(
+		        	'idFeriado'  => $this->_request->getPost('idFeriado'),
+		        	'date'  => $this->_request->getPost('date'),
+	                'descricao' => $this->_request->getPost('descricao')	            	
+	        );
+
+            if ( $form->isValid($data) )
+            { 
+            	$data['date'] = implode("-", array_reverse(explode("/", $data['date'])));
+            	               
+                if($this->model_feriado->update($data, "idFeriado = " . $this->_request->getPost('idFeriado')))
+           			 ZendX_JQuery_FlashMessenger::addMessage('Dados alterados com sucesso.');
+	        	else 
+	           	 	 ZendX_JQuery_FlashMessenger::addMessage('Problemas ao alterar os dados.', 'error');
+                $this->_redirect('admin/cartorio/feriados');
+            }
+        }
+        
+    	$id      = (int) $this->_getParam('idFeriado');     	    	      
+        $result  = $this->model_feriado->find($id);
+        $data    = $result->current();         
+		$data['date'] = implode("/", array_reverse(explode("-", $data['date'])));
+		
+        if ( null === $data ){
+            ZendX_JQuery_FlashMessenger::addMessage('Feriado não encontrado.', 'notice');
+            return false;
+        }
+        
+        $form->setAsEditForm($data);
+
+        $this->view->form = $form;
+    }
+
+    public function deletarferiadoAction()
+    {
+        if ( $this->_hasParam('idFeriado') == false )
+        {
+            $this->_redirect('/admin/cartorio/feriados');
+        }
+ 
+        $id = (int) $this->_getParam('idFeriado');
+        $where = $this->model_feriado->getAdapter()->quoteInto('idFeriado = ?', $id);
+        
+        if($this->model_feriado->delete($where))
+            ZendX_JQuery_FlashMessenger::addMessage('Dados deletados com sucesso.');
+        else 
+            ZendX_JQuery_FlashMessenger::addMessage('Problemas ao deletar os dados.', 'error');        
+        $this->_redirect('/admin/cartorio/feriados');
+    }
+
+    public function abrangenciasAction()
+    {
+        $data =  $this->model_abrangencia->getAbrangencias();
+            	
+        $this->view->abrangencias = $data;
+    }
+
+    public function cadastrarabrangenciaAction()
+    {
+        $form = new Admin_Form_Abrangencias();
+        
+        if ( $this->_request->isPost()){
+	        	$data = array(
+	        		'idCidade'  => $this->_request->getPost('idCidade'),
+	                'inicio' => $this->_request->getPost('inicio'),
+	        		'limite' => $this->_request->getPost('limite')	            	
+	            );
+	            
+	            
+	            if($data['limite'] == ''){
+	            	$data['limite'] = $data['inicio'];
+	            }
+	
+	            if ( $form->isValid($data) ){
+	            	$data['inicio'] = preg_replace('/[^0-9]/', '', $data['inicio']);
+	            	$data['limite'] = preg_replace('/[^0-9]/', '', $data['limite']);
+	            	
+		             if($data['limite'] < $data['inicio']){
+		            	$data['limite'] = $data['inicio'];
+		             }
+	            	
+	            	if($this->model_abrangencia->insert($data))
+	            		ZendX_JQuery_FlashMessenger::addMessage('Dados cadastrados com sucesso.');
+	            	else 
+	            		ZendX_JQuery_FlashMessenger::addMessage('Problemas ao cadastrar os dados.', 'error');	                
+
+	            }
+        }
+        
+        $this->view->form = $form;
+    }
+
+    public function deletarabrangenciaAction()
+    {
+        // verificamos se realmente foi informado algum ID
+        if ( $this->_hasParam('idFaixacep') == false )
+        {
+            $this->_redirect('/admin/cartorio/abrangencias');
+        }
+ 
+        $id = (int) $this->_getParam('idFaixacep');
+        $where = $this->model_abrangencia->getAdapter()->quoteInto('idFaixacep = ?', $id);
+        
+        if($this->model_abrangencia->delete($where))
+            ZendX_JQuery_FlashMessenger::addMessage('Dados deletados com sucesso.');
+        else 
+            ZendX_JQuery_FlashMessenger::addMessage('Problemas ao deletar os dados.', 'error');        
+        $this->_redirect('/admin/cartorio/abrangencias');
+    }
+
+    public function editarabrangenciaAction()
+    {
+        $form = new Admin_Form_Abrangencias();
+    	
+    	if ( $this->_request->isPost()){
+	        	$data = array(
+	        		'idCidade'  => $this->_request->getPost('idCidade'),
+	                'inicio' => $this->_request->getPost('inicio'),
+	        		'limite' => $this->_request->getPost('limite')	            	
+	            );
+	            
+	            
+	            if($data['limite'] == ''){
+	            	$data['limite'] = $data['inicio'];
+	            }
+	
+	            if ( $form->isValid($data) ){
+	            	$data['inicio'] = preg_replace('/[^0-9]/', '', $data['inicio']);
+	            	$data['limite'] = preg_replace('/[^0-9]/', '', $data['limite']);
+	            	
+		             if($data['inicio'] > $data['limite']){
+		            	$data['limite'] = $data['inicio'];
+		             }
+	            	//print_r($data);exit;
+	            	if($this->model_abrangencia->update($data, "idFaixacep = " . $this->_request->getPost('idFaixacep'))){	            	
+	            		ZendX_JQuery_FlashMessenger::addMessage('Dados editados com sucesso.');
+	            		$this->_redirect('/admin/cartorio/abrangencias');
+	            	}
+	            	else {
+	            		ZendX_JQuery_FlashMessenger::addMessage('Problemas ao editar os dados.', 'error');
+	            	}	                
+
+	            }
+        	}
+        
+    	$id      = (int) $this->_getParam('idFaixacep');     	    	      
+        $result  = $this->model_abrangencia->find($id);
+        $data    = $result->current();         
+		
+        if ( null === $data ){
+            ZendX_JQuery_FlashMessenger::addMessage('Dados não encontrados.', 'error');
+            return false;
+        }
+        
+        $form->setAsEditForm($data);
+
+        $this->view->form = $form;
+    }
 
 }

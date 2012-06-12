@@ -10,6 +10,7 @@
 		  //print_r($cartorio->idCartorio);exit;
 		  if(!isset($cartorio->idCartorio) ){
 	?>	
+	
 	<li>
 		<a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'cartorio','action' => 'cadastrarcartorio'), null, true); ?>" title="Cadastrar dados a respeito do cartório.">
 			<img src="<?php echo $this->baseUrl(); ?>/css/icons/cartorio.png" />
@@ -18,6 +19,13 @@
 		</a>
 	</li>
 	<?php } ?>
+	<li>
+		<a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'cartorio', 'action' => 'abrangencias'), null, true); ?>" title="Faixa de CEP da praça.">
+			<img src="<?php echo $this->baseUrl(); ?>/css/icons/mapa.png" />
+			<br/>
+			Abrangência da Praça
+		</a>
+	</li>
 	<li>
 		<a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'cartorio','action' => 'bancos'), null, true); ?>" title="Inserir bancos, agências e contas bancárias.">
 			<img src="<?php echo $this->baseUrl(); ?>/css/icons/bancos.png" />
@@ -32,7 +40,13 @@
 			Custas
 		</a>
 	</li>
-	
+	<li>
+		<a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'cartorio','action' => 'feriados'), null, true); ?>" title="Cadastrar feriados.">
+			<img src="<?php echo $this->baseUrl(); ?>/css/icons/feriados.png" />
+			<br/>
+			Feriados
+		</a>
+	</li>
 	<li>
 		<a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'cartorio','action' => 'editarcartorio'), null, true); ?>" title="Editar dados a respeito do cartório.">
 			<img src="<?php echo $this->baseUrl(); ?>/css/icons/cartorio.png" />

@@ -4,7 +4,7 @@ class Admin_Form_Emolumento extends Zend_Form
 {
 	public function init(){
        
-    	$idEmolumento = new Zend_Form_Element_Hidden('idEmolumento'); 
+    	$idEmolumentos = new Zend_Form_Element_Hidden('idEmolumentos'); 
 		
 		$model_vigencia = new Vigencia();
         
@@ -15,15 +15,15 @@ class Admin_Form_Emolumento extends Zend_Form
 	    	$idVigencia->addMultiOption($vigen->idVigencia, $vigen->vigencia);
 		}
 		
-		$emolumento = new Zend_Form_Element_Text('emolumento');
+		$emolumento = new Zend_Form_Element_Text('emolumentos');
     	$emolumento->setLabel("Valor do Emolumento:")
     		 	  ->setAttrib('size', '30');
 
-    	$valor_inicial = new Zend_Form_Element_Text('valor_inicial');
-    	$valor_inicial->setLabel("Valor Inicial do Emolumento:")
+    	$valorinicial = new Zend_Form_Element_Text('valorinicial');
+    	$valorinicial->setLabel("Valor Inicial do Emolumento:")
     		 	->setAttrib('size', '10');
 				
-		$valor_final = new Zend_Form_Element_Text('valor_final');
+		$valor_final = new Zend_Form_Element_Text('valorfinal');
     	$valor_final->setLabel("Valor Final do Emolumento:")
     		 	->setAttrib('size', '10');
     		 	      	
@@ -31,17 +31,17 @@ class Admin_Form_Emolumento extends Zend_Form
         $submit->setLabel('Enviar')
                ->setAttrib('id', 'submitbutton');
  
-        $this->addElements(array($idEmolumento, $idVigencia, $emolumento, $valor_inicial, $valor_final, $submit));
+        $this->addElements(array($idEmolumentos, $idVigencia, $emolumento, $valorinicial, $valor_final, $submit));
     }
     
 	public function setAsEditForm(Zend_Db_Table_Row $row){
         $this->populate($row->toArray());
-        $this->setAction(sprintf('editaremolumento/idEmolumento/%d', $row->idEmolumento));
+        $this->setAction(sprintf('editaremolumento/idEmolumentos/%d', $row->idEmolumentos));
 
-        $this->getElement('idEmolumento');
+        $this->getElement('idEmolumentos');
 		$this->getElement('idVigencia');
-		$this->getElement('valor_inicial');
-        $this->getElement('valor_final');
+		$this->getElement('valorinicial');
+        $this->getElement('valorfinal');
 		$this->getElement('emolumento');
         
         return $this;

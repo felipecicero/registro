@@ -483,7 +483,7 @@ class Admin_CartorioController extends Zend_Controller_Action
     	$select =  $this->model_emolumento->select() 
                    		->setIntegrityCheck(false)
                    		->where("idVigencia = ?", $idVigencia)               			
-              			->order(array('emolumento'));
+              			->order(array('emolumentos'));
         
     	$data = $this->model_emolumento->fetchAll($select);
     	
@@ -498,10 +498,10 @@ class Admin_CartorioController extends Zend_Controller_Action
         if ( $this->_request->isPost()){
         	
         	$data = array(
-        		'idVigencia'  => $idVigencia,
-        		'valor_inicial' => str_replace(',', '.', str_replace('.', '', $this->_request->getPost('valor_inicial'))),
-				'valor_final' => str_replace(',', '.', str_replace('.', '', $this->_request->getPost('valor_final'))),
-				'emolumento' => str_replace(',', '.', str_replace('.', '', $this->_request->getPost('emolumento')))
+        		'idVigencia' => $idVigencia,
+        		'valorinicial' => str_replace(',', '.', str_replace('.', '', $this->_request->getPost('valorinicial'))),
+				'valorfinal' => str_replace(',', '.', str_replace('.', '', $this->_request->getPost('valorfinal'))),
+				'emolumentos' => str_replace(',', '.', str_replace('.', '', $this->_request->getPost('emolumentos')))
             );
         	
             if($this->model_emolumento->insert($data))
@@ -520,18 +520,18 @@ class Admin_CartorioController extends Zend_Controller_Action
     	
    		if ( $this->_request->isPost()){           
             $data = array(
-                'emolumento' => $this->_request->getPost('emolumento'),
-        		'valor_inicial' => $this->_request->getPost('valor_inicial'),
-				'valor_final' => $this->_request->getPost('valor_final')
+                'emolumentos' => $this->_request->getPost('emolumentos'),
+        		'valorinicial' => $this->_request->getPost('valorinicial'),
+				'valorfinal' => $this->_request->getPost('valorfinal')
             );
 
             if ( $form->isValid($data) )
             {
-            	$data['valor_inicial'] = str_replace(',', '.', str_replace('.', '', $this->_request->getPost('valor_inicial')));
-				$data['valor_final'] = str_replace(',', '.', str_replace('.', '', $this->_request->getPost('valor_final')));
-				$data['emolumento'] = str_replace(',', '.', str_replace('.', '', $this->_request->getPost('emolumento')));
+            	$data['valorinicial'] = str_replace(',', '.', str_replace('.', '', $this->_request->getPost('valorinicial')));
+				$data['valorfinal'] = str_replace(',', '.', str_replace('.', '', $this->_request->getPost('valorfinal')));
+				$data['emolumentos'] = str_replace(',', '.', str_replace('.', '', $this->_request->getPost('emolumentos')));
             	
-                if($this->model_emolumento->update($data, "idEmolumento = " . (int) $this->_request->getPost('idEmolumento')))
+                if($this->model_emolumento->update($data, "idEmolumentos = " . (int) $this->_request->getPost('idEmolumentos')))
            			 ZendX_JQuery_FlashMessenger::addMessage('Dados alterados com sucesso.');
 	        	else 
 	           	 	 ZendX_JQuery_FlashMessenger::addMessage('Problemas ao alterar os dados.', 'error');
@@ -540,7 +540,7 @@ class Admin_CartorioController extends Zend_Controller_Action
             }
         }
         
-    	$id      = (int) $this->_getParam('idEmolumento');     	    	      
+    	$id      = (int) $this->_getParam('idEmolumentos');     	    	      
         $result  = $this->model_emolumento->find($id);
         $data    = $result->current();         
 		
@@ -549,9 +549,9 @@ class Admin_CartorioController extends Zend_Controller_Action
             return false;
         }
         
-        $data->valor_inicial = $this->_helper->Util->valor($data->valor_inicial);
-        $data->valor_final = $this->_helper->Util->valor($data->valor_final);
-        $data->emolumento = $this->_helper->Util->valor($data->emolumento);
+        $data->valorinicial = $this->_helper->Util->valor($data->valorinicial);
+        $data->valorfinal = $this->_helper->Util->valor($data->valorfinal);
+        $data->emolumentos = $this->_helper->Util->valor($data->emolumentos);
         $form->setAsEditForm($data);
 
         $this->view->form = $form;
@@ -560,13 +560,13 @@ class Admin_CartorioController extends Zend_Controller_Action
     public function deletaremolumentoAction()
     {
         // verificamos se realmente foi informado algum ID
-        if ( $this->_hasParam('idEmolumento') == false )
+        if ( $this->_hasParam('idEmolumentos') == false )
         {
             $this->_redirect('/admin/cartorio/emolumentos/idVigencia/' . $this->_getParam('idVigencia'));
         }
  
-        $id = (int) $this->_getParam('idEmolumento');
-        $where = $this->model_emolumento->getAdapter()->quoteInto('idEmolumento = ?', $id);
+        $id = (int) $this->_getParam('idEmolumentos');
+        $where = $this->model_emolumento->getAdapter()->quoteInto('idEmolumentos = ?', $id);
         
         if($this->model_emolumento->delete($where))
             ZendX_JQuery_FlashMessenger::addMessage('Dados deletados com sucesso.');
@@ -676,54 +676,3 @@ class Admin_CartorioController extends Zend_Controller_Action
 
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

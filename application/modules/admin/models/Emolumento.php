@@ -8,9 +8,9 @@ class Emolumento extends Zend_Db_Table_Abstract{
     {
     	$select = $this->select();
     	
-    	$select->where('valor_inicial <= ' . $valor);
+    	$select->where('valorinicial <= ' . $valor);
     	
-    	$select->where('valor_final >= ' . $valor);
+    	$select->where('valorfinal >= ' . $valor);
     	
     	$data = $this->fetchAll($select);
     	

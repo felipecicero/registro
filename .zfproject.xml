@@ -72,6 +72,14 @@
               <actionMethod actionName="cadastrarselo"/>
               <actionMethod actionName="editarselo"/>
               <actionMethod actionName="deletarselo"/>
+              <actionMethod actionName="natureza"/>
+              <actionMethod actionName="cadastrarnatureza"/>
+              <actionMethod actionName="editarnatureza"/>
+              <actionMethod actionName="deletarnatureza"/>
+              <actionMethod actionName="tipodocumentos"/>
+              <actionMethod actionName="cadastrartipodocumentos"/>
+              <actionMethod actionName="editartipodocumentos"/>
+              <actionMethod actionName="deletartipodocumentos"/>
             </controllerFile>
             <controllerFile controllerName="Perfil">
               <actionMethod actionName="index"/>
@@ -102,6 +110,8 @@
             <formFile formName="Feriado"/>
             <formFile formName="Abrangencias"/>
             <formFile formName="Selo"/>
+            <formFile formName="Natureza"/>
+            <formFile formName="Tipodocumento"/>
           </formsDirectory>
           <layoutsDirectory enabled="false"/>
           <modelsDirectory>
@@ -124,6 +134,8 @@
             <modelFile modelName="Abrangencias"/>
             <modelFile modelName="Selo"/>
             <modelFile modelName="ControleSelo"/>
+            <modelFile modelName="Natureza"/>
+            <modelFile modelName="Tipodocumento"/>
           </modelsDirectory>
           <viewsDirectory>
             <viewScriptsDirectory>
@@ -273,6 +285,30 @@
               </viewControllerScriptsDirectory>
               <viewControllerScriptsDirectory forControllerName="Cartorio">
                 <viewScriptFile forActionName="deletarselo"/>
+              </viewControllerScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="Cartorio">
+                <viewScriptFile forActionName="natureza"/>
+              </viewControllerScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="Cartorio">
+                <viewScriptFile forActionName="cadastrarnatureza"/>
+              </viewControllerScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="Cartorio">
+                <viewScriptFile forActionName="editarnatureza"/>
+              </viewControllerScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="Cartorio">
+                <viewScriptFile forActionName="deletarnatureza"/>
+              </viewControllerScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="Cartorio">
+                <viewScriptFile forActionName="tipodocumentos"/>
+              </viewControllerScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="Cartorio">
+                <viewScriptFile forActionName="cadastrartipodocumentos"/>
+              </viewControllerScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="Cartorio">
+                <viewScriptFile forActionName="editartipodocumentos"/>
+              </viewControllerScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="Cartorio">
+                <viewScriptFile forActionName="deletartipodocumentos"/>
               </viewControllerScriptsDirectory>
             </viewScriptsDirectory>
             <viewHelpersDirectory/>

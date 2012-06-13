@@ -18,9 +18,10 @@ class Admin_CartorioController extends Zend_Controller_Action
     private $model_feriado = null;
 
     private $model_abrangencia = null;
+
+    private $model_selos = null;
 	
-	private $model_selos = null;	
-	
+    private $model_natureza = null;
 
     public function init()
     {
@@ -46,6 +47,7 @@ class Admin_CartorioController extends Zend_Controller_Action
 		$this->model_feriado = new Feriado();
 		$this->model_abrangencia = new Abrangencias();
 		$this->model_selos = new Selo();
+		$this->model_natureza = new Natureza();
 		
 		$this->view->setEncoding('ISO-8859-1');//para nao dar problemas com acentuação dos formulários
     }
@@ -884,7 +886,7 @@ class Admin_CartorioController extends Zend_Controller_Action
     }
 
     public function selosAction()
-    {    	
+    {
     	$select =  $this -> model_selos -> select() 
                    		 -> setIntegrityCheck(false);
         
@@ -983,6 +985,81 @@ class Admin_CartorioController extends Zend_Controller_Action
         	ZendX_JQuery_FlashMessenger::addMessage('Problemas ao deletar os dados.', 'error');
         }
         $this->_redirect('admin/cartorio/selos');
+    }
+
+    public function naturezaAction()
+    {
+        $select =  $this->model_natureza->select() 
+                   		->setIntegrityCheck(false)               			
+              			->order(array('nome'));
+        
+    	$data = $this->model_natureza->fetchAll($select);
+    	
+        $this->view->naturezas = $data;
+    }
+
+    public function cadastrarnaturezaAction()
+    {
+        $form = new Admin_Form_Natureza();
+        
+        if ( $this->_request->isPost()){
+        	$data = array(
+                'nome'		 => $this->_request->getPost('nome')    	
+            );
+        	
+            if($this->model_natureza->insert($data))
+	            		ZendX_JQuery_FlashMessenger::addMessage('Dados cadastrados com sucesso.');
+            else 
+            	ZendX_JQuery_FlashMessenger::addMessage('Problemas ao cadastrar os dados.', 'error');	                
+
+        }
+        
+        //$form->idVigencia->setValue($idVigencia);
+        $this->view->form = $form;
+    }
+
+    public function editarnaturezaAction()
+    {
+        // action body
+    }
+
+    public function deletarnaturezaAction()
+    {
+       // verificamos se realmente foi informado algum ID
+        if ( $this->_hasParam('idNatureza') == false )
+        {
+            $this->_redirect('admin/cartorio/natureza');
+        }
+ 
+        $id = (int) $this->_getParam('idNatureza');
+        $where = $this->model_natureza->getAdapter()->quoteInto('idNatureza = ?', $id);
+         
+        if($this->model_natureza->delete($where))
+            ZendX_JQuery_FlashMessenger::addMessage('Dados deletados com sucesso.');
+        else 
+            ZendX_JQuery_FlashMessenger::addMessage('Problemas ao deletar os dados.', 'error');
+        
+        $this->_redirect('admin/cartorio/natureza');
+    }
+
+    public function tipodocumentosAction()
+    {
+        // action body
+    }
+
+    public function cadastrartipodocumentosAction()
+    {
+        // action body
+    }
+
+    public function editartipodocumentosAction()
+    {
+        // action body
+    }
+
+    public function deletartipodocumentosAction()
+    {
+        // action body
     }
 
 

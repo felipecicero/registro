@@ -1,0 +1,24 @@
+<a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'cartorio', 'action' => 'index')); ?>" id="back-link">voltar</a>
+
+<h1>Tipos de Documentos</h1>
+
+<ul>
+	<li>
+		<a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'cartorio','action' => 'cadastrartipodocumento')); ?>" title="Cadastrar Tipo de Documento">Cadastrar Tipo de Documento</a>
+	</li>
+	
+</ul>
+
+<div id="messenger"><?php echo $this->flashMessenger();?></div>
+
+<table cellspacing="1" cellpadding="1" border="1" class="display" id="tabela" >
+    <thead>
+        <tr>
+            <th> # </th>
+            <th>Tipo de Documento</th>
+            <th><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'cartorio', 'action' => 'natureza')); ?>" title="Cadastrar Tipo de Documento">Natureza</a></th>
+        </tr>
+     </thead>
+     
+          
+</table>

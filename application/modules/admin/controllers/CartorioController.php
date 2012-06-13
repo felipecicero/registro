@@ -1046,12 +1046,17 @@ class Admin_CartorioController extends Zend_Controller_Action
     {
         $form = new Admin_Form_Tipodocumento();
         
-
         if ( $this->_request->isPost()){
         	
+			if ((string) $this->_request->getPost('valor') == '0,01')
+				$valor = 1;
+			else 
+				$valor = 0;
+				
         	$data = array(
-        		'idNatureza'  => (int) $this->_getParam('idNatureza'),
-				'nome' => $this->_request->getPost('nome')
+        		'idNatureza' => $this->_request->getPost('idNatureza'),
+				'nome' => $this->_request->getPost('nome'),
+				'valor' => $valor
             );
         	
             if($this->model_tipodocumento->insert($data))

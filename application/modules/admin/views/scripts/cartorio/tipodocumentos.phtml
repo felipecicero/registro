@@ -20,7 +20,8 @@
         <tr>
             <th> # </th>
             <th>Tipo de Documento</th>
-            <th>Natureza</th>
+            <th>Documento Sem Valor</th>
+			<th>Natureza</th>
 			<th></th>
 		</tr>
      </thead>
@@ -29,12 +30,14 @@
             <tr>
                 <td><?php echo $i; ?></td>
                 <td><?php echo $this->escape($tipodocumento->nome); ?></td>
-				<td><?php echo $this->escape($tipodocumento->natu); ?></td>    
+				<td  align="center"><?php 	if($tipodocumento->valor == '1') echo 'Sim';
+							else echo 'Não'?></td>
+				<td align="center"><?php echo $this->escape($tipodocumento->natu); ?></td> 
                 <td align="center">
                     <a href="<?php echo $this->url(array(
                                        'module' => 'admin', 
 									   'controller' => 'cartorio',
-                                       'action'     => 'editaritipodocumentos',
+                                       'action'     => 'editartipodocumentos',
                                        'idTipodocumentos'         => $this->escape($tipodocumento->idTipodocumentos))); ?>" title="Editar">Editar</a>
                     &nbsp;
                     <a href="<?php echo $this->url(array(

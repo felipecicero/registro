@@ -4,25 +4,17 @@ class Admin_CartorioController extends Zend_Controller_Action
 {
 
     private $model_banco = null;
-
     private $model_cartorio = null;
-
     private $model_agencia = null;
-
     private $model_vigencia = null;
-
     private $model_emolumento = null;
-
     private $model_custa = null;
-
     private $model_feriado = null;
-
     private $model_abrangencia = null;
-
     private $model_selos = null;
-	
     private $model_natureza = null;
-
+	private $model_tipodocumento = null;
+	
     public function init()
     {
        if ( !Zend_Auth::getInstance()->hasIdentity() ) {
@@ -48,6 +40,7 @@ class Admin_CartorioController extends Zend_Controller_Action
 		$this->model_abrangencia = new Abrangencias();
 		$this->model_selos = new Selo();
 		$this->model_natureza = new Natureza();
+		$this->model_tipodocumento = new Tipodocumento();
 		
 		$this->view->setEncoding('ISO-8859-1');//para nao dar problemas com acentuação dos formulários
     }
@@ -1044,12 +1037,30 @@ class Admin_CartorioController extends Zend_Controller_Action
 
     public function tipodocumentosAction()
     {
-        // action body
+        $data = $this->model_tipodocumento->selectTipos();
+    	
+        $this->view->tipodocumentos = $data;
     }
 
     public function cadastrartipodocumentosAction()
     {
-        // action body
+        $form = new Admin_Form_Tipodocumento();
+        
+
+        if ( $this->_request->isPost()){
+        	
+        	$data = array(
+        		'idNatureza'  => (int) $this->_getParam('idNatureza'),
+				'nome' => $this->_request->getPost('nome')
+            );
+        	
+            if($this->model_tipodocumento->insert($data))
+           			 ZendX_JQuery_FlashMessenger::addMessage('Dados cadastrados com sucesso.');
+        	else 
+           	 ZendX_JQuery_FlashMessenger::addMessage('Problemas ao cadastrar os dados.', 'error');
+        }
+       
+        $this->view->form = $form;
     }
 
     public function editartipodocumentosAction()
@@ -1059,7 +1070,21 @@ class Admin_CartorioController extends Zend_Controller_Action
 
     public function deletartipodocumentosAction()
     {
-        // action body
+        // verificamos se realmente foi informado algum ID
+        if ( $this->_hasParam('idTipodocumentos') == false )
+        {
+            $this->_redirect('/admin/cartorio/tipodocumentos/idTipodocumentos/' . $this->_getParam('idTipodocumentos'));
+        }
+ 
+        $id = (int) $this->_getParam('idTipodocumentos');
+        $where = $this->model_tipodocumento->getAdapter()->quoteInto('idTipodocumentos = ?', $id);
+        
+        if($this->model_tipodocumento->delete($where))
+            ZendX_JQuery_FlashMessenger::addMessage('Dados deletados com sucesso.');
+        else 
+            ZendX_JQuery_FlashMessenger::addMessage('Problemas ao deletar os dados.', 'error');
+            
+        $this->_redirect('/admin/cartorio/tipodocumentos/idTipodocumentos/' . $this->_getParam('idTipodocumentos'));
     }
 
 

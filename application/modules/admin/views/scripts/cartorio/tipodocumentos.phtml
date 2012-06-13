@@ -4,8 +4,12 @@
 
 <ul>
 	<li>
-		<a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'cartorio','action' => 'cadastrartipodocumento')); ?>" title="Cadastrar Tipo de Documento">Cadastrar Tipo de Documento</a>
+		<a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'cartorio','action' => 'cadastrartipodocumentos')); ?>" title="Cadastrar Tipo de Documento">Cadastrar Tipo de Documento</a>
 	</li>
+	<li>
+		<a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'cartorio', 'action' => 'natureza')); ?>" title="Natureza">Natureza</a>
+	</li>
+	
 	
 </ul>
 
@@ -16,9 +20,31 @@
         <tr>
             <th> # </th>
             <th>Tipo de Documento</th>
-            <th><a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'cartorio', 'action' => 'natureza')); ?>" title="Cadastrar Tipo de Documento">Natureza</a></th>
-        </tr>
+            <th>Natureza</th>
+			<th></th>
+		</tr>
      </thead>
-     
+     <tbody>
+        <?php $i=0; foreach ( $this->tipodocumentos as $tipodocumento ) { $i=$i+1; ?>
+            <tr>
+                <td><?php echo $i; ?></td>
+                <td><?php echo $this->escape($tipodocumento->nome); ?></td>
+				<td><?php echo $this->escape($tipodocumento->natu); ?></td>    
+                <td align="center">
+                    <a href="<?php echo $this->url(array(
+                                       'module' => 'admin', 
+									   'controller' => 'cartorio',
+                                       'action'     => 'editaritipodocumentos',
+                                       'idTipodocumentos'         => $this->escape($tipodocumento->idTipodocumentos))); ?>" title="Editar">Editar</a>
+                    &nbsp;
+                    <a href="<?php echo $this->url(array(
+                                       'module' => 'admin', 
+									   'controller' => 'cartorio',
+                                       'action'     => 'deletartipodocumentos',
+                                       'idTipodocumentos'         => $this->escape($tipodocumento->idTipodocumentos))); ?>" title="Apagar">Apagar</a>
+                </td>
+            </tr>
+        <?php } ?>        
+     </tbody>
           
 </table>

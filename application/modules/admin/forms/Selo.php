@@ -22,26 +22,23 @@ public function init()
     	$serie = new Zend_Form_Element_Text('serie');
 		$serie -> clearDecorators();
 		$serie -> addDecorators($decorator_default);
-        $serie->setLabel('Série:')
-              ->setRequired(true)
-              ->addValidator('Db_NoRecordExists', false,
-                 array(
-                     'table' => 'car_situacao',
-                     'field' => 'codigo'
-                 )
-             	);
+        $serie -> setLabel('Série:');
+        $serie -> setRequired(true);
+        $serie -> addValidator('Db_NoRecordExists', false,
+						 array('table' => 'car_situacao',
+							   'field' => 'codigo' ));
     	
         $inicio = new Zend_Form_Element_Text('numeroinicial');
 		$inicio -> clearDecorators();
 		$inicio -> addDecorators($decorator_default);
-        $inicio -> setLabel('Nº Inicial:')
-                -> setRequired(true);
+        $inicio -> setLabel('Nº Inicial:');
+        $inicio -> setRequired(true);
                 
         $final = new Zend_Form_Element_Text('numerofinal');
 		$final -> clearDecorators();
 		$final -> addDecorators($decorator_default);
-        $final -> setLabel('Nº Final:')
-                -> setRequired(true);
+        $final -> setLabel('Nº Final:');
+        $final -> setRequired(true);
                 
         $notafiscal = new Zend_Form_Element_Text('notafiscal');
 		$notafiscal -> clearDecorators();

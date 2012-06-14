@@ -15,32 +15,32 @@ class Admin_Form_Cartorio extends Zend_Form
        	$nome = new Zend_Form_Element_Text('nome');
 		$nome -> clearDecorators();
 		$nome -> addDecorators($decorator_default);
-    	$nome -> setLabel("Nome:")
-    		  -> setAttrib('size', '40');
+    	$nome -> setLabel("Nome:");
+    	$nome -> setAttrib('size', '40');
     		
     	$nomefantasia = new Zend_Form_Element_Text('nomefantasia');
 		$nomefantasia -> clearDecorators();
 		$nomefantasia -> addDecorators($decorator_default);
-    	$nomefantasia -> setLabel("Nome Fantasia:")
-    				  -> setAttrib('size', '20');
+    	$nomefantasia -> setLabel("Nome Fantasia:");
+    	$nomefantasia -> setAttrib('size', '20');
     	
 		$tabeliao = new Zend_Form_Element_Text('tabeliao');
 		$tabeliao -> clearDecorators();
 		$tabeliao -> addDecorators($decorator_default);
-    	$tabeliao -> setLabel("Oficial/Tabelião:")
-    			  -> setAttrib('size', '20');
+    	$tabeliao -> setLabel("Oficial/Tabelião:");
+    	$tabeliao -> setAttrib('size', '20');
     			  
     	$substituto = new Zend_Form_Element_Text('substituto');
 		$substituto -> clearDecorators();
 		$substituto -> addDecorators($decorator_default);
-    	$substituto -> setLabel("Suboficial/Substituto:")
-    			    -> setAttrib('size', '20');
+    	$substituto -> setLabel("Suboficial/Substituto:");
+    	$substituto -> setAttrib('size', '20');
     			   
     	$escrevente = new Zend_Form_Element_Text('escrevente');
 		$escrevente -> clearDecorators();
 		$escrevente -> addDecorators($decorator_default);
-    	$escrevente -> setLabel("Escrevente Autorizado:")
-    			    -> setAttrib('size', '20');
+    	$escrevente -> setLabel("Escrevente Autorizado:");
+    	$escrevente -> setAttrib('size', '20');
     			   
     	$notificacao = new Zend_Form_Element_Radio('notificacao');
 		$notificacao -> clearDecorators();
@@ -51,71 +51,72 @@ class Admin_Form_Cartorio extends Zend_Form
 			                '2'  => 'Notificação Comum'));
     				  
     	$validator_doc = new Hazel_Validate_Or();
-		$validator_doc->addValidator(new Hazel_Validate_Cpf())
-          		  	  ->addValidator(new Hazel_Validate_Cnpj());   	
+		$validator_doc->addValidator(new Hazel_Validate_Cpf());
+        $validator_doc->addValidator(new Hazel_Validate_Cnpj());
+		
     	$cnpj = new Zend_Form_Element_Text('cnpj');
 		$cnpj -> clearDecorators();
 		$cnpj -> addDecorators($decorator_default);
-    	$cnpj -> setLabel("CNPJ:")
-	     	  -> setAttrib('size', '18') 
-	     	  -> addValidator($validator_doc);
+    	$cnpj -> setLabel("CNPJ:");
+	    $cnpj -> setAttrib('size', '18') ;
+	    $cnpj -> addValidator($validator_doc);
 
     	$codigo = new Zend_Form_Element_Text('codigo');
 		$codigo -> clearDecorators();
 		$codigo -> addDecorators($decorator_default);
-    	$codigo -> setLabel("Código:")
-    		    -> setAttrib('size', '5');
+    	$codigo -> setLabel("Código:");
+    	$codigo -> setAttrib('size', '5');
     		 
     	$telefone = new Zend_Form_Element_Text('telefone');
 		$telefone -> clearDecorators();
 		$telefone -> addDecorators($decorator_default);
-    	$telefone -> setLabel("Telefone:")
-    		      -> setAttrib('size', '14');
+    	$telefone -> setLabel("Telefone:");
+    	$telefone -> setAttrib('size', '14');
     	
     	$email = new Zend_Form_Element_Text('email');
 		$email -> clearDecorators();
 		$email -> addDecorators($decorator_default);
-    	$email -> setLabel("e-mail:")
-    		   -> setRequired(true)
-    		   -> addValidator('EmailAddress')
-    		   -> setAttrib('size', '40')
-    		   -> setAttrib('maxlength', '60');
+    	$email -> setLabel("e-mail:");
+    	$email -> setRequired(true);
+    	$email -> addValidator('EmailAddress');
+    	$email -> setAttrib('size', '40');
+    	$email -> setAttrib('maxlength', '60');
             
         $site = new Zend_Form_Element_Text('site');
 		$site -> clearDecorators();
 		$site -> addDecorators($decorator_default);
-    	$site -> setLabel("Site:")
-    		  -> setAttrib('size', '30');
+    	$site -> setLabel("Site:");
+    	$site -> setAttrib('size', '30');
     		 
     	$cep = new Zend_Form_Element_Text('cep');
 		$cep -> clearDecorators();
 		$cep -> addDecorators($decorator_default);
-    	$cep -> setLabel("CEP:")
-    		 -> setAttrib('size', '30');    		 
+    	$cep -> setLabel("CEP:");
+    	$cep -> setAttrib('size', '30');    		 
     	
     	$endereco = new Zend_Form_Element_Text('endereco');
 		$endereco -> clearDecorators();
 		$endereco -> addDecorators($decorator_default);
-    	$endereco->setLabel("Endereço:")
-    		 ->setAttrib('size', '30');
+    	$endereco -> setLabel("Endereço:");
+    	$endereco -> setAttrib('size', '30');
 
     	$complemento = new Zend_Form_Element_Text('complemento');
 		$complemento -> clearDecorators();
 		$complemento -> addDecorators($decorator_default);
-    	$complemento->setLabel("Complemento:")
-    		 ->setAttrib('size', '30');
+    	$complemento -> setLabel("Complemento:");
+    	$complemento -> setAttrib('size', '30');
     		 
     	$bairro = new Zend_Form_Element_Text('bairro');
 		$bairro -> clearDecorators();
 		$bairro -> addDecorators($decorator_default);
-    	$bairro->setLabel("Bairro:")
-    		 ->setAttrib('size', '30');
+    	$bairro -> setLabel("Bairro:");
+    	$bairro -> setAttrib('size', '30');
     		 
     	$numero = new Zend_Form_Element_Text('numero');
 		$numero -> clearDecorators();
 		$numero -> addDecorators($decorator_default);
-    	$numero->setLabel("Número:")
-    		 ->setAttrib('size', '30');
+    	$numero -> setLabel("Número:");
+    	$numero -> setAttrib('size', '30');
     		 
     	$estado = new Zend_Form_Element_Select('uf');
 		$estado -> clearDecorators();
@@ -131,8 +132,8 @@ class Admin_Form_Cartorio extends Zend_Form
     	$cidade = new Zend_Form_Element_Select('idCidade');
     	$cidade -> clearDecorators();
 		$cidade -> addDecorators($decorator_default);
-		$cidade->setLabel("Cidade:")
-    				   ->setRegisterInArrayValidator(false);
+		$cidade -> setLabel("Cidade:");
+		$cidade -> setRegisterInArrayValidator(false);
 
     		 
     	$model_banco = new Banco();
@@ -141,7 +142,7 @@ class Admin_Form_Cartorio extends Zend_Form
 		$banco -> addDecorators($decorator_default);
 		$banco -> setLabel('Banco:');
         //populando o select
-        $banco->addMultiOption('0', "Selecione o Banco");    	
+        $banco -> addMultiOption('0', "Selecione o Banco");    	
 	    foreach ($model_banco->findForSelect() as $banc) {
 	    	$banco->addMultiOption($banc->idBanco, $banc->codigo . " - " .$banc->nome);
 		}
@@ -149,21 +150,21 @@ class Admin_Form_Cartorio extends Zend_Form
 		$agencia = new Zend_Form_Element_Select('idAgencia');
     	$agencia -> setLabel("Agência:");
 		$agencia -> clearDecorators();
-		$agencia -> addDecorators($decorator_default)
-    			 -> setRegisterInArrayValidator(false);
+		$agencia -> addDecorators($decorator_default);
+    	$agencia -> setRegisterInArrayValidator(false);
 
     		 	 
     	$conta = new Zend_Form_Element_Text('conta');
 		$conta -> clearDecorators();
 		$conta -> addDecorators($decorator_default);
-    	$conta -> setLabel("Conta:")
-    		   -> setAttrib('size', '20');
+    	$conta -> setLabel("Conta:");
+    	$conta -> setAttrib('size', '20');
     		 
     	$carteira = new Zend_Form_Element_Text('carteira');
 		$carteira -> clearDecorators();
 		$carteira -> addDecorators($decorator_default);
-    	$carteira -> setLabel("Carteira:")
-    		      -> setAttrib('size', '5');
+    	$carteira -> setLabel("Carteira:");
+    	$carteira -> setAttrib('size', '5');
     	
     
     	$submit = new Zend_Form_Element_Submit('Salvar');

@@ -16,8 +16,8 @@ class Admin_Form_Agencia extends Zend_Form
 	    $banco = new Zend_Form_Element_Select('idBanco');
 		$banco -> clearDecorators();
 		$banco -> addDecorators($decorator_default);
-		$banco ->setLabel('Banco:')		         
-               ->setRequired(true);
+		$banco -> setLabel('Banco:');         
+        $banco -> setRequired(true);
         //populando o select    	
 	    foreach ($model_banco->findForSelect() as $banc) {
 	    	$banco->addMultiOption($banc->idBanco, $banc->codigo . " - " .$banc->nome);
@@ -26,14 +26,14 @@ class Admin_Form_Agencia extends Zend_Form
         $codigo = new Zend_Form_Element_Text('codigo');
 		$codigo -> clearDecorators();
 		$codigo -> addDecorators($decorator_default);
-        $codigo ->setLabel('Código:')
-                ->setRequired(true);
+        $codigo -> setLabel('Código:');
+        $codigo -> setRequired(true);
          
         $descricao = new Zend_Form_Element_Text('descricao');
 		$descricao -> clearDecorators();
 		$descricao -> addDecorators($decorator_default);
-        $descricao ->setLabel('Descrição:')
-                   ->setRequired(true);        
+        $descricao -> setLabel('Descrição:')
+        $descricao -> setRequired(true);        
  
         $submit = new Zend_Form_Element_Submit('Salvar');
         $submit -> setAttrib('id', 'submitbutton');

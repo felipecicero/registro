@@ -11,8 +11,8 @@ class Admin_Form_Natureza extends Zend_Form
     	$natureza = new Zend_Form_Element_Text('nome');
 		$natureza -> clearDecorators();
 		$natureza -> addDecorators($decorator_default);
-    	$natureza->setLabel("Natureza:")    	 
-    				->setAttrib('size', '40');
+    	$natureza -> setLabel("Natureza:");
+    	$natureza -> setAttrib('size', '40');
     		 	      	
         $submit = new Zend_Form_Element_Submit('Salvar');
         $submit -> setAttrib('id', 'submitbutton');

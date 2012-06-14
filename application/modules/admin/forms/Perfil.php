@@ -15,8 +15,8 @@ class Admin_Form_Perfil extends Zend_Form
         $nome = new Zend_Form_Element_Text('papel');
 		$nome -> clearDecorators();
 		$nome -> addDecorators($decorator_default);
-        $nome -> setLabel('Nome do Perfil:')
-                	-> setRequired(true);
+        $nome -> setLabel('Nome do Perfil:');
+        $nome -> setRequired(true);
               
         $descricao = new Zend_Form_Element_Text('descricao');
 		$descricao -> clearDecorators();
@@ -54,11 +54,11 @@ class Admin_Form_Perfil extends Zend_Form
         }          
         $this->addDisplayGroup($array_recursos, 'resources',array('legend' => 'Permissões de Acesso'));
         $recursos = $this->getDisplayGroup('resources');
-		$recursos->setDecorators(array('FormElements','Fieldset',array('HtmlTag',array('tag'=>'div'))));
+		$recursos -> setDecorators(array('FormElements','Fieldset',array('HtmlTag',array('tag'=>'div'))));
 		
-		$this->addDisplayGroup(array('Salvar'),'submit');
+		$this -> addDisplayGroup(array('Salvar'),'submit');
         $submit = $this->getDisplayGroup('submit');
-		$submit->setDecorators(array('FormElements','Fieldset',array('HtmlTag',array('tag'=>'div'))));
+		$submit -> setDecorators(array('FormElements','Fieldset',array('HtmlTag',array('tag'=>'div'))));
         
         
         

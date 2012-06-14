@@ -15,22 +15,14 @@ class Admin_Form_Banco extends Zend_Form
         $banco = new Zend_Form_Element_Text('nome');
 		$banco -> clearDecorators();
 		$banco -> addDecorators($decorator_default);
-        $banco -> setLabel('Nome:')
-               -> setRequired(true);
+        $banco -> setLabel('Nome:');
+        $banco -> setRequired(true);
               
         $codigo = new Zend_Form_Element_Text('codigo');
 		$codigo -> clearDecorators();
 		$codigo -> addDecorators($decorator_default);
-        $codigo -> setLabel('Código:')
-                -> setRequired(true);/*
-                -> addValidator('Db_NoRecordExists', false,
-                 array(
-                     'table' => 'cap_bancos',
-                     'field' => 'codigo'
-                 )
-             	);*/
- 
-        
+        $codigo -> setLabel('Código:');
+        $codigo -> setRequired(true);
  
         $submit = new Zend_Form_Element_Submit('Salvar');
         $submit -> setAttrib('id', 'submitbutton');

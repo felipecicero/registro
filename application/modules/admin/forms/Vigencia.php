@@ -16,10 +16,10 @@ class Admin_Form_Vigencia extends Zend_Form
     	$vigencia = new Zend_Form_Element_Text('vigencia');
 		$vigencia -> clearDecorators();
 		$vigencia -> addDecorators($decorator_default);
-    	$vigencia->setLabel("Início da Vigência:")    	 
-    				->setAttrib('size', '10')
-    				->setAttrib('maxlength', '10')
-    				->addValidator($validate);//valida a data
+    	$vigencia -> setLabel("Início da Vigência:");
+    	$vigencia -> setAttrib('size', '10');
+    	$vigencia -> setAttrib('maxlength', '10');
+    	$vigencia -> addValidator($validate);//valida a data
     		 	      	
         $submit = new Zend_Form_Element_Submit('Salvar');
         $submit -> setAttrib('id', 'submitbutton');

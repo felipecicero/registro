@@ -9,27 +9,27 @@ class Admin_Form_Emolumento extends Zend_Form
 		$model_vigencia = new Vigencia();
         
 		$idVigencia = new Zend_Form_Element_Select('idVigencia');
-		$idVigencia->setLabel('Vigencia:')
-				 ->setAttrib('disabled', 'disabled');
+		$idVigencia -> setLabel('Vigencia:');
+		$idVigencia -> setAttrib('disabled', 'disabled');
 	    foreach ($model_vigencia->findForSelect() as $vigen) {
 	    	$idVigencia->addMultiOption($vigen->idVigencia, $vigen->vigencia);
 		}
 		
 		$emolumento = new Zend_Form_Element_Text('emolumentos');
-    	$emolumento->setLabel("Valor do Emolumento:")
-    		 	  ->setAttrib('size', '30');
+    	$emolumento -> setLabel("Valor do Emolumento:");
+    	$emolumento -> setAttrib('size', '30');
 
     	$valorinicial = new Zend_Form_Element_Text('valorinicial');
-    	$valorinicial->setLabel("Valor Inicial do Emolumento:")
-    		 	->setAttrib('size', '10');
+    	$valorinicial -> setLabel("Valor Inicial do Emolumento:");
+    	$valorinicial -> setAttrib('size', '10');
 				
 		$valor_final = new Zend_Form_Element_Text('valorfinal');
-    	$valor_final->setLabel("Valor Final do Emolumento:")
-    		 	->setAttrib('size', '10');
+    	$valor_final -> setLabel("Valor Final do Emolumento:");
+    	$valor_final -> setAttrib('size', '10');
     		 	      	
         $submit = new Zend_Form_Element_Submit('submit');
-        $submit->setLabel('Enviar')
-               ->setAttrib('id', 'submitbutton');
+        $submit -> setLabel('Enviar');
+        $submit -> setAttrib('id', 'submitbutton');
  
         $this->addElements(array($idEmolumentos, $idVigencia, $emolumento, $valorinicial, $valor_final, $submit));
     }

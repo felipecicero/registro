@@ -19,8 +19,8 @@ class Admin_Form_Abrangencias extends Zend_Form
 	    $cidade = new Zend_Form_Element_Select('idCidade');
 		$cidade -> clearDecorators();
 		$cidade -> addDecorators($decorator_default);
-		$cidade->setLabel('Comarca:')
-				->setRequired(true);
+		$cidade->setLabel('Comarca:');
+		$cidade->setRequired(true);
         //populando o select 
 	    foreach ($model_cidade->findForSelect($data_cartorio->idEstado) as $prot) {
 	    	$cidade->addMultiOption($prot->idCidade, $prot->nome);

@@ -16,56 +16,55 @@ class Admin_Form_Editarusuario extends Zend_Form
     	$nome = new Zend_Form_Element_Text('nome');
 		$nome -> clearDecorators();
 		$nome -> addDecorators($decorator_default);
-    	$nome->setLabel("Nome:")
-    		 ->setRequired(true)
-    		 ->setAttrib('size', '40')
-    		 ->setAttrib('maxlength', '60');    		 
+    	$nome -> setLabel("Nome:");
+    	$nome -> setRequired(true);
+    	$nome -> setAttrib('size', '40');
+    	$nome -> setAttrib('maxlength', '60');    		 
     	      
     	$senha = new Zend_Form_Element_Password('senha', true);
 		$senha -> clearDecorators();
 		$senha -> addDecorators($decorator_default);
-    	$senha->setLabel("Senha:")
-    		  //->addFilter('StringTrim')
-    	      //->setRequired(true)
-    	      ->setAttrib('size', '15')
-    	      ->setAttrib('maxlength', '20');    	      
+    	$senha -> setLabel("Senha:");
+    	$senha -> setAttrib('size', '15');
+    	$senha -> setAttrib('maxlength', '20');    	      
     	      
     	$confirmasenha = new Zend_Form_Element_Password('confirmasenha', true);
 		$confirmasenha -> clearDecorators();
 		$confirmasenha -> addDecorators($decorator_default);
-    	$confirmasenha->setLabel("Confirmar Senha:")
-    	    		  //->setRequired(true)
-    	    		  ->setAttrib('size', '15')
-    	    		  ->setAttrib('maxlength', '20')
-    	    		  ->addValidators(array(
-            						  array('identical', false, array('token' => 'senha')))); 
+    	$confirmasenha -> setLabel("Confirmar Senha:");
+    	$confirmasenha -> setAttrib('size', '15');
+    	$confirmasenha -> setAttrib('maxlength', '20');
+    	$confirmasenha -> addValidators(array(
+										array('identical', false, 
+										array('token' => 'senha')
+										))); 
     	
     	$validate = new Zend_Validate_Date(array('locale' => 'pt-Br'));
     	$nascimento = new Zend_Form_Element_Text('nascimento');
 		$nascimento -> clearDecorators();
 		$nascimento -> addDecorators($decorator_default);
-    	$nascimento->setLabel("Nascimento:")    	 
-    				->setAttrib('size', '10')
-    				->setAttrib('maxlength', '10')
-    				->addValidator($validate);//valida a data    			   
+    	$nascimento -> setLabel("Nascimento:");    	 
+    	$nascimento -> setAttrib('size', '10');
+    	$nascimento -> setAttrib('maxlength', '10');
+    	$nascimento -> addValidator($validate);//valida a data    			   
     	
     	$telefone = new Zend_Form_Element_Text('telefone');
 		$telefone -> clearDecorators();
 		$telefone -> addDecorators($decorator_default);
-    	$telefone->setLabel("Telefone:")
-    			 ->setAttrib('maxlength', '14')
-    		     ->setAttrib('size', '14');
+    	$telefone -> setLabel("Telefone:");
+    	$telefone -> setAttrib('maxlength', '14');
+    	$telefone -> setAttrib('size', '14');
     	
     	            
         $model_perfil = new Papel();
 	    $perfil = new Zend_Form_Element_Select('idPapel');
 		$perfil -> clearDecorators();
 		$perfil -> addDecorators($decorator_default);
-		$perfil->setLabel('Tipo do Cadastro: ');
+		$perfil -> setLabel('Tipo do Cadastro: ');
     	foreach ($model_perfil->getPapeis() as $perfi) {
 	    	$perfil->addMultiOption($perfi->idPapel, $perfi->papel);
 		}
-		$perfil->setValue('2');
+		$perfil -> setValue('2');
 
         $submit = new Zend_Form_Element_Submit('Salvar');
 		$submit -> clearDecorators();

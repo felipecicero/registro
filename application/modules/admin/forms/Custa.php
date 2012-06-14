@@ -14,14 +14,14 @@ class Admin_Form_Custa extends Zend_Form
         $nome = new Zend_Form_Element_Text('nome');
 		$nome -> clearDecorators();
 		$nome -> addDecorators($decorator_default);
-    	$nome->setLabel("Nome da Custa:")
-    		 	  ->setAttrib('size', '30');
+    	$nome -> setLabel("Nome da Custa:");
+    	$nome -> setAttrib('size', '30');
 
     	$valor = new Zend_Form_Element_Text('valor');
 		$valor -> clearDecorators();
 		$valor -> addDecorators($decorator_default);
-    	$valor->setLabel("Valor da Custa:")
-    		 	->setAttrib('size', '10');
+    	$valor -> setLabel("Valor da Custa:");
+    	$valor -> setAttrib('size', '10');
     		 	      	
         $submit = new Zend_Form_Element_Submit('Salvar');
         $submit -> setAttrib('id', 'submitbutton');

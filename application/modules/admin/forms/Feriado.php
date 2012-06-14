@@ -16,20 +16,20 @@ class Admin_Form_Feriado extends Zend_Form
     	$date = new Zend_Form_Element_Text('date');
 		$date -> clearDecorators();
 		$date -> addDecorators($decorator_default);
-    	$date -> setLabel("Data:")    	 
-			  -> setAttrib('size', '20')
-    		  -> setAttrib('maxlength', '10')
-    		  -> setAttrib('onKeyDown', 'Mascara(this,mdata);')
-    		  -> setAttrib('onKeyPress', 'Mascara(this,mdata);')
-    		  -> setAttrib('onKeyUp', 'Mascara(this,mdata);')
-    		  -> addValidator($validate)    				
-    		  -> setRequired(true);
+    	$date -> setLabel("Data:");    	 
+		$date -> setAttrib('size', '20');
+    	$date -> setAttrib('maxlength', '10');
+    	$date -> setAttrib('onKeyDown', 'Mascara(this,mdata);');
+    	$date -> setAttrib('onKeyPress', 'Mascara(this,mdata);');
+    	$date -> setAttrib('onKeyUp', 'Mascara(this,mdata);');
+    	$date -> addValidator($validate);		
+    	$date -> setRequired(true);
               
         $descricao = new Zend_Form_Element_Text('descricao');
 		$descricao -> clearDecorators();
 		$descricao -> addDecorators($decorator_default);
-        $descricao -> setLabel('Descrição:')
-                	-> setRequired(true);  
+        $descricao -> setLabel('Descrição:');
+        $descricao -> setRequired(true);  
  
         $submit = new Zend_Form_Element_Submit('Salvar');
         $submit -> setAttrib('id', 'submitbutton');

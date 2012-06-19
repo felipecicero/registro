@@ -23,19 +23,13 @@ class Admin_Form_Tipodocumento extends Zend_Form
     	$tipodocumentos -> addDecorators($decorator_default);
 		$tipodocumentos -> setLabel("Tipo do Documento:");
 		$tipodocumentos -> setAttrib('size', '50');
-
-		$valor = new Zend_Form_Element_Checkbox('valor');
-    	$valor -> clearDecorators();
-		$valor -> addDecorators($decorator_option);
-		$valor -> setLabel("Sem valor:");    		 	  
-		$valor -> setCheckedValue('1');
 		
         $submit = new Zend_Form_Element_Submit('Enviar');
         $submit -> setAttrib('id', 'submitbutton-import');
 		$submit -> clearDecorators();
 		$submit -> setDecorators(array('ViewHelper'));
  
-        $this->addElements(array($idTipodocumentos, $idNatureza, $tipodocumentos, $valor, $submit));
+        $this->addElements(array($idTipodocumentos, $idNatureza, $tipodocumentos, $submit));
     }
 
 

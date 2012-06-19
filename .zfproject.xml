@@ -52,10 +52,10 @@
               <actionMethod actionName="cadastrarvigencia"/>
               <actionMethod actionName="deletarvigencia"/>
               <actionMethod actionName="editarvigencia"/>
-              <actionMethod actionName="emolumentos"/>
-              <actionMethod actionName="cadastraremolumento"/>
-              <actionMethod actionName="editaremolumento"/>
-              <actionMethod actionName="deletaremolumento"/>
+              <actionMethod actionName="tipoemolumentos"/>
+              <actionMethod actionName="cadastrartipoemolumento"/>
+              <actionMethod actionName="editatiporemolumento"/>
+              <actionMethod actionName="deletartipoemolumento"/>
               <actionMethod actionName="custas"/>
               <actionMethod actionName="cadastrarcusta"/>
               <actionMethod actionName="editarcusta"/>
@@ -80,6 +80,15 @@
               <actionMethod actionName="cadastrartipodocumentos"/>
               <actionMethod actionName="editartipodocumentos"/>
               <actionMethod actionName="deletartipodocumentos"/>
+              <actionMethod actionName="emolumentovalor"/>
+              <actionMethod actionName="cadastraremolumentovalor"/>
+              <actionMethod actionName="editaremolumentovalor"/>
+              <actionMethod actionName="deletaremolumentovalor"/>
+              <actionMethod actionName="custasdocs"/>
+              <actionMethod actionName="tabelaemolumentos"/>
+              <actionMethod actionName="cadastrartabelaemolumentos"/>
+              <actionMethod actionName="editartabelaemolumentos"/>
+              <actionMethod actionName="deletartabelaemolumentos"/>
             </controllerFile>
             <controllerFile controllerName="Perfil">
               <actionMethod actionName="index"/>
@@ -105,13 +114,15 @@
             <formFile formName="Banco"/>
             <formFile formName="Agencia"/>
             <formFile formName="Vigencia"/>
-            <formFile formName="Emolumento"/>
+            <formFile formName="TipoEmolumento"/>
             <formFile formName="Custa"/>
             <formFile formName="Feriado"/>
             <formFile formName="Abrangencias"/>
             <formFile formName="Selo"/>
             <formFile formName="Natureza"/>
             <formFile formName="Tipodocumento"/>
+            <formFile formName="Emolumentovalor"/>
+            <formFile formName="TabelaEmolumentos"/>
           </formsDirectory>
           <layoutsDirectory enabled="false"/>
           <modelsDirectory>
@@ -128,7 +139,7 @@
             <modelFile modelName="Agencia"/>
             <modelFile modelName="Endereco"/>
             <modelFile modelName="Custa"/>
-            <modelFile modelName="Emolumento"/>
+            <modelFile modelName="TipoEmolumento"/>
             <modelFile modelName="Vigencia"/>
             <modelFile modelName="Feriado"/>
             <modelFile modelName="Abrangencias"/>
@@ -136,6 +147,9 @@
             <modelFile modelName="ControleSelo"/>
             <modelFile modelName="Natureza"/>
             <modelFile modelName="Tipodocumento"/>
+            <modelFile modelName="Semvaloremolumento"/>
+            <modelFile modelName="Valoremolumento"/>
+            <modelFile modelName="TabelaEmolumentos"/>
           </modelsDirectory>
           <viewsDirectory>
             <viewScriptsDirectory>
@@ -227,16 +241,16 @@
                 <viewScriptFile forActionName="editarvigencia"/>
               </viewControllerScriptsDirectory>
               <viewControllerScriptsDirectory forControllerName="Cartorio">
-                <viewScriptFile forActionName="emolumentos"/>
+                <viewScriptFile forActionName="tipoemolumentos"/>
               </viewControllerScriptsDirectory>
               <viewControllerScriptsDirectory forControllerName="Cartorio">
-                <viewScriptFile forActionName="cadastraremolumento"/>
+                <viewScriptFile forActionName="cadastrartipoemolumento"/>
               </viewControllerScriptsDirectory>
               <viewControllerScriptsDirectory forControllerName="Cartorio">
-                <viewScriptFile forActionName="editaremolumento"/>
+                <viewScriptFile forActionName="editartipoemolumento"/>
               </viewControllerScriptsDirectory>
               <viewControllerScriptsDirectory forControllerName="Cartorio">
-                <viewScriptFile forActionName="deletaremolumento"/>
+                <viewScriptFile forActionName="deletartipoemolumento"/>
               </viewControllerScriptsDirectory>
               <viewControllerScriptsDirectory forControllerName="Cartorio">
                 <viewScriptFile forActionName="custas"/>
@@ -310,6 +324,33 @@
               <viewControllerScriptsDirectory forControllerName="Cartorio">
                 <viewScriptFile forActionName="deletartipodocumentos"/>
               </viewControllerScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="Cartorio">
+                <viewScriptFile forActionName="emolumentovalor"/>
+              </viewControllerScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="Cartorio">
+                <viewScriptFile forActionName="cadastraremolumentovalor"/>
+              </viewControllerScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="Cartorio">
+                <viewScriptFile forActionName="editaremolumentovalor"/>
+              </viewControllerScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="Cartorio">
+                <viewScriptFile forActionName="deletaremolumentovalor"/>
+              </viewControllerScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="Cartorio">
+                <viewScriptFile forActionName="custasdocs"/>
+              </viewControllerScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="Cartorio">
+                <viewScriptFile forActionName="tabelaemolumentos"/>
+              </viewControllerScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="Cartorio">
+                <viewScriptFile forActionName="cadastrartabelaemolumentos"/>
+              </viewControllerScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="Cartorio">
+                <viewScriptFile forActionName="editartabelaemolumentos"/>
+              </viewControllerScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="Cartorio">
+                <viewScriptFile forActionName="deletartabelaemolumentos"/>
+              </viewControllerScriptsDirectory>
             </viewScriptsDirectory>
             <viewHelpersDirectory/>
             <viewFiltersDirectory/>
@@ -318,12 +359,33 @@
         <moduleDirectory moduleName="registro">
           <apisDirectory enabled="false"/>
           <configsDirectory enabled="false"/>
-          <controllersDirectory/>
-          <formsDirectory enabled="false"/>
+          <controllersDirectory>
+            <controllerFile controllerName="Titulodocumentos">
+              <actionMethod actionName="index"/>
+              <actionMethod actionName="cadastrotitulodocumento"/>
+            </controllerFile>
+          </controllersDirectory>
+          <formsDirectory>
+            <formFile formName="Titulodocumentos"/>
+          </formsDirectory>
           <layoutsDirectory enabled="false"/>
-          <modelsDirectory/>
+          <modelsDirectory>
+            <modelFile modelName="Pedidos"/>
+            <modelFile modelName="Pessoas"/>
+            <modelFile modelName="Itempedidos"/>
+            <modelFile modelName="Registros"/>
+            <modelFile modelName="Protocolo"/>
+            <modelFile modelName="Situacoes"/>
+          </modelsDirectory>
           <viewsDirectory>
-            <viewScriptsDirectory/>
+            <viewScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="Titulodocumentos">
+                <viewScriptFile forActionName="index"/>
+              </viewControllerScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="Titulodocumentos">
+                <viewScriptFile forActionName="cadastrotitulodocumento"/>
+              </viewControllerScriptsDirectory>
+            </viewScriptsDirectory>
             <viewHelpersDirectory/>
             <viewFiltersDirectory/>
           </viewsDirectory>

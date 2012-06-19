@@ -1,0 +1,24 @@
+<a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'cartorio', 'action' => 'index'), null, true); ?>" id="back-link">voltar</a>
+
+<h1>Administração</h1>
+<hr />
+<div id="messenger"><?php echo $this->flashMessenger();?></div>
+
+<ul id="menu-grid">
+	
+	<li>
+		<a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'cartorio','action' => 'vigencias'), null, true); ?>" title="Inserir custas e emolumentos.">
+			<img src="<?php echo $this->baseUrl(); ?>/css/icons/custas.png" />
+			<br/>
+			Custas e emolumentos
+		</a>
+	</li>
+	<li>
+		<a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'cartorio', 'action' => 'tipodocumentos'), null, true); ?>" title="Inserir tipos de documentos e naturezas.">
+			<img src="<?php echo $this->baseUrl(); ?>/css/icons/blank.png" />
+			<br/>
+			Tipo de Documento e Natureza
+		</a>
+	</li>
+</ul>
+

@@ -7,14 +7,15 @@ class Admin_CartorioController extends Zend_Controller_Action
     private $model_cartorio = null;
     private $model_agencia = null;
     private $model_vigencia = null;
-    private $model_emolumento = null;
+    private $model_tipoemolumento = null;
+    private $model_tabelaemolumento = null;
     private $model_custa = null;
     private $model_feriado = null;
     private $model_abrangencia = null;
     private $model_selos = null;
     private $model_natureza = null;
-	private $model_tipodocumento = null;
-	
+    private $model_tipodocumento = null;
+
     public function init()
     {
        if ( !Zend_Auth::getInstance()->hasIdentity() ) {
@@ -35,7 +36,8 @@ class Admin_CartorioController extends Zend_Controller_Action
 		$this->model_cartorio = new Cartorio();
 		$this->model_banco = new Banco();
 		$this->model_agencia = new Agencia();
-		$this->model_emolumento = new Emolumento();
+		$this->model_tipoemolumento = new TipoEmolumento();
+		$this->model_tabelaemolumento = new TabelaEmolumentos();
 		$this->model_feriado = new Feriado();
 		$this->model_abrangencia = new Abrangencias();
 		$this->model_selos = new Selo();
@@ -482,34 +484,34 @@ class Admin_CartorioController extends Zend_Controller_Action
         // action body
     }
 
-    public function emolumentosAction()
+    public function tipoemolumentosAction()
     {
         $idVigencia      = (int) $this->_getParam('idVigencia');    	
-    	$select =  $this->model_emolumento->select() 
-                   		->setIntegrityCheck(false)
-                   		->where("idVigencia = ?", $idVigencia)               			
-              			->order(array('emolumentos'));
-        
-    	$data = $this->model_emolumento->fetchAll($select);
-    	
+    	$data =  $this->model_tipoemolumento->selectTipos();
+		
         $this->view->emolumentos = $data;
     }
 
-    public function cadastraremolumentoAction()
+    public function cadastrartipoemolumentoAction()
     {
-        $form = new Admin_Form_Emolumento();
-        $idVigencia = (int) $this->_getParam('idVigencia');
-
+        $form = new Admin_Form_TipoEmolumento();
+		$idVigencia = (int) $this->_getParam('idVigencia');
+		
+		
         if ( $this->_request->isPost()){
+		
+			if ((string) $this->_request->getPost('valor') == '0,01')
+				$valor = 1;
+			else 
+				$valor = 0;
         	
         	$data = array(
         		'idVigencia' => $idVigencia,
-        		'valorinicial' => str_replace(',', '.', str_replace('.', '', $this->_request->getPost('valorinicial'))),
-				'valorfinal' => str_replace(',', '.', str_replace('.', '', $this->_request->getPost('valorfinal'))),
-				'emolumentos' => str_replace(',', '.', str_replace('.', '', $this->_request->getPost('emolumentos')))
+        		'idNatureza' => $this->_request->getPost('idNatureza'),
+				'tipo_custa' => $valor,
+				'emolumento' => $this->_request->getPost('emolumentos')
             );
-        	
-            if($this->model_emolumento->insert($data))
+            if($this->model_tipoemolumento->insert($data))
            			 ZendX_JQuery_FlashMessenger::addMessage('Dados cadastrados com sucesso.');
         	else 
            	 ZendX_JQuery_FlashMessenger::addMessage('Problemas ao cadastrar os dados.', 'error');
@@ -519,9 +521,9 @@ class Admin_CartorioController extends Zend_Controller_Action
         $this->view->form = $form;
     }
 
-    public function editaremolumentoAction()
+    public function editartipoemolumentoAction()
     {
-        $form = new Admin_Form_Emolumento();
+        $form = new Admin_Form_TipoEmolumento();
     	
    		if ( $this->_request->isPost()){           
             $data = array(
@@ -536,17 +538,17 @@ class Admin_CartorioController extends Zend_Controller_Action
 				$data['valorfinal'] = str_replace(',', '.', str_replace('.', '', $this->_request->getPost('valorfinal')));
 				$data['emolumentos'] = str_replace(',', '.', str_replace('.', '', $this->_request->getPost('emolumentos')));
             	
-                if($this->model_emolumento->update($data, "idEmolumentos = " . (int) $this->_request->getPost('idEmolumentos')))
+                if($this->model_tipoemolumento->update($data, "idEmolumentos = " . (int) $this->_request->getPost('idEmolumentos')))
            			 ZendX_JQuery_FlashMessenger::addMessage('Dados alterados com sucesso.');
 	        	else 
 	           	 	 ZendX_JQuery_FlashMessenger::addMessage('Problemas ao alterar os dados.', 'error');
                 
-                $this->_redirect('/admin/cartorio/emolumentos/idVigencia/' . $this->_getParam('idVigencia'));
+                $this->_redirect('/admin/cartorio/tipoemolumentos/idVigencia/' . $this->_getParam('idVigencia'));
             }
         }
         
     	$id      = (int) $this->_getParam('idEmolumentos');     	    	      
-        $result  = $this->model_emolumento->find($id);
+        $result  = $this->model_tipoemolumento->find($id);
         $data    = $result->current();         
 		
         if ( null === $data ){
@@ -562,23 +564,23 @@ class Admin_CartorioController extends Zend_Controller_Action
         $this->view->form = $form;
     }
 
-    public function deletaremolumentoAction()
+    public function deletartipoemolumentoAction()
     {
         // verificamos se realmente foi informado algum ID
         if ( $this->_hasParam('idEmolumentos') == false )
         {
-            $this->_redirect('/admin/cartorio/emolumentos/idVigencia/' . $this->_getParam('idVigencia'));
+            $this->_redirect('/admin/cartorio/tipoemolumentos/idVigencia/' . $this->_getParam('idVigencia'));
         }
  
         $id = (int) $this->_getParam('idEmolumentos');
-        $where = $this->model_emolumento->getAdapter()->quoteInto('idEmolumentos = ?', $id);
+        $where = $this->model_tipoemolumento->getAdapter()->quoteInto('idEmolumentos = ?', $id);
         
-        if($this->model_emolumento->delete($where))
+        if($this->model_tipoemolumento->delete($where))
             ZendX_JQuery_FlashMessenger::addMessage('Dados deletados com sucesso.');
         else 
             ZendX_JQuery_FlashMessenger::addMessage('Problemas ao deletar os dados.', 'error');
             
-        $this->_redirect('/admin/cartorio/emolumentos/idVigencia/' . $this->_getParam('idVigencia'));
+        $this->_redirect('/admin/cartorio/tipoemolumentos/idVigencia/' . $this->_getParam('idVigencia'));
     }
 
     public function custasAction()
@@ -1047,16 +1049,9 @@ class Admin_CartorioController extends Zend_Controller_Action
         $form = new Admin_Form_Tipodocumento();
         
         if ( $this->_request->isPost()){
-        	
-			if ((string) $this->_request->getPost('valor') == '0,01')
-				$valor = 1;
-			else 
-				$valor = 0;
-				
         	$data = array(
         		'idNatureza' => $this->_request->getPost('idNatureza'),
-				'nome' => $this->_request->getPost('nome'),
-				'valor' => $valor
+				'nome' => $this->_request->getPost('nome')
             );
         	
             if($this->model_tipodocumento->insert($data))
@@ -1092,5 +1087,158 @@ class Admin_CartorioController extends Zend_Controller_Action
         $this->_redirect('/admin/cartorio/tipodocumentos/idTipodocumentos/' . $this->_getParam('idTipodocumentos'));
     }
 
+    public function emolumentovalorAction()
+    {
+        $idEmolumentos = (int) $this->_getParam('idEmolumentos');
+		
+		$tipo = $this->model_emolumento->verificaTipoCusta($idEmolumentos);
+		
+		$custa = $this->model_emolumento->verificaCusta($idEmolumentos, (int)$tipo->tipo_custa);
+		
+		if ($custa == null){
+		
+			
+			
+		}
+		
+		
+    }
+
+    public function cadastraremolumentovalorAction()
+    {
+        // action body
+    }
+
+    public function editaremolumentovalorAction()
+    {
+        // action body
+    }
+
+    public function deletaremolumentovalorAction()
+    {
+        // action body
+    }
+
+    public function custasdocsAction()
+    {
+        // action body
+    }
+
+    public function tabelaemolumentosAction()
+    {
+        $idVigencia      = (int) $this->_getParam('idVigencia');    	
+    	$select =  $this->model_tabelaemolumento->select() 
+                   		->setIntegrityCheck(false)
+                   		->where("idVigencia = ?", $idVigencia)               			
+              			->order(array('emolumento'));
+        
+    	$data = $this->model_tabelaemolumento->fetchAll($select);
+    	
+        $this->view->emolumentos = $data;
+    }
+
+    public function cadastrartabelaemolumentosAction()
+    {
+        $form = new Admin_Form_TabelaEmolumentos();
+        $idVigencia = (int) $this->_getParam('idVigencia');
+
+        if ( $this->_request->isPost()){
+        	
+        	$data = array(
+        		'idVigencia'  => $idVigencia,
+        		'valor_inicial' => str_replace(',', '.', str_replace('.', '', $this->_request->getPost('valor_inicial'))),
+				'valor_final' => str_replace(',', '.', str_replace('.', '', $this->_request->getPost('valor_final'))),
+				'emolumento' => str_replace(',', '.', str_replace('.', '', $this->_request->getPost('emolumento')))
+            );
+        	
+            if($this->model_tabelaemolumento->insert($data))
+           			 ZendX_JQuery_FlashMessenger::addMessage('Dados cadastrados com sucesso.');
+        	else 
+           	 ZendX_JQuery_FlashMessenger::addMessage('Problemas ao cadastrar os dados.', 'error');
+        }
+        
+        $form->idVigencia->setValue($idVigencia);
+        $this->view->form = $form;
+    }
+
+    public function editartabelaemolumentosAction()
+    {
+        $form = new Admin_Form_TabelaEmolumentos();
+    	
+   		if ( $this->_request->isPost()){           
+            $data = array(
+                'emolumento' => $this->_request->getPost('emolumento'),
+        		'valor_inicial' => $this->_request->getPost('valor_inicial'),
+				'valor_final' => $this->_request->getPost('valor_final')
+            );
+
+            if ( $form->isValid($data) )
+            {
+            	$data['valor_inicial'] = str_replace(',', '.', str_replace('.', '', $this->_request->getPost('valor_inicial')));
+				$data['valor_final'] = str_replace(',', '.', str_replace('.', '', $this->_request->getPost('valor_final')));
+				$data['emolumento'] = str_replace(',', '.', str_replace('.', '', $this->_request->getPost('emolumento')));
+            	
+                if($this->model_tabelaemolumento->update($data, "idTabelaEmolumento = " . (int) $this->_request->getPost('idTabelaEmolumento')))
+           			 ZendX_JQuery_FlashMessenger::addMessage('Dados alterados com sucesso.');
+	        	else 
+	           	 	 ZendX_JQuery_FlashMessenger::addMessage('Problemas ao alterar os dados.', 'error');
+                
+                $this->_redirect('/admin/cartorio/emolumentos/idVigencia/' . $this->_getParam('idVigencia'));
+            }
+        }
+        
+    	$id      = (int) $this->_getParam('idTabelaEmolumento');     	    	      
+        $result  = $this->model_emolumento->find($id);
+        $data    = $result->current();         
+		
+        if ( null === $data ){
+        	ZendX_JQuery_FlashMessenger::addMessage('Emolumento não encontrado!', 'notice');
+            return false;
+        }
+        
+        $data->valor_inicial = $this->_helper->Util->valor($data->valor_inicial);
+        $data->valor_final = $this->_helper->Util->valor($data->valor_final);
+        $data->emolumento = $this->_helper->Util->valor($data->emolumento);
+        $form->setAsEditForm($data);
+
+        $this->view->form = $form;
+    }
+
+    public function deletartabelaemolumentosAction()
+    {
+        // verificamos se realmente foi informado algum ID
+        if ( $this->_hasParam('idTabelaEmolumento') == false )
+        {
+            $this->_redirect('/admin/cartorio/emolumentos/idVigencia/' . $this->_getParam('idVigencia'));
+        }
+ 
+        $id = (int) $this->_getParam('idTabelaEmolumento');
+        $where = $this->model_tabelaemolumento->getAdapter()->quoteInto('idTabelaEmolumento = ?', $id);
+        
+        if($this->model_emolumento->delete($where))
+            ZendX_JQuery_FlashMessenger::addMessage('Dados deletados com sucesso.');
+        else 
+            ZendX_JQuery_FlashMessenger::addMessage('Problemas ao deletar os dados.', 'error');
+            
+        $this->_redirect('/admin/cartorio/emolumentos/idVigencia/' . $this->_getParam('idVigencia'));
+    }
+
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

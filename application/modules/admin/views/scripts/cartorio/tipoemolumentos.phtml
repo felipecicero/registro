@@ -1,0 +1,63 @@
+<a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'cartorio', 'action' => 'vigencias')); ?>" id="back-link">voltar</a>
+
+<h1>Emolumentos do Cartório</h1>
+
+<ul>
+	<li>
+		<a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'cartorio','action' => 'cadastrartipoemolumento')); ?>" title="Cadastrar Emolumento">Cadastrar tipo de Emolumentos</a>
+	</li>
+</ul>
+<ul>
+	<li>
+		<a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'cartorio','action' => 'cadastrartabelaemolumentos')); ?>" title="Cadastrar Emolumento">Cadastrar tabela de Emolumentos</a>
+	</li>
+</ul>
+<ul>
+	<li>
+		<a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'cartorio','action' => 'tabelaemolumentos')); ?>" title="Cadastrar Emolumento">Tabela de Emolumentos</a>
+	</li>
+</ul>
+ 
+ 
+<div id="messenger"><?php echo $this->flashMessenger();?></div>
+ 
+<table cellspacing="1" cellpadding="1" border="1" class="display" id="tabela">
+    <thead>
+        <tr>
+            <th> # </th>
+            <th>Descrição do Emolumento</th>
+            <th>Natureza</th>
+			<th>Valores do Emolumento</th>
+            <th></th>
+        </tr>
+     </thead>
+     <tbody>
+        <?php $i=0; foreach ( $this->emolumentos as $emolumento ) { $i=$i+1; ?>
+            <tr>
+                <td><?php echo $i; ?></td>
+                <td><?php echo $emolumento->emolumento; ?></td>
+				<td align="center"><?php echo $emolumento->natureza; ?></td>
+				<td align="center"><a href="<?php echo $this->url(array(
+                                       'module' 		=> 'admin', 
+									   'controller' 	=> 'cartorio',
+                                       'action'     	=> 'emolumentovalor',
+                                       'idEmolumentos'  => $emolumento->idEmolumentos)); ?>" title="Editar">ícone</a></td>
+                               
+                <td align="center">
+                    <a href="<?php echo $this->url(array(
+                                       'module' 		=> 'admin', 
+									   'controller' 	=> 'cartorio',
+                                       'action'     	=> 'editartipoemolumento',
+                                       'idEmolumentos'  => $emolumento->idEmolumentos)); ?>" title="Editar">Editar</a>
+                    &nbsp;
+                    <a href="<?php echo $this->url(array(
+                                       'module' 		=> 'admin', 
+									   'controller' 	=> 'cartorio',
+                                       'action'     	=> 'deletartipoemolumento',
+                                       'idEmolumentos'  => $emolumento->idEmolumentos)); ?>" title="Apagar">Apagar</a>
+                </td>
+            </tr>
+        <?php } ?>        
+     </tbody>
+     
+</table>

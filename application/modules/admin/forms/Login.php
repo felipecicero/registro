@@ -22,10 +22,10 @@ class Admin_Form_Login extends Zend_Form
         $senha = new Zend_Form_Element_Password('senha');
 		$senha -> clearDecorators();
 		$senha -> addDecorators($decorator_default);
-        $senha -> setLabel('Senha:')
-        $senha -> setRequired(true)
-        $senha -> addFilter('StripTags')
-        $senha -> addFilter('StringTrim')
+        $senha -> setLabel('Senha:');
+        $senha -> setRequired(true);
+        $senha -> addFilter('StripTags');
+        $senha -> addFilter('StringTrim');
         $senha -> addValidator('NotEmpty');
  
         $submit = new Zend_Form_Element_Submit('Entrar');

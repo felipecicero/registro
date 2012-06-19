@@ -19,5 +19,16 @@ class TabelaEmolumentos extends Zend_Db_Table_Abstract{
     	
     	return $data->Current();
     }
+
+public function findForSelect($id)
+    {
+    	$select = $this->select();
+    	
+    	$select->where('idEmolumentoFixo = ' . $id);
+    
+    	return $this->fetchAll($select)->Current();
+    }
 }
+
+
 

@@ -78,5 +78,16 @@ class TipoEmolumento extends Zend_Db_Table_Abstract{
 		}
 		else return null;
 	}
+	
+	public function findForSelect($id)
+	{
+		$select = $this->select();
+		
+		$select->where('idEmolumentos = ?', $id);
+		
+		return $this->fetchAll($select)->Current();
+	}
+	
+	
 }
 

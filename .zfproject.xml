@@ -80,10 +80,10 @@
               <actionMethod actionName="cadastrartipodocumentos"/>
               <actionMethod actionName="editartipodocumentos"/>
               <actionMethod actionName="deletartipodocumentos"/>
-              <actionMethod actionName="emolumentovalor"/>
-              <actionMethod actionName="cadastraremolumentovalor"/>
-              <actionMethod actionName="editaremolumentovalor"/>
-              <actionMethod actionName="deletaremolumentovalor"/>
+              <actionMethod actionName="emolumentofixo"/>
+              <actionMethod actionName="cadastraremolumentofixo"/>
+              <actionMethod actionName="editaremolumentofixo"/>
+              <actionMethod actionName="deletaremolumentofixo"/>
               <actionMethod actionName="custasdocs"/>
               <actionMethod actionName="tabelaemolumentos"/>
               <actionMethod actionName="cadastrartabelaemolumentos"/>
@@ -121,7 +121,7 @@
             <formFile formName="Selo"/>
             <formFile formName="Natureza"/>
             <formFile formName="Tipodocumento"/>
-            <formFile formName="Emolumentovalor"/>
+            <formFile formName="Emolumentofixo"/>
             <formFile formName="TabelaEmolumentos"/>
           </formsDirectory>
           <layoutsDirectory enabled="false"/>
@@ -147,7 +147,7 @@
             <modelFile modelName="ControleSelo"/>
             <modelFile modelName="Natureza"/>
             <modelFile modelName="Tipodocumento"/>
-            <modelFile modelName="Semvaloremolumento"/>
+            <modelFile modelName="Emolumentofixo"/>
             <modelFile modelName="Valoremolumento"/>
             <modelFile modelName="TabelaEmolumentos"/>
           </modelsDirectory>
@@ -325,16 +325,16 @@
                 <viewScriptFile forActionName="deletartipodocumentos"/>
               </viewControllerScriptsDirectory>
               <viewControllerScriptsDirectory forControllerName="Cartorio">
-                <viewScriptFile forActionName="emolumentovalor"/>
+                <viewScriptFile forActionName="emolumentofixo"/>
               </viewControllerScriptsDirectory>
               <viewControllerScriptsDirectory forControllerName="Cartorio">
-                <viewScriptFile forActionName="cadastraremolumentovalor"/>
+                <viewScriptFile forActionName="cadastraremolumentofixo"/>
               </viewControllerScriptsDirectory>
               <viewControllerScriptsDirectory forControllerName="Cartorio">
-                <viewScriptFile forActionName="editaremolumentovalor"/>
+                <viewScriptFile forActionName="editaremolumentofixo"/>
               </viewControllerScriptsDirectory>
               <viewControllerScriptsDirectory forControllerName="Cartorio">
-                <viewScriptFile forActionName="deletaremolumentovalor"/>
+                <viewScriptFile forActionName="deletaremolumentofixo"/>
               </viewControllerScriptsDirectory>
               <viewControllerScriptsDirectory forControllerName="Cartorio">
                 <viewScriptFile forActionName="custasdocs"/>

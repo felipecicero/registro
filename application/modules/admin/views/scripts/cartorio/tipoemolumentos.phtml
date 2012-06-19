@@ -32,7 +32,10 @@
         </tr>
      </thead>
      <tbody>
-        <?php $i=0; foreach ( $this->emolumentos as $emolumento ) { $i=$i+1; ?>
+        <?php $i=0; foreach ( $this->emolumentos as $emolumento ) { $i=$i+1; 
+			if($emolumento->tipo_custa == 1) $action_tabela = 'tabelaemolumentos';
+			else $action_tabela = 'emolumentofixo';
+		?>
             <tr>
                 <td><?php echo $i; ?></td>
                 <td><?php echo $emolumento->emolumento; ?></td>
@@ -40,8 +43,8 @@
 				<td align="center"><a href="<?php echo $this->url(array(
                                        'module' 		=> 'admin', 
 									   'controller' 	=> 'cartorio',
-                                       'action'     	=> 'emolumentovalor',
-                                       'idEmolumentos'  => $emolumento->idEmolumentos)); ?>" title="Editar">ícone</a></td>
+                                       'action'     	=> $action_tabela,
+                                       'idEmolumentos'  => $emolumento->idEmolumentos)); ?>" title="Editar">Ver custas</a></td>
                                
                 <td align="center">
                     <a href="<?php echo $this->url(array(

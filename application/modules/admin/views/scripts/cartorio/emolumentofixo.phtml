@@ -1,0 +1,45 @@
+<a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'cartorio', 'action' => 'tipoemolumentos')); ?>" id="back-link">voltar</a>
+
+<h1>Custas Fixas do Emolumento</h1>
+ 
+<div id="messenger"><?php echo $this->flashMessenger();?></div>
+
+<?php 	if($this->emolumentofixo == null){?>
+
+<h1>Não existe custa cadastrada para esse Tipo de Emolumento</h1>
+
+<a href="<?php echo $this->url(array(
+                                       'module' 		=> 'admin', 
+									   'controller' 	=> 'cartorio',
+                                       'action'     	=> 'cadastraremolumentofixo',
+                                       'idEmolumentos'  => $this->idemolumento)); ?>" title="Editar">Cadastrar Custa</a> 
+									   
+<?php	}else{
+		 ?>
+
+<table cellspacing="1" cellpadding="1" border="1" class="display" id="tabela">
+    <thead>
+        <tr>
+            <th> # </th>
+            <th>Tipo do Emolumento</th>
+            <th>Natureza</th>
+			<th>Vigência</th>
+			<th>Valor do Emolumento</th>
+			<th>Valor das Páginas Extras</th>
+			<th>Primeira Página Extra</th>
+        </tr>
+     </thead>
+     <tbody>
+            <tr>
+                <td align="center"><?php echo '1'; ?></td>
+                <td align="center"><?php echo $this->emolumentofixo->nome_emolumento; ?></td>
+				<td align="center"><?php echo $this->emolumentofixo->natureza; ?></td>
+				<td align="center"><?php echo $this->emolumentofixo->vigencia; ?></td>
+				<td align="center"><?php echo $this->emolumentofixo->emolumento; ?></td>
+				<td align="center"><?php echo $this->emolumentofixo->pagina_extra; ?></td>
+				<td align="center"><?php echo $this->emolumentofixo->pagina_inicial; ?></td>
+            </tr>
+<?php 	} ?>        
+     </tbody>
+     
+</table>

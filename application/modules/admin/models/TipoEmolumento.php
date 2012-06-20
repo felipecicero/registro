@@ -88,6 +88,11 @@ class TipoEmolumento extends Zend_Db_Table_Abstract{
 		return $this->fetchAll($select)->Current();
 	}
 	
-	
+	public function findForSelectForm()
+	{
+		$select = $this->select();
+    	$select->order('emolumento');
+    	return $this->fetchAll($select);
+	}
 }
 

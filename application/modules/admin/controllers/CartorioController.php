@@ -1251,24 +1251,5 @@ class Admin_CartorioController extends Zend_Controller_Action
             
         $this->_redirect('/admin/cartorio/tipoemolumentos/idVigencia/' . $this->_getParam('idVigencia'));
     }
-
-	
 	
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

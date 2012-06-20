@@ -363,10 +363,13 @@
             <controllerFile controllerName="Titulodocumentos">
               <actionMethod actionName="index"/>
               <actionMethod actionName="cadastrotitulodocumento"/>
+              <actionMethod actionName="pedido"/>
+              <actionMethod actionName="cadastrarpedido"/>
             </controllerFile>
           </controllersDirectory>
           <formsDirectory>
             <formFile formName="Titulodocumentos"/>
+            <formFile formName="Pedido"/>
           </formsDirectory>
           <layoutsDirectory enabled="false"/>
           <modelsDirectory>
@@ -376,6 +379,8 @@
             <modelFile modelName="Registros"/>
             <modelFile modelName="Protocolo"/>
             <modelFile modelName="Situacoes"/>
+            <modelFile modelName="ItemPedidos"/>
+            <modelFile modelName="Pessoascitadas"/>
           </modelsDirectory>
           <viewsDirectory>
             <viewScriptsDirectory>
@@ -384,6 +389,12 @@
               </viewControllerScriptsDirectory>
               <viewControllerScriptsDirectory forControllerName="Titulodocumentos">
                 <viewScriptFile forActionName="cadastrotitulodocumento"/>
+              </viewControllerScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="Titulodocumentos">
+                <viewScriptFile forActionName="pedido"/>
+              </viewControllerScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="Titulodocumentos">
+                <viewScriptFile forActionName="cadastrarpedido"/>
               </viewControllerScriptsDirectory>
             </viewScriptsDirectory>
             <viewHelpersDirectory/>

@@ -18,5 +18,18 @@ class TitulodocumentosController extends Zend_Controller_Action
         // action body
     }
 
+    public function pedidoAction()
+    {
+        // action body
+    }
+
+    public function cadastrarpedidoAction()
+    {
+        // action body
+    }
+
 
 }
+
+
+

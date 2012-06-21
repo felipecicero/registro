@@ -49,20 +49,49 @@ fieldset legend{
 	font-size: 18px;
 }
 
+a img{border: none;	}
+
+input[type="text"]{ padding: 2px 5px; height: 20px; margin: 2px 0px;}
+select{ padding-left: 5px; height: 28px; max-width: 422px; margin: 2px 0px; display: block;}
+select.half{ width: 200px;}
+input.full{ width: 410px; }
+input.margin{ margin-bottom: 20px; }
+input.posfix{ margin-right: 200px; }
+input.half{ width: 188px; }
+.field{ max-width: 424px; padding-bottom: 5px;}
+.field.checkbox{ height: 56px; margin-bottom: 20px; }
+.field.checkbox label{ display: inline; line-height: 56px;  float: left; }
+.field.checkbox >div{ display: inline; line-height: 56px; height: 56px; float: left; }
+.field.checkbox input{ width: auto; margin: 21px 5px; }
+.field.margin{ margin-bottom: 20px !important; clear: both; }
+#submitbutton-import{ margin: 14px; height: 30px; border: 1px solid #333; }
+#submitbutton-import:focus,#submitbutton-import:hover{ border: 1px solid #003c58; cursor: pointer; background: #aee5ff;}
+#submitbutton-import:active{ border: 1px solid #001f3c; background: #00498d; color: #fff;}
+
+#form-tab .field{ float: left; margin: 0px 10px; width: 184px;}
+#form-tab select.half{ width: 182px;}
+#form-tab input.half{ width: 170px; }
+#form-tab .textarea{ clear: both; display: block; float: none; width: 400px; }
+
 .errors{
 	margin: 0px;
 	padding: 0px;
+	font-size: 10px;
+	width: 200px;
 	list-style: none;
-	margin: 0px 15px 10px;
+	margin: 0px;
 	color: #ff4343;
 }
 
 .clear{
 	margin: 0px;
 	height: 1px;
-	border: none;
 	display: block;
 	clear: both;
+    border: none;
+    outline: none;
+    background: url("img/split.png") center no-repeat;
+	visibility: hidden;
 }
 
 #page{
@@ -77,6 +106,34 @@ fieldset legend{
 #logo{
 	float: left;
 }
+#messenger ul{ list-style: none; margin: 0px; padding:0px; font-size: 12px;}
+#messenger ul li{ padding: 10px 5px 10px 50px; line-height: 20px;}
+#loginbox{
+	width: 200px;
+	margin: 50px auto;
+	background: #e9e9e9;
+	padding: 20px;
+	font-size: 16px;
+	border-radius: 4px;
+	border: 1px solid #d9d9d9;
+}
+#loginbox input[type="text"], #loginbox input[type="password"]{
+	width: 196px;
+	height: 30px;
+	margin: 5px 0px;
+	font-size: 16px;
+	padding: 0px;
+}
+#loginbox input[type="submit"]{
+	width: 200px;
+	height: 30px;
+	margin: 5px 0px;
+	font-size: 16px;
+	padding: 0px;
+	border: 1px solid #333; 
+}
+#loginbox input[type="submit"]:focus,#loginbox input[type="submit"]:hover{border: 1px solid #003c58; cursor: pointer; background: #aee5ff;}
+#loginbox input[type="submit"]:active{ border: 1px solid #001f3c; background: #00498d; color: #fff;}
 #menu-global{
 	margin: 0px;
 	list-style: none;
@@ -108,6 +165,7 @@ fieldset legend{
 	margin: 20px;
 	display: inline-block;
 	text-align: center;
+	*float: left;
 }
 #menu-grid.min li{
 	width: 150px;
@@ -196,7 +254,7 @@ fieldset legend{
 .option-field{
 	float: left;
 	width: 180px;
-	padding-right: 22px;
+	padding-right: 20px;
 	margin: 0px 10px;
 }
 .option-field label{

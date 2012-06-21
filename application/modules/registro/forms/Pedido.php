@@ -12,14 +12,14 @@ class Registro_Form_Pedido extends Zend_Form
 		$decorator_textarea = array('ViewHelper','Errors','Description','HtmlTag','Label',array(array('row' => 'HtmlTag'),array('tag' => 'div', 'class' => 'field textarea')));
 		$decorator_option = array('ViewHelper','Errors','Label',array(array('row' => 'HtmlTag'),array('class' => 'option-field')));
 		
-		$model_pedido = new Pedidos();
+		$model_pedidos = new Pedidos();
 	    $pedido = new Zend_Form_Element_Select('idPedido');
 		$pedido -> clearDecorators();
 		$pedido -> addDecorators($decorator_default);
 		$pedido -> setLabel('Pedido:');
 		$pedido -> setAttrib('disabled', 'disabled');
 		$pedido -> setAttrib('class', 'half');
-	    foreach ($model_pedido->findForSelect() as $pedi) {
+	    foreach ($model_pedidos->findForSelect() as $pedi) {
 	    	$pedido -> addMultiOption($pedi->idPedido, $this->completa(10, $pedi->pedido, "0"));
 		}
 		
@@ -31,11 +31,11 @@ class Registro_Form_Pedido extends Zend_Form
 		$situacao -> setAttrib('disabled', 'disabled');
 		$situacao -> setAttrib('class', 'half');
 	    foreach ($model_situacao->findForSelect() as $situa) {
-	    	$situacao->addMultiOption($situa->idSituacao, $situa->nome);
+	    	$situacao->addMultiOption($situa->idSituacoes, $situa->nome);
 		}
 	
 		$validate = new Zend_Validate_Date(array('locale' => 'pt-Br'));
-    	$data_pedido = new Zend_Form_Element_Text('datapedido');
+    	$data_pedido = new Zend_Form_Element_Text('data_pedido');
 		$data_pedido -> clearDecorators();
 		$data_pedido -> addDecorators($decorator_default);
     	$data_pedido -> setLabel("Data do Pedido:");
@@ -49,7 +49,7 @@ class Registro_Form_Pedido extends Zend_Form
 		
 		$validator_date = new Validate_DateHJ();
 		
-    	$data_prevista = new Zend_Form_Element_Text('dataprevista');
+    	$data_prevista = new Zend_Form_Element_Text('data_prevista');
 		$data_prevista -> clearDecorators();
 		$data_prevista -> addDecorators($decorator_default);
     	$data_prevista -> setLabel("Data Prevista:");
@@ -75,38 +75,45 @@ class Registro_Form_Pedido extends Zend_Form
     	$data_entrega -> addValidator($validator_date);
     	$data_entrega -> setRequired(true);
 		
-		$valor_pedido = new Zend_Form_Element_Text('valorpedido');
+		$valor_pedido = new Zend_Form_Element_Text('valor_pedido');
 		$valor_pedido -> clearDecorators();
 		$valor_pedido -> addDecorators($decorator_default);
     	$valor_pedido -> setLabel("Valor do Pedido:");
 		$valor_pedido -> setAttrib('class', 'half');
     	$valor_pedido -> setRequired(true);
 		
-		$valor_deposito = new Zend_Form_Element_Text('valordeposito');
+		$valor_deposito = new Zend_Form_Element_Text('valor_deposito');
 		$valor_deposito -> clearDecorators();
 		$valor_deposito -> addDecorators($decorator_default);
     	$valor_deposito -> setLabel("Valor do Depósito:");
 		$valor_deposito -> setAttrib('class', 'half');
     	$valor_deposito -> setRequired(true);
 		
-		$valor_receber = new Zend_Form_Element_Text('valorreceber');
+		$valor_receber = new Zend_Form_Element_Text('valor_receber');
 		$valor_receber -> clearDecorators();
 		$valor_receber -> addDecorators($decorator_default);
     	$valor_receber -> setLabel("Valor à Receber:");
 		$valor_receber -> setAttrib('class', 'half');
     	$valor_receber -> setRequired(true);
 		
+		$itens_pedido = new Zend_Form_Element_Text('itens_pedido');
+		$itens_pedido -> clearDecorators();
+		$itens_pedido -> addDecorators($decorator_default);
+    	$itens_pedido -> setLabel("Número de Itens do Pedido:");
+		$itens_pedido -> setAttrib('class', 'half');
+    	$itens_pedido -> setRequired(true);
+		
 		//Requerente
 		
-    	$tipo_requerente = new Zend_Form_Element_Radio('tipo_identificacao_requerente');
-		$tipo_requerente -> clearDecorators();
-		$tipo_requerente -> addDecorators($decorator_default);
-        $tipo_requerente -> setLabel('Tipo do documento:');
-        $tipo_requerente -> addMultiOptions(array(
+    	$tipo_identificacao_requerente = new Zend_Form_Element_Radio('tipo_identificacao_requerente');
+		$tipo_identificacao_requerente -> clearDecorators();
+		$tipo_identificacao_requerente -> addDecorators($decorator_default);
+        $tipo_identificacao_requerente -> setLabel('Tipo do documento:');
+        $tipo_identificacao_requerente -> addMultiOptions(array(
 													'1' => 'CNPJ',
 													'2' => 'CPF'));
-      	$tipo_requerente -> setSeparator('');
-      	$tipo_requerente -> setValue('1');
+      	$tipo_identificacao_requerente -> setSeparator('');
+      	$tipo_identificacao_requerente -> setValue('1');
          
     	$documento_requerente = new Zend_Form_Element_Text('documento_requerente');
 		$documento_requerente -> clearDecorators();
@@ -133,7 +140,7 @@ class Registro_Form_Pedido extends Zend_Form
 		$endereco_requerente -> setAttrib('class', 'half');
 						
 						
-		$telefone_requerente = new Zend_Form_Element_Text('telefone');
+		$telefone_requerente = new Zend_Form_Element_Text('telefone_requerente');
 		$telefone_requerente -> clearDecorators();
 		$telefone_requerente -> addDecorators($decorator_default);
     	$telefone_requerente -> setLabel("Telefone:");
@@ -158,7 +165,8 @@ class Registro_Form_Pedido extends Zend_Form
     	$numero_requerente -> setLabel("Número:");
 		$numero_requerente -> setAttrib('class', 'half');
     	
-    	$estado_requerente = new Zend_Form_Element_Select('uf_requerente');
+		$model_estado = new Estado();
+    	$estado_requerente = new Zend_Form_Element_Select('estado_requerente');
 		$estado_requerente -> clearDecorators();
 		$estado_requerente -> addDecorators($decorator_default);
 		$estado_requerente -> setLabel('UF:');
@@ -178,12 +186,35 @@ class Registro_Form_Pedido extends Zend_Form
 		$obs_requerente = new Zend_Form_Element_Textarea('obs_requerente');
 		$obs_requerente -> clearDecorators();
 		$obs_requerente -> addDecorators($decorator_textarea);
-        $obs_requerente -> setLabel('Observações: (telefones, emails, etc)');
+        $obs_requerente -> setLabel('Observações:');
 		$obs_requerente -> setAttrib('rows','5');
 		$obs_requerente -> setAttrib('cols','40');
 		$obs_requerente -> addFilter('StripTags');
 		
-		//item pedido
+		$submit = new Zend_Form_Element_Submit('Salvar');
+        $submit -> setAttrib('id', 'submitbutton-import');
+		$submit -> clearDecorators();
+		$submit -> setDecorators(array('ViewHelper'));
+		
+		$this->addElements(array($pedido, $situacao, $data_pedido, $data_prevista, $data_entrega, $valor_pedido, $valor_deposito, $valor_receber, $itens_pedido));
+		
+		$this->addElements(array($tipo_identificacao_requerente, $documento_requerente, $nome_requerente, $telefone_requerente, $cep_requerente, 
+								$endereco_requerente, $complemento_requerente, $bairro_requerente, $numero_requerente, 
+								$estado_requerente, $cidade_requerente, $obs_requerente));
+		
+		$this->addElements(array($submit));	
+		
+		
+	}
+
+	public function itensPedido(){
+		
+		$this->setDecorators(array( 'FormElements', 'Form')); 
+		$decorator_default = array('ViewHelper','Errors','Description','HtmlTag','Label',array(array('row' => 'HtmlTag'),array('tag' => 'div', 'class' => 'field')));
+		$decorator_check = array('ViewHelper','Errors','Description','HtmlTag','Label',array(array('row' => 'HtmlTag'),array('tag' => 'div', 'class' => 'field checkbox')));
+		$decorator_margin = array('ViewHelper','Errors','Description','HtmlTag','Label',array(array('row' => 'HtmlTag'),array('tag' => 'div', 'class' => 'field margin')));
+		$decorator_textarea = array('ViewHelper','Errors','Description','HtmlTag','Label',array(array('row' => 'HtmlTag'),array('tag' => 'div', 'class' => 'field textarea')));
+		$decorator_option = array('ViewHelper','Errors','Label',array(array('row' => 'HtmlTag'),array('class' => 'option-field')));
 		
 		$model_itempedido = new ItemPedidos();
 	    $item_pedido = new Zend_Form_Element_Select('idItempedido');
@@ -193,9 +224,10 @@ class Registro_Form_Pedido extends Zend_Form
 		$item_pedido -> setAttrib('disabled', 'disabled');
 		$item_pedido -> setAttrib('class', 'half');
 	    foreach ($model_itempedido->findForSelect() as $item) {
-	    	$item_pedido -> addMultiOption($item->idItempedido, $this->completa(10, $item->itempedido, "0"));
+	    	$item_pedido -> addMultiOption($item->idItempedido, $this->_helper->Util->completa(10, $item->itempedido, "0"));
 		}
 		
+		$model_situacao = new Situacoes();
 	    $pedido_situacao = new Zend_Form_Element_Select('idSituacao');
 		$pedido_situacao -> clearDecorators();
 		$pedido_situacao -> addDecorators($decorator_default);
@@ -203,7 +235,7 @@ class Registro_Form_Pedido extends Zend_Form
 		$pedido_situacao -> setAttrib('disabled', 'disabled');
 		$pedido_situacao -> setAttrib('class', 'half');
 	    foreach ($model_situacao->findForSelect() as $situa) {
-	    	$pedido_situacao -> addMultiOption($situa->idSituacao, $situa->nome);
+	    	$pedido_situacao -> addMultiOption($situa->idSituacoes, $situa->nome);
 		}
 		
 		$data_situacao = new Zend_Form_Element_Text('datasituacao');
@@ -220,23 +252,23 @@ class Registro_Form_Pedido extends Zend_Form
     	$data_situacao -> setRequired(true);
 		
 		$model_tipodocumento = new Tipodocumento();
-	    $documento = new Zend_Form_Element_Select('idTipodocumentos');
-		$documento -> clearDecorators();
-		$documento -> addDecorators($decorator_default);
-		$documento -> setLabel('Tipo do Docuemento:');
-		$documento -> setAttrib('class', 'half');
+	    $tipodocumentos = new Zend_Form_Element_Select('tipodocumentos');
+		$tipodocumentos -> clearDecorators();
+		$tipodocumentos -> addDecorators($decorator_default);
+		$tipodocumentos -> setLabel('Tipo do Docuemento:');
+		$tipodocumentos -> setAttrib('class', 'half');
 	    foreach ($model_tipodocumento->findForSelect() as $tdoc) {
-	    	$documento -> addMultiOption($tdoc->idTipodocumentos, $tdoc->nome);
+	    	$tipodocumentos -> addMultiOption($tdoc->idTipodocumentos, $tdoc->nome);
 		}
 		
 		$model_tipoemolumento = new TipoEmolumento();
-	    $documento = new Zend_Form_Element_Select('idTipodocumentos');
-		$documento -> clearDecorators();
-		$documento -> addDecorators($decorator_default);
-		$documento -> setLabel('Tipo do Docuemento:');
-		$documento -> setAttrib('class', 'half');
+	    $tipoemolumento = new Zend_Form_Element_Select('tipoemolumento');
+		$tipoemolumento -> clearDecorators();
+		$tipoemolumento -> addDecorators($decorator_default);
+		$tipoemolumento -> setLabel('Tipo do Emolumento:');
+		$tipoemolumento -> setAttrib('class', 'half');
 	    foreach ($model_tipoemolumento->findForSelectForm() as $temo) {
-	    	$documento -> addMultiOption($temo->idTipodocumentos, $temo->nome);
+	    	$tipoemolumento -> addMultiOption($temo->idEmolumentos, $temo->emolumento);
 		}
 		
 		$numeropaginas = new Zend_Form_Element_Text('numeropaginas');
@@ -316,14 +348,37 @@ class Registro_Form_Pedido extends Zend_Form
 		$observacao = new Zend_Form_Element_Textarea('observacao');
 		$observacao -> clearDecorators();
 		$observacao -> addDecorators($decorator_textarea);
-        $observacao -> setLabel('Observações:')
-		$observacao -> setAttrib('rows','5')
-		$observacao -> setAttrib('cols','40')
+        $observacao -> setLabel('Observações:');
+		$observacao -> setAttrib('rows','5');
+		$observacao -> setAttrib('cols','40');
 		$observacao -> addFilter('StripTags');
 		
+		$submit = new Zend_Form_Element_Submit('Salvar');
+        $submit -> setAttrib('id', 'submitbutton-import');
+		$submit -> clearDecorators();
+		$submit -> setDecorators(array('ViewHelper'));
+		
+		$this->addElements(array($item_pedido, $pedido_situacao, $data_situacao, $tipodocumentos, $tipoemolumento, $numeropaginas, $numerovias, $numeropessoas, $valor_documento, $emolumento, $valor_correio, $outras_despesas, $taxa_judiciaria, $funcivil, $total_custas, $observacao, $submit));
 		
 	}
-
-
+	
+	public function completa($tamanho, $string, $complemento){
+		
+		$tamanho_string = strlen($string);
+		
+		if($complemento == "0"){
+			while($tamanho_string < $tamanho){
+				$string = $complemento.$string;
+				$tamanho_string = strlen($string);
+			}
+		}
+		else{
+			while($tamanho_string < $tamanho){
+				$string = $string.$complemento;
+				$tamanho_string = strlen($string);
+			}
+		}
+		return $string;
+	}
 }
 

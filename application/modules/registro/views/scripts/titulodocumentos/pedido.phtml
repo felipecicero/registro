@@ -1,4 +1,119 @@
-<br /><br />
-<div id="view-content">
-	<p>View script for controller <b>Titulodocumentos</b> and script/action name <b>pedido</b></p>
-</div>
+<a href="<?php echo $this->url(array('module' => 'registro', 'controller' => 'titulodocumentos', 'action' => 'index'), null, true); ?>" id="back-link">voltar</a>
+
+
+<h1>Cadastro de Pedido </h1>
+
+<div id="messenger"><?php echo $this->flashMessenger();?></div>
+
+<?php echo $this->form; ?>
+
+<style>
+input{
+	text-transform: uppercase;
+} 
+</style>
+
+<script type="text/javascript">
+
+
+	$(function() {
+		var tabs = $('#form-tab');
+		var legends = $(tabs).find('fieldset').get();
+		
+		var titles = $('<ul></ul>');
+		$.each(legends, function(index, value) { 
+			var legend = $(value).find('legend');
+			
+			var id = $(value).attr('id');
+			var a = $('<a></a>').attr('href', '#' + id).text($(legend).text());
+			var li = $('<li></li>').append(a);
+			
+			$(legend).remove();
+			
+			$(titles).append(li);			
+			var div = $('<div></div>').attr('id', id);
+			$(div).html($(value).html());
+			$(tabs).append(div);
+			
+			$(value).remove();
+		});
+		$(tabs).prepend(titles);
+		$(tabs).tabs();
+		
+		
+		$('#estado_requerente').change(function() { 
+		
+	    	var id = $(this).val();		    	    			     
+
+	    	$.ajax({
+	    		url:"<?php echo $this->url(array('module' => 'registro', 'controller' => 'titulodocumentos', 'action' => 'getcidades'), null, true); ?>",
+    			dataType:'html',
+    			encoding: 'utf-8',
+   				data:{id: id},
+    			type:'GET',
+    			success: function(data){
+            				$('#cidade_requerente').html(data);
+    			}
+			});
+		});
+		
+		$('input[name="cep_requerente"]').setMask('99.999-999');
+		$('input[name="data_pedido"]').setMask('date');
+		$('input[name="data_prevista"]').setMask('date');
+		$('input[name="data_entrega"]').setMask('date');
+		$('input[name="valor_pedido"]').setMask('decimal');
+		$('input[name="valor_deposito"]').setMask('decimal');
+		$('input[name="valor_receber"]').setMask('decimal');
+		
+		$('input[name="documento_requerente"]').setMask('cnpj');
+		$('input[name="tipo_identificacao_requerente"]').change(function(){
+			if($(this).val() == '2'){	
+				$('input[name="documento_requerente"]').setMask('cpf');		
+			}else{
+				$('input[name="documento_requerente"]').setMask('cnpj');
+			}
+		})
+		
+		$('#documento_requerente').change(function() { 
+			
+	    	var doc = $(this).val();
+			var i = doc.replace(/[^0-9]/g, "");
+	    		
+	    	$.ajax({
+	    		url:"<?php echo $this->url(array('module' => 'registro', 'controller' => 'titulodocumentos' , 'action' => 'getpessoa'), null, true); ?>",
+    			dataType:'html',
+    			//encoding: 'iso-8859-1',
+   				data:{doc: doc},
+    			type:'GET',
+    			onFailure: function() {
+                    	    alert("Falha na execução desta tarefa.");
+                },
+    			success: function(data){
+                	$('#nome_requerente').html(data);
+                	$("#nome_requerente").val($('#idnome'+i).val()) ;
+                	$("#telefone_requerente").val($('#idtelefone'+i).val()) ;
+                	$("#endereco_requerente").val($('#idendereco'+i).val());
+                	$("#cep_requerente").val($('#idcep'+i).val());
+                	$("#complemento_requerente").val($('#idcomplemento'+i).val());
+                	$("#bairro_requerente").val($('#idbairro'+i).val());
+                	$("#numero_requerente").val($('#idnumero'+i).val());
+                	$("#obs_requerente").val($('#idobs'+i).val());
+					var uf = $('#iduf'+i).val();
+                	$("#estado_requerente").val(uf);
+                	
+        	    	$.ajax({
+        	    		url:"<?php echo $this->url(array('module' => 'registro', 'controller' => 'titulodocumentos', 'action' => 'getcidades'), null, true); ?>",
+            			dataType:'html',
+            			encoding: 'utf-8',
+           				data:{id: uf},
+            			type:'GET',
+            			success: function(data){
+                    				$('#cidade_requerente').html(data);
+            					 }
+        			});
+    			}
+			});
+		});
+
+	});
+</script>

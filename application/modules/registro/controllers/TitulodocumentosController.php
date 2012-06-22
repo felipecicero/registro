@@ -41,27 +41,25 @@ class TitulodocumentosController extends Zend_Controller_Action
 		
 			if ( $this->_request->isPost()){
 				
-				$user = new Zend_Session_Namespace();
-				
-				$user->data_pedido						= $this->_request->getPost('data_pedido');
-				$user->data_prevista					= $this->_request->getPost('data_prevista');
-				$user->data_entrega						= $this->_request->getPost('data_entrega');
-				$user->valor_pedido						= $this->_request->getPost('valor_pedido');
-				$user->valor_deposito					= $this->_request->getPost('valor_deposito');
-				$user->valor_receber					= $this->_request->getPost('valor_receber');
-				$user->itens_pedido 					= $this->_request->getPost('itens_pedido');
-				$user->tipo_identificacao_requerente	= $this->_request->getPost('tipo_identificacao_requerente');
-				$user->documento_requerente				= $this->_request->getPost('documento_requerente');
-				$user->nome_requerente					= $this->_request->getPost('nome_requerente');
-				$user->telefone_requerente				= $this->_request->getPost('telefone_requerente');
-				$user->cep_requerente					= $this->_request->getPost('cep_requerente');
-				$user->endereco_requerente				= $this->_request->getPost('endereco_requerente');
-				$user->complemento_requerente			= $this->_request->getPost('complemento_requerente');
-				$user->bairro_requerente				= $this->_request->getPost('bairro_requerente');
-				$user->numero_requerente				= $this->_request->getPost('numero_requerente');
-				$user->estado_requerente 				= $this->_request->getPost('estado_requerente');
-				$user->cidade_requerente				= $this->_request->getPost('cidade_requerente');
-				$user->obs_requerente 					= $this->_request->getPost('obs_requerente');
+				$user['data_pedido']					= $this->_request->getPost('data_pedido');
+				$user['data_prevista']					= $this->_request->getPost('data_prevista');
+				$user['data_entrega']					= $this->_request->getPost('data_entrega');
+				$user['valor_pedido']					= $this->_request->getPost('valor_pedido');
+				$user['valor_deposito']					= $this->_request->getPost('valor_deposito');
+				$user['valor_receber']					= $this->_request->getPost('valor_receber');
+				$user['itens_pedido'] 					= $this->_request->getPost('itens_pedido');
+				$user['tipo_identificacao_requerente']	= $this->_request->getPost('tipo_identificacao_requerente');
+				$user['documento_requerente']			= $this->_request->getPost('documento_requerente');
+				$user['nome_requerente']				= $this->_request->getPost('nome_requerente');
+				$user['telefone_requerente']			= $this->_request->getPost('telefone_requerente');
+				$user['cep_requerente']					= $this->_request->getPost('cep_requerente');
+				$user['endereco_requerente']			= $this->_request->getPost('endereco_requerente');
+				$user['complemento_requerente']			= $this->_request->getPost('complemento_requerente');
+				$user['bairro_requerente']				= $this->_request->getPost('bairro_requerente');
+				$user['numero_requerente']				= $this->_request->getPost('numero_requerente');
+				$user['estado_requerente'] 				= $this->_request->getPost('estado_requerente');
+				$user['cidade_requerente']				= $this->_request->getPost('cidade_requerente');
+				$user['obs_requerente'] 				= $this->_request->getPost('obs_requerente');
 				
 				$form->data_pedido->setValue($user->data_pedido);
 				$form->data_prevista->setValue($user->data_prevista);
@@ -83,11 +81,36 @@ class TitulodocumentosController extends Zend_Controller_Action
 				$form->cidade_requerente->setValue($user->cidade_requerente);
 				$form->obs_requerente->setValue($user->obs_requerente);
 				
-				$form1 = new Registro_Form_Pedido();
-				
 				$this->view->form = $form;
-				$this->view->form = $form1->itensPedido();
-				
+
+				if ( $this->_request->isPost('salvar')){
+					
+					$this->view->form = $form->itensPedido();
+
+					if ( $this->_request->isPost('adicionar')){
+					
+						$itens['datasituacao']		= $this->_request->getPost('datasituacao');
+						$itens['tipodocumentos']	= $this->_request->getPost('tipodocumentos');
+						$itens['tipoemolumento']	= $this->_request->getPost('tipoemolumento');
+						$itens['numeropaginas']		= $this->_request->getPost('numeropaginas');
+						$itens['numerovias']		= $this->_request->getPost('numerovias');
+						$itens['numeropessoas']		= $this->_request->getPost('numeropessoas');
+						$itens['valordocumento']	= $this->_request->getPost('valordocumento');
+						$itens['emolumento']		= $this->_request->getPost('emolumento');
+						$itens['valor_correio']		= $this->_request->getPost('valor_correio');
+						$itens['outrasdespesas']	= $this->_request->getPost('outrasdespesas');
+						$itens['total_custas']		= $this->_request->getPost('observacao');
+
+						$_SESSION['itempedido'][] = $itens;
+						
+						if($this->_request->isPost('submitfinal'){
+						
+						
+						
+						}
+						
+					}
+				}
 			}
 		
 		$this->view->form = $form;

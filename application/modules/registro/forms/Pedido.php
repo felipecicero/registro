@@ -238,6 +238,8 @@ class Registro_Form_Pedido extends Zend_Form
 	    	$pedido_situacao -> addMultiOption($situa->idSituacoes, $situa->nome);
 		}
 		
+		$validate = new Zend_Validate_Date(array('locale' => 'pt-Br'));
+		$validator_date = new Validate_DateHJ();
 		$data_situacao = new Zend_Form_Element_Text('datasituacao');
 		$data_situacao -> clearDecorators();
 		$data_situacao -> addDecorators($decorator_default);
@@ -320,6 +322,8 @@ class Registro_Form_Pedido extends Zend_Form
 		$outras_despesas -> setAttrib('class', 'half');
     	$outras_despesas -> setRequired(true);
 		
+		
+		$model_custa = new Custa();
 		$valor = $model_custa->getCustaByName('taxa judiciária');
     	$taxa_judiciaria = new Zend_Form_Element_Text('taxajudiciaria');
 		$taxa_judiciaria -> clearDecorators();
@@ -353,12 +357,17 @@ class Registro_Form_Pedido extends Zend_Form
 		$observacao -> setAttrib('cols','40');
 		$observacao -> addFilter('StripTags');
 		
-		$submit = new Zend_Form_Element_Submit('Salvar');
-        $submit -> setAttrib('id', 'submitbutton-import');
-		$submit -> clearDecorators();
-		$submit -> setDecorators(array('ViewHelper'));
+		$submit_temp = new Zend_Form_Element_Submit('adicionar');
+        $submit_temp -> setAttrib('id', 'submitbutton-itempedido');
+		$submit_temp -> clearDecorators();
+		$submit_temp -> setDecorators(array('ViewHelper'));
 		
-		$this->addElements(array($item_pedido, $pedido_situacao, $data_situacao, $tipodocumentos, $tipoemolumento, $numeropaginas, $numerovias, $numeropessoas, $valor_documento, $emolumento, $valor_correio, $outras_despesas, $taxa_judiciaria, $funcivil, $total_custas, $observacao, $submit));
+		$submit_final = new Zend_Form_Element_Submit('submitfinal');
+        $submit_final -> setAttrib('id', 'submitbutton-itempedido');
+		$submit_final -> clearDecorators();
+		$submit_final -> setDecorators(array('ViewHelper'));
+		
+		$this->addElements(array($item_pedido, $pedido_situacao, $data_situacao, $tipodocumentos, $tipoemolumento, $numeropaginas, $numerovias, $numeropessoas, $valor_documento, $emolumento, $valor_correio, $outras_despesas, $taxa_judiciaria, $funcivil, $total_custas, $observacao, $submit_temp));
 		
 	}
 	

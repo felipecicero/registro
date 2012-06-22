@@ -6,6 +6,34 @@
 <div id="messenger"><?php echo $this->flashMessenger();?></div>
 
 <?php echo $this->form; ?>
+				
+<table cellspacing="1" cellpadding="1" border="1" class="display" id="tabela"  >
+    <thead>
+        <tr>
+            <th>Item pedido</th>
+            <th>Tipo do Documento</th>
+			<th>Situação</th>
+            <th>Total das Custas</th>
+        </tr>
+    </thead>
+    <tbody>
+<?php
+	foreach ($_SESSION['itempedido'] as $item) {
+?> 
+        <tr>
+            <td><?php echo $this->escape($item['datasituacao']); ?></td>
+            <td><?php echo $this->escape($item['tipodocumentos']); ?></td>
+			<td><?php echo $this->escape($item['tipoemolumento']); ?></td>
+            <td><?php echo $this->escape($item['valordocumento']); ?></td>
+        </tr> 
+<?php
+	}
+?> 		
+    </tbody>
+				
+</table>
+
+
 
 <style>
 input{

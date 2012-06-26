@@ -1,5 +1,6 @@
 <a href="<?php echo $this->url(array('module' => 'registro', 'controller' => 'titulodocumentos', 'action' => 'index'), null, true); ?>" id="back-link">voltar</a>
 
+<a href="<?php echo $this->url(array('module'=>'registro','controller'=>'titulodocumentos' , 'action'=>'getpessoa', 'doc'=>'01364587181'), null, true); ?>" id="back-link">voltar</a>
 
 <h1>Cadastro de Pedido </h1>
 
@@ -18,7 +19,8 @@
     </thead>
     <tbody>
 <?php
-	foreach ($_SESSION['itempedido'] as $item) {
+	if(isset($_SESSION['itempedido'])){
+		foreach ($_SESSION['itempedido'] as $item) {
 ?> 
         <tr>
             <td><?php echo $this->escape($item['datasituacao']); ?></td>
@@ -27,6 +29,7 @@
             <td><?php echo $this->escape($item['valordocumento']); ?></td>
         </tr> 
 <?php
+		}
 	}
 ?> 		
     </tbody>
@@ -119,15 +122,15 @@ input{
     			success: function(data){
                 	$('#nome_requerente').html(data);
                 	$("#nome_requerente").val($('#idnome'+i).val()) ;
-                	$("#telefone_requerente").val($('#idtelefone'+i).val()) ;
+                	$("#telefone_requerente").val($('#idtelefone'+i).val());
+					$("#cep_requerente").val($('#idcep'+i).val());
                 	$("#endereco_requerente").val($('#idendereco'+i).val());
-                	$("#cep_requerente").val($('#idcep'+i).val());
                 	$("#complemento_requerente").val($('#idcomplemento'+i).val());
                 	$("#bairro_requerente").val($('#idbairro'+i).val());
                 	$("#numero_requerente").val($('#idnumero'+i).val());
-                	$("#obs_requerente").val($('#idobs'+i).val());
 					var uf = $('#iduf'+i).val();
                 	$("#estado_requerente").val(uf);
+					$("#obs_requerente").val($('#idobs'+i).val());
                 	
         	    	$.ajax({
         	    		url:"<?php echo $this->url(array('module' => 'registro', 'controller' => 'titulodocumentos', 'action' => 'getcidades'), null, true); ?>",

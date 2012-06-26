@@ -364,8 +364,8 @@
               <actionMethod actionName="index"/>
               <actionMethod actionName="cadastrotitulodocumento"/>
               <actionMethod actionName="pedido"/>
-			  <actionMethod actionName="getpessoa"/>
-			  <actionMethod actionName="getcidades"/>
+              <actionMethod actionName="getpessoa"/>
+              <actionMethod actionName="getcidades"/>
               <actionMethod actionName="cadastrarpedido"/>
             </controllerFile>
           </controllersDirectory>
@@ -383,16 +383,18 @@
             <modelFile modelName="Situacoes"/>
             <modelFile modelName="ItemPedidos"/>
             <modelFile modelName="Pessoascitadas"/>
+            <modelFile modelName="Pedido"/>
+            <modelFile modelName="Itempedido"/>
           </modelsDirectory>
           <viewsDirectory>
             <viewScriptsDirectory>
               <viewControllerScriptsDirectory forControllerName="Titulodocumentos">
                 <viewScriptFile forActionName="index"/>
               </viewControllerScriptsDirectory>
-			  <viewControllerScriptsDirectory forControllerName="Titulodocumentos">
+              <viewControllerScriptsDirectory forControllerName="Titulodocumentos">
                 <viewScriptFile forActionName="getpessoa"/>
               </viewControllerScriptsDirectory>
-			  <viewControllerScriptsDirectory forControllerName="Titulodocumentos">
+              <viewControllerScriptsDirectory forControllerName="Titulodocumentos">
                 <viewScriptFile forActionName="getcidades"/>
               </viewControllerScriptsDirectory>
               <viewControllerScriptsDirectory forControllerName="Titulodocumentos">

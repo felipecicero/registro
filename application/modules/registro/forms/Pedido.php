@@ -12,14 +12,14 @@ class Registro_Form_Pedido extends Zend_Form
 		$decorator_textarea = array('ViewHelper','Errors','Description','HtmlTag','Label',array(array('row' => 'HtmlTag'),array('tag' => 'div', 'class' => 'field textarea')));
 		$decorator_option = array('ViewHelper','Errors','Label',array(array('row' => 'HtmlTag'),array('class' => 'option-field')));
 		
-		$model_pedidos = new Pedidos();
+		$model_pedido = new Pedido();
 	    $pedido = new Zend_Form_Element_Select('idPedido');
 		$pedido -> clearDecorators();
 		$pedido -> addDecorators($decorator_default);
 		$pedido -> setLabel('Pedido:');
 		$pedido -> setAttrib('disabled', 'disabled');
 		$pedido -> setAttrib('class', 'half');
-	    foreach ($model_pedidos->findForSelect() as $pedi) {
+	    foreach ($model_pedido->findForSelect() as $pedi) {
 	    	$pedido -> addMultiOption($pedi->idPedido, $this->completa(10, $pedi->pedido, "0"));
 		}
 		
@@ -28,7 +28,7 @@ class Registro_Form_Pedido extends Zend_Form
 		$situacao -> clearDecorators();
 		$situacao -> addDecorators($decorator_default);
 		$situacao -> setLabel('Situação:');
-		$situacao -> setAttrib('disabled', 'disabled');
+		//$situacao -> setAttrib('disabled', 'disabled');
 		$situacao -> setAttrib('class', 'half');
 	    foreach ($model_situacao->findForSelect() as $situa) {
 	    	$situacao->addMultiOption($situa->idSituacoes, $situa->nome);
@@ -95,14 +95,7 @@ class Registro_Form_Pedido extends Zend_Form
     	$valor_receber -> setLabel("Valor à Receber:");
 		$valor_receber -> setAttrib('class', 'half');
     	$valor_receber -> setRequired(true);
-		
-		$itens_pedido = new Zend_Form_Element_Text('itens_pedido');
-		$itens_pedido -> clearDecorators();
-		$itens_pedido -> addDecorators($decorator_default);
-    	$itens_pedido -> setLabel("Número de Itens do Pedido:");
-		$itens_pedido -> setAttrib('class', 'half');
-    	$itens_pedido -> setRequired(true);
-		
+
 		//Requerente
 		
     	$tipo_identificacao_requerente = new Zend_Form_Element_Radio('tipo_identificacao_requerente');
@@ -196,7 +189,7 @@ class Registro_Form_Pedido extends Zend_Form
 		$submit -> clearDecorators();
 		$submit -> setDecorators(array('ViewHelper'));
 		
-		$this->addElements(array($pedido, $situacao, $data_pedido, $data_prevista, $data_entrega, $valor_pedido, $valor_deposito, $valor_receber, $itens_pedido));
+		$this->addElements(array($pedido, $situacao, $data_pedido, $data_prevista, $data_entrega, $valor_pedido, $valor_deposito, $valor_receber));
 		
 		$this->addElements(array($tipo_identificacao_requerente, $documento_requerente, $nome_requerente, $telefone_requerente, $cep_requerente, 
 								$endereco_requerente, $complemento_requerente, $bairro_requerente, $numero_requerente, 
@@ -216,15 +209,15 @@ class Registro_Form_Pedido extends Zend_Form
 		$decorator_textarea = array('ViewHelper','Errors','Description','HtmlTag','Label',array(array('row' => 'HtmlTag'),array('tag' => 'div', 'class' => 'field textarea')));
 		$decorator_option = array('ViewHelper','Errors','Label',array(array('row' => 'HtmlTag'),array('class' => 'option-field')));
 		
-		$model_itempedido = new ItemPedidos();
+		$model_protocolo = new Protocolo();
 	    $item_pedido = new Zend_Form_Element_Select('idItempedido');
 		$item_pedido -> clearDecorators();
 		$item_pedido -> addDecorators($decorator_default);
 		$item_pedido -> setLabel('Item do Pedido:');
 		$item_pedido -> setAttrib('disabled', 'disabled');
 		$item_pedido -> setAttrib('class', 'half');
-	    foreach ($model_itempedido->findForSelect() as $item) {
-	    	$item_pedido -> addMultiOption($item->idItempedido, $this->_helper->Util->completa(10, $item->itempedido, "0"));
+	    foreach ($model_protocolo->findForSelect() as $item) {
+	    	$item_pedido -> addMultiOption($item->idProtocolo, $this->completa(10, $item->protocolo, "0"));
 		}
 		
 		$model_situacao = new Situacoes();
@@ -232,7 +225,7 @@ class Registro_Form_Pedido extends Zend_Form
 		$pedido_situacao -> clearDecorators();
 		$pedido_situacao -> addDecorators($decorator_default);
 		$pedido_situacao -> setLabel('Situação:');
-		$pedido_situacao -> setAttrib('disabled', 'disabled');
+		//$pedido_situacao -> setAttrib('disabled', 'disabled');
 		$pedido_situacao -> setAttrib('class', 'half');
 	    foreach ($model_situacao->findForSelect() as $situa) {
 	    	$pedido_situacao -> addMultiOption($situa->idSituacoes, $situa->nome);
@@ -367,7 +360,7 @@ class Registro_Form_Pedido extends Zend_Form
 		$submit_final -> clearDecorators();
 		$submit_final -> setDecorators(array('ViewHelper'));
 		
-		$this->addElements(array($item_pedido, $pedido_situacao, $data_situacao, $tipodocumentos, $tipoemolumento, $numeropaginas, $numerovias, $numeropessoas, $valor_documento, $emolumento, $valor_correio, $outras_despesas, $taxa_judiciaria, $funcivil, $total_custas, $observacao, $submit_temp));
+		$this->addElements(array($item_pedido, $pedido_situacao, $data_situacao, $tipodocumentos, $tipoemolumento, $numeropaginas, $numerovias, $numeropessoas, $valor_documento, $emolumento, $valor_correio, $outras_despesas, $taxa_judiciaria, $funcivil, $total_custas, $observacao, $submit_temp, $submit_final));
 		
 	}
 	

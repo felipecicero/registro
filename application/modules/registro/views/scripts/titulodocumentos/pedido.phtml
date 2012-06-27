@@ -1,7 +1,5 @@
 <a href="<?php echo $this->url(array('module' => 'registro', 'controller' => 'titulodocumentos', 'action' => 'index'), null, true); ?>" id="back-link">voltar</a>
 
-<a href="<?php echo $this->url(array('module'=>'registro','controller'=>'titulodocumentos' , 'action'=>'getpessoa', 'doc'=>'01364587181'), null, true); ?>" id="back-link">voltar</a>
-
 <h1>Cadastro de Pedido </h1>
 
 <div id="messenger"><?php echo $this->flashMessenger();?></div>
@@ -89,10 +87,19 @@ input{
 		});
 		
 		$('input[name="cep_requerente"]').setMask('99.999-999');
+		$('input[name="telefone_requerente"]').setMask('(99)9999-9999');
 		$('input[name="data_pedido"]').setMask('date');
 		$('input[name="data_prevista"]').setMask('date');
+		$('input[name="datasituacao"]').setMask('date');
 		$('input[name="data_entrega"]').setMask('date');
 		$('input[name="valor_pedido"]').setMask('decimal');
+		$('input[name="valordocumento"]').setMask('decimal');
+		$('input[name="emolumento"]').setMask('decimal');
+		$('input[name="outrasdespesas"]').setMask('decimal');
+		$('input[name="funcivil"]').setMask('decimal');
+		$('input[name="total_custas"]').setMask('decimal');
+		$('input[name="taxajudiciaria"]').setMask('decimal');
+		$('input[name="valor_correio"]').setMask('decimal');
 		$('input[name="valor_deposito"]').setMask('decimal');
 		$('input[name="valor_receber"]').setMask('decimal');
 		
@@ -128,10 +135,9 @@ input{
                 	$("#complemento_requerente").val($('#idcomplemento'+i).val());
                 	$("#bairro_requerente").val($('#idbairro'+i).val());
                 	$("#numero_requerente").val($('#idnumero'+i).val());
+					$("#obs_requerente").val($('#idobs'+i).val());
 					var uf = $('#iduf'+i).val();
                 	$("#estado_requerente").val(uf);
-					$("#obs_requerente").val($('#idobs'+i).val());
-                	
         	    	$.ajax({
         	    		url:"<?php echo $this->url(array('module' => 'registro', 'controller' => 'titulodocumentos', 'action' => 'getcidades'), null, true); ?>",
             			dataType:'html',

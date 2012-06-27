@@ -7,8 +7,7 @@ class Pedidos extends Zend_Db_Table_Abstract{
 	public function findForSelect()
     {
     	$select = $this->select()
-    				   ->setIntegrityCheck(false) 
-    				   ->order('pedido');
+    				   ->setIntegrityCheck(false);
     	return $this->fetchAll($select);
     }
     

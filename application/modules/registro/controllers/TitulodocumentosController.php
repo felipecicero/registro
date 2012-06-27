@@ -3,7 +3,9 @@
 class TitulodocumentosController extends Zend_Controller_Action
 {
 
+	private $model_pedidos = null;
 	private $model_pedido = null;
+	private $model_protocolo = null;
 	private $model_itempedido = null;
 	
     public function init()
@@ -26,7 +28,9 @@ class TitulodocumentosController extends Zend_Controller_Action
 		
 		parent::init();
 		
-		$this->model_pedido = new Pedidos();
+		$this->model_pedidos = new Pedidos();
+		$this->model_protocolo = new Protocolo();
+		$this->model_pedido = new Pedido();
 		$this->model_itempedido = new ItemPedidos();
 		
 		$this->view->setEncoding('ISO-8859-1');
@@ -48,7 +52,9 @@ class TitulodocumentosController extends Zend_Controller_Action
 		
 		//if(isset($_SESSION['itempedido'])) unset($_SESSION['itempedido']);
 		if ( $this->_request->isPost()){
-				
+			
+
+			
 			$pedido['data_pedido']						= $this->_request->getPost('data_pedido');
 			$pedido['data_prevista']					= $this->_request->getPost('data_prevista');
 			$pedido['data_entrega']						= $this->_request->getPost('data_entrega');
@@ -68,8 +74,8 @@ class TitulodocumentosController extends Zend_Controller_Action
 			$requerente['estado_requerente'] 			= $this->_request->getPost('estado_requerente');
 			$requerente['cidade_requerente']			= $this->_request->getPost('cidade_requerente');
 			$requerente['obs_requerente'] 				= $this->_request->getPost('obs_requerente');
-				
-			$form->data_pedido->setValue(date('Y-m-d'));
+						
+			$form->data_pedido->setValue(date('d-m-Y'));
 			$form->data_prevista->setValue($pedido['data_prevista']);
 			$form->data_entrega->setValue($pedido['data_entrega']);
 			$form->valor_pedido->setValue($pedido['valor_pedido']);
@@ -85,15 +91,17 @@ class TitulodocumentosController extends Zend_Controller_Action
 			$form->bairro_requerente->setValue($requerente['bairro_requerente']);
 			$form->numero_requerente->setValue($requerente['numero_requerente']);
 			$form->estado_requerente->setValue($requerente['estado_requerente']);
-			$form->cidade_requerente->setValue($requerente['cidade_requerente']);
+			
+			$model_cidade = new Cidade();
+			$cidade = $model_cidade->findcity($this->_request->getPost('cidade_requerente'));
+			
+			$form->cidade_requerente->addMultiOption($cidade->idCidade, $cidade->nome);
 			$form->obs_requerente->setValue($requerente['obs_requerente']);
-				
+			
 			$this->view->form = $form;
 			$this->view->form = $form->itensPedido();
-				
-				
-					
-			if ( $this->_request->getPost('adicionar')){
+			
+			if ( $this->_request->getPost('adicionar') || $this->_request->getPost('submitfinal')){
 					
 				$itens['datasituacao']		= $this->_request->getPost('datasituacao');
 				$itens['tipodocumentos']	= $this->_request->getPost('tipodocumentos');
@@ -106,12 +114,13 @@ class TitulodocumentosController extends Zend_Controller_Action
 				$itens['valor_correio']		= $this->_request->getPost('valor_correio');
 				$itens['outrasdespesas']	= $this->_request->getPost('outrasdespesas');
 				$itens['total_custas']		= $this->_request->getPost('observacao');
+				
 				$_SESSION['itempedido'][] = $itens;
 					
 			}
 				
 			if($this->_request->getPost('submitfinal')){
-						
+				
 				$data_requerente = array(
 					'tipo_identificacao'	=> $requerente['tipo_identificacao_requerente'],
 					'numeroidentificacao'	=> preg_replace('/[^0-9]/', '', $requerente['documento_requerente']),	
@@ -128,7 +137,7 @@ class TitulodocumentosController extends Zend_Controller_Action
 							
 				$data_pedido = array(
 					'idPedidoFK'	=> $this->getUltimoPedido(),
-					'datapedido' 	=> date('Y-m-d'),
+					'datapedido' 	=> date('Y-m-d h:i:s'),
 					'dataprevista' 	=> preg_replace('/[^0-9]/', '', $pedido['data_prevista']),
 					'dataentrega' 	=> preg_replace('/[^0-9]/', '', $pedido['data_entrega']),
 					'valorpedido' 	=> preg_replace('/[^0-9]/', '', $pedido['valor_pedido']),
@@ -137,14 +146,9 @@ class TitulodocumentosController extends Zend_Controller_Action
 					'idSituacoes'	=> preg_replace('/[^0-9]/', '', $pedido['idSituacoes']),
 					'idRequerente'	=> $this->cadastrarpessoa($data_requerente)
 				);
-							
-				if($this->model_pedido->insert($data_pedido)){
-					$idPedido = $this->model_pedido->getAdapter()->lastInsertId();
-					$flag = true;
-				}
-				else 
-					$flag = false;
-					
+				
+				$idPedido = $this->cadastrarPedido($data_pedido);
+				
 				foreach($_SESSION['itempedido'] as $itens){
 				
 					$data_itempedido = array(
@@ -152,7 +156,7 @@ class TitulodocumentosController extends Zend_Controller_Action
 						'idProtocolo' 		=> $this->getUltimoProtocolo(),
 						'idTipodocumentos' 	=> preg_replace('/[^0-9]/', '', $itens['tipodocumentos']),
 						'idEmolumentos' 	=> preg_replace('/[^0-9]/', '', $itens['tipoemolumento']),
-						'datasituacao' 		=> preg_replace('/[^0-9]/', '', $itens['datasituacao']),
+						'datasituacao' 		=> date('Y-m-d h:i:s'),
 						'numeropaginas' 	=> preg_replace('/[^0-9]/', '', $itens['numeropaginas']),
 						'numerovias' 		=> preg_replace('/[^0-9]/', '', $itens['numerovias']),
 						'numeropessoas' 	=> preg_replace('/[^0-9]/', '', $itens['numeropessoas']),
@@ -161,21 +165,13 @@ class TitulodocumentosController extends Zend_Controller_Action
 						'outrasdespesas' 	=> preg_replace('/[^0-9]/', '', $itens['outrasdespesas'])
 					);
 							
-					if($this->model_itempedido->insert($data_itempedido)){
-						$flag = true;
-					}
-					else 
-						$flag = false;
+					$this->cadastrarItemPedido($data_itempedido);
 						
 				}
 				unset($_SESSION['itempedido']);
-				if($flag == true){
-					ZendX_JQuery_FlashMessenger::addMessage("Título cadastrado com sucesso.");
-					$form = new Registro_Form_Pedido();
-				}
-				else{
-					ZendX_JQuery_FlashMessenger::addMessage("Houve um problema ao cadastrar o Pedido.", 'warning');
-				}
+				
+				ZendX_JQuery_FlashMessenger::addMessage("Título cadastrado com sucesso.");
+				$form = new Registro_Form_Pedido();	
 			}
 		}
 		$this->view->form = $form;
@@ -331,7 +327,7 @@ class TitulodocumentosController extends Zend_Controller_Action
     	$pedido = $model_pedido->fetchAll($select);
     	
     	if(count($pedido) == 0){
-    		$model_pedido->insert(array('pedido' => 1, 'situacao' => 1));
+    		$model_pedido->insert(array('pedido' => 1, 'situacao' => 1, 'data_pedido' => date('Y-m-d h:i:s')));
     		return $model_pedido->getAdapter()->lastInsertId();
     	}
                
@@ -350,11 +346,111 @@ class TitulodocumentosController extends Zend_Controller_Action
     	$protocolo = $model_protocolo->fetchAll($select);
     	
     	if(count($protocolo) == 0){
-    		$model_protocolo->insert(array('protocolo'=>1, 'situacao' => 1));
+    		$model_protocolo->insert(array('protocolo' => 1, 'situacao' => 1, 'data' => date('Y-m-d h:i:s')));
     		return $model_protocolo->getAdapter()->lastInsertId();
     	}
-        //$this->_pvar($protocolo[count($protocolo)-1]);exit;        
+		
         return $protocolo[count($protocolo)-1]->idProtocolo;
     }
+	
+	public function updateProtocolo($idProtocolo)
+    {
+    	$model_protocolo = new Protocolo();
+
+	 	$select =  $model_protocolo->select() 
+                   		  		   ->setIntegrityCheck(false) 
+              			  		   ->where("idProtocolo = ?", $idProtocolo);
+        $protocolo = $model_protocolo->fetchAll($select);
+
+        $data_protocolo = array(
+        						'situacao' => '2'
+        				  );
+        
+        
+		if(isset($protocolo['_data'])){			
+	        $where = $model_protocolo->getAdapter()->quoteInto('idProtocolo = ?', $idProtocolo);
+	        $model_protocolo->update($data_protocolo, $where);
+
+	        $data_protocolo = array('protocolo' => ($protocolo['_data']->protocolo + 1),
+	        						'situacao' => '1');
+
+        	$model_protocolo->insert($data_protocolo);
+			$model_protocolo->getAdapter()->lastInsertId();
+		}
+    	
+    }
+	
+	public function updatePedido($idPedido)
+    {
+    	$model_pedido = new Pedido();
+
+	 	$select =  $model_pedido->select() 
+                   		  		->setIntegrityCheck(false) 
+              			  		->where("idPedido = ?", $idPedido);
+        $pedido = $model_pedido->fetchAll($select);
+        
+        $data_pedido = array('situacao' => '2');
+
+		if(isset($pedido['_data'])){			
+	        $where = $model_pedido->getAdapter()->quoteInto('idPedido = ?', $idPedido);
+	        $model_pedido->update($data_pedido, $where);
+
+	        $data_pedido = array('pedido' => ($pedido['_data']->pedido + 1),
+								 'situacao' => '1');
+			
+        	$model_pedido->insert($data_pedido);
+			$model_pedido->getAdapter()->lastInsertId();
+		}
+    	
+    }
+	
+	public function cadastrarPedido($data)
+    {
+		$model_pedido = new Pedidos();
+	
+		$select =  $model_pedido->select() 
+                   		  		->setIntegrityCheck(false) 
+              			  		->where("idPedidoFK = ?", $data['idPedidoFK']);
+        $pedido = $model_pedido->fetchAll($select);
+        
+		if(isset($pedido['_data'])){
+			return $pedido['_data']->idPedido;
+		}
+		else{
+
+			$model_pedido->insert($data);
+			$idPedido = $model_pedido->getAdapter()->lastInsertId();
+			
+			$this->updatePedido($data['idPedidoFK']);
+			 
+            return $idPedido;
+		}	
+    }
+	
+	public function cadastrarItemPedido($data)
+    {
+		
+		$model_itempedido = new ItemPedidos();
+		
+		$select =  $model_itempedido->select() 
+									->setIntegrityCheck(false) 
+									->where("idProtocolo = ?", $data['idProtocolo']);
+        $itempedido = $model_itempedido->fetchAll($select);
+        
+		if(isset($itempedido['_data'])){
+			return $itempedido['_data']->idItempedido;
+		}
+		else{
+
+			$model_itempedido->insert($data);
+			$idItempedido = $model_itempedido->getAdapter()->lastInsertId();
+			
+			$this->updateProtocolo($data['idProtocolo']);
+			 
+            return true;
+		}	
+    }
+	
+	
 	
 }

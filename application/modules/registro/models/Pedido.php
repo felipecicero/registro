@@ -8,6 +8,7 @@ class Pedido extends Zend_Db_Table_Abstract{
     {
     	$select = $this->select()
     				   ->setIntegrityCheck(false) 
+					   ->where("situacao = ?", 1)
     				   ->order('pedido');
     	return $this->fetchAll($select);
     }

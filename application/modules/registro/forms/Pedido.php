@@ -175,6 +175,8 @@ class Registro_Form_Pedido extends Zend_Form
 		$cidade_requerente -> addDecorators($decorator_default);
 		$cidade_requerente -> setLabel("Cidade:");
 		$cidade_requerente -> setAttrib('class', 'half');
+		$cidade_requerente -> setRegisterInArrayValidator(false);
+		$cidade_requerente -> setRequired(true);
         
 		$obs_requerente = new Zend_Form_Element_Textarea('obs_requerente');
 		$obs_requerente -> clearDecorators();
@@ -317,7 +319,7 @@ class Registro_Form_Pedido extends Zend_Form
 		
 		
 		$model_custa = new Custa();
-		$valor = $model_custa->getCustaByName('taxa judiciária');
+		$valor = $model_custa->getCustaByName('taxa_judiciária');
     	$taxa_judiciaria = new Zend_Form_Element_Text('taxajudiciaria');
 		$taxa_judiciaria -> clearDecorators();
 		$taxa_judiciaria -> addDecorators($decorator_default);

@@ -36,5 +36,18 @@ class Cidade extends Zend_Db_Table_Abstract
     	
     	return $data;
     }
+	
+	public function findcity($id)
+    {
+    	$select = $this->select();
+		
+    	$select -> setIntegrityCheck(false);
+    	
+    	$select -> from(array('cid' => 'car_cidades'), array('idCidade','nome'));
+		
+		$select -> where("idCidade = ?", $id);
+    	
+		return $this->fetchAll($select)->Current();
+    }
 
 }

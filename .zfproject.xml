@@ -150,6 +150,7 @@
             <modelFile modelName="Emolumentofixo"/>
             <modelFile modelName="Valoremolumento"/>
             <modelFile modelName="TabelaEmolumentos"/>
+            <modelFile modelName="Historico"/>
           </modelsDirectory>
           <viewsDirectory>
             <viewScriptsDirectory>
@@ -367,11 +368,14 @@
               <actionMethod actionName="getpessoa"/>
               <actionMethod actionName="getcidades"/>
               <actionMethod actionName="cadastrarpedido"/>
+              <actionMethod actionName="acompanhamento"/>
+              <actionMethod actionName="itenspedido"/>
             </controllerFile>
           </controllersDirectory>
           <formsDirectory>
             <formFile formName="Titulodocumentos"/>
             <formFile formName="Pedido"/>
+            <formFile formName="Itenspedido"/>
           </formsDirectory>
           <layoutsDirectory enabled="false"/>
           <modelsDirectory>
@@ -405,6 +409,12 @@
               </viewControllerScriptsDirectory>
               <viewControllerScriptsDirectory forControllerName="Titulodocumentos">
                 <viewScriptFile forActionName="cadastrarpedido"/>
+              </viewControllerScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="Titulodocumentos">
+                <viewScriptFile forActionName="acompanhamento"/>
+              </viewControllerScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="Titulodocumentos">
+                <viewScriptFile forActionName="itenspedido"/>
               </viewControllerScriptsDirectory>
             </viewScriptsDirectory>
             <viewHelpersDirectory/>

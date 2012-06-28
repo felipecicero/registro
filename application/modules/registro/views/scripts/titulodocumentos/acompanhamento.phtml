@@ -1,0 +1,49 @@
+<a href="<?php echo $this->url(array('module'=>'registro', 'controller' => 'titulodocumentos', 'action' => 'index'), null, true); ?>" id="back-link">voltar</a>
+
+<h1>Acompanhamento de Pedidos</h1>
+<hr />
+<div id="messenger"><?php echo $this->flashMessenger();?></div>
+
+<hr class="clear" />
+<table class="display" id="tabela" >
+
+    <thead>
+        <tr>
+            <th> # </th>
+            <th>Pedido</th>
+            <th>Item do Pedido</th>            
+            <th>Data de Cadastro</th>            
+            <th>Data Prevista</th>            
+            <th>Usuário</th>
+            <th>Situação Atual</th>
+
+        </tr>
+     </thead>
+      
+     <tbody>
+<?php 
+	$i=0;
+	foreach ( $this->pedidos as $pedido ) { 
+		$i=$i+1; 
+?>
+			<tr>
+                <td><?php echo $i; ?></td>
+                <td align="center"><?php echo $this->escape($pedido->numero_pedido); ?></td>
+                <td align="center">
+                	<a href="<?php echo $this->url(array(
+                						'module' 		=>'registro', 
+										'controller'	=> 'titulodocumentos',
+										'action'     	=> 'acompanhamento',
+										'idItempedido' 	=> $pedido->idItempedido)); ?>" title=""><?php echo ($pedido->protocolo); ?></a>
+                </td> 
+                <td align="center"><?php echo ($pedido->datapedido); ?></td>                
+                <td align="center"><?php echo ($pedido->dataprevista); ?></td>                
+                <td align="center"><?php echo ($pedido->nome); ?></td>
+                <td align="center"><?php echo ($pedido->situacao); ?></td>
+            </tr>
+<?php 
+	} 
+?>        
+     </tbody>
+     
+</table>

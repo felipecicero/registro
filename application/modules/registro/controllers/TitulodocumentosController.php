@@ -3,11 +3,16 @@
 class TitulodocumentosController extends Zend_Controller_Action
 {
 
-	private $model_pedidos = null;
-	private $model_pedido = null;
-	private $model_protocolo = null;
-	private $model_itempedido = null;
-	
+    private $model_pedidos = null;
+
+    private $model_pedido = null;
+
+    private $model_protocolo = null;
+
+    private $model_historico = null;
+
+    private $model_itempedido = null;
+
     public function init()
     {
         if ( !Zend_Auth::getInstance()->hasIdentity() ) {
@@ -40,8 +45,8 @@ class TitulodocumentosController extends Zend_Controller_Action
     {
         // action body
     }
-	
-	public function cadastrotitulodocumentoAction()
+
+    public function cadastrotitulodocumentoAction()
     {
         // action body
     }
@@ -53,12 +58,10 @@ class TitulodocumentosController extends Zend_Controller_Action
 		//if(isset($_SESSION['itempedido'])) unset($_SESSION['itempedido']);
 		if ( $this->_request->isPost()){
 			
-
-			
 			$pedido['data_pedido']						= $this->_request->getPost('data_pedido');
 			$pedido['data_prevista']					= $this->_request->getPost('data_prevista');
 			$pedido['data_entrega']						= $this->_request->getPost('data_entrega');
-			$pedido['idSituacoes']						= $this->_request->getPost('situacao');
+			$pedido['idSituacoes']						= $this->_request->getPost('idSituacao');
 			$pedido['valor_pedido']						= $this->_request->getPost('valor_pedido');
 			$pedido['valor_deposito']					= $this->_request->getPost('valor_deposito');
 			$pedido['valor_receber']					= $this->_request->getPost('valor_receber');
@@ -78,6 +81,7 @@ class TitulodocumentosController extends Zend_Controller_Action
 			$form->data_pedido->setValue(date('d-m-Y'));
 			$form->data_prevista->setValue($pedido['data_prevista']);
 			$form->data_entrega->setValue($pedido['data_entrega']);
+			$form->situacao->setValue($pedido['idSituacoes']);
 			$form->valor_pedido->setValue($pedido['valor_pedido']);
 			$form->valor_deposito->setValue($pedido['valor_deposito']);
 			$form->valor_receber->setValue($pedido['valor_receber']);
@@ -96,6 +100,7 @@ class TitulodocumentosController extends Zend_Controller_Action
 			$cidade = $model_cidade->findcity($this->_request->getPost('cidade_requerente'));
 			
 			$form->cidade_requerente->addMultiOption($cidade->idCidade, $cidade->nome);
+			$form->cidade_requerente->setValue($cidade->nome);
 			$form->obs_requerente->setValue($requerente['obs_requerente']);
 			
 			$this->view->form = $form;
@@ -105,6 +110,7 @@ class TitulodocumentosController extends Zend_Controller_Action
 					
 				$itens['datasituacao']		= $this->_request->getPost('datasituacao');
 				$itens['tipodocumentos']	= $this->_request->getPost('tipodocumentos');
+				$itens['idSituacoes']		= $this->_request->getPost('pedido_situacao');
 				$itens['tipoemolumento']	= $this->_request->getPost('tipoemolumento');
 				$itens['numeropaginas']		= $this->_request->getPost('numeropaginas');
 				$itens['numerovias']		= $this->_request->getPost('numerovias');
@@ -120,6 +126,11 @@ class TitulodocumentosController extends Zend_Controller_Action
 			}
 				
 			if($this->_request->getPost('submitfinal')){
+				
+				$user = new Zend_Session_Namespace('user_data');
+				
+				$data_historico['usuario'] = $user->user->idUsuario;
+				
 				
 				$data_requerente = array(
 					'tipo_identificacao'	=> $requerente['tipo_identificacao_requerente'],
@@ -144,10 +155,13 @@ class TitulodocumentosController extends Zend_Controller_Action
 					'valordeposito' => preg_replace('/[^0-9]/', '', $pedido['valor_deposito']),
 					'valorreceber' 	=> preg_replace('/[^0-9]/', '', $pedido['valor_receber']),
 					'idSituacoes'	=> preg_replace('/[^0-9]/', '', $pedido['idSituacoes']),
-					'idRequerente'	=> $this->cadastrarpessoa($data_requerente)
+					'idRequerente'	=> $this->cadastrarPessoa($data_requerente)
 				);
 				
 				$idPedido = $this->cadastrarPedido($data_pedido);
+				
+				$data_historico['idPedido'] = $idPedido;
+
 				
 				foreach($_SESSION['itempedido'] as $itens){
 				
@@ -156,6 +170,7 @@ class TitulodocumentosController extends Zend_Controller_Action
 						'idProtocolo' 		=> $this->getUltimoProtocolo(),
 						'idTipodocumentos' 	=> preg_replace('/[^0-9]/', '', $itens['tipodocumentos']),
 						'idEmolumentos' 	=> preg_replace('/[^0-9]/', '', $itens['tipoemolumento']),
+						'idSituacoes	' 	=> preg_replace('/[^0-9]/', '', $itens['pedido_situacao']),
 						'datasituacao' 		=> date('Y-m-d h:i:s'),
 						'numeropaginas' 	=> preg_replace('/[^0-9]/', '', $itens['numeropaginas']),
 						'numerovias' 		=> preg_replace('/[^0-9]/', '', $itens['numerovias']),
@@ -165,8 +180,13 @@ class TitulodocumentosController extends Zend_Controller_Action
 						'outrasdespesas' 	=> preg_replace('/[^0-9]/', '', $itens['outrasdespesas'])
 					);
 							
-					$this->cadastrarItemPedido($data_itempedido);
-						
+					$data_historico['idItempedido'] = $this->cadastrarItemPedido($data_itempedido);
+					$data_historico['descricao'] =  'Item de Pedido Cadastrado.';
+					
+					$this->cadastrarHistoricoPedidos($data_historico);
+					
+					unset($data_historico['idItempedido']);
+					unset($data_historico['descricao']);
 				}
 				unset($_SESSION['itempedido']);
 				
@@ -176,8 +196,8 @@ class TitulodocumentosController extends Zend_Controller_Action
 		}
 		$this->view->form = $form;
     }
-	
-	public function getpessoaAction()
+
+    public function getpessoaAction()
     {
 		$this->_helper->layout ()->disableLayout ();
 		$this->_helper->viewRenderer->setNoRender ();
@@ -208,8 +228,8 @@ class TitulodocumentosController extends Zend_Controller_Action
         	   
 		exit();
     }
-   
-	public function cadastrarpessoa($data)
+
+    public function cadastrarPessoa($data)
     {
     	$model_pessoa = new Pessoas();
 		
@@ -230,19 +250,20 @@ class TitulodocumentosController extends Zend_Controller_Action
 			
 			$model_pessoa->update($data, "idPessoas = " . $pessoa->Current()->idPessoas);
 
-			$this->cadastrarendereco($data_endereco, $pessoa->Current()->idEndereco);
+			$this->cadastrarEndereco($data_endereco, $pessoa->Current()->idEndereco);
 			
 			return $pessoa->Current()->idPessoas;
 		}
 		else{			
-			$data['idEndereco'] = $this->cadastrarendereco($data_endereco);
+			$data['idEndereco'] = $this->cadastrarEndereco($data_endereco);
 			 
 			$model_pessoa->insert($data);
             return $model_pessoa->getAdapter()->lastInsertId();
-		}
+		
+		
     }
-	
-	public function cadastrarendereco($data, $id = '')
+
+    public function cadastrarEndereco($data, $id = '')
     {
     	$model_endereco = new Endereco();
     	 
@@ -258,13 +279,13 @@ class TitulodocumentosController extends Zend_Controller_Action
     	}
     	return true;
     }
-	
-	public function cadastrarpedidoAction()
+
+    public function cadastrarpedidoAction()
     {
         // action body
     }
-	
-	public function getcidadesAction()
+
+    public function getcidadesAction()
     {
        $this->_helper->layout ()->disableLayout ();
 	   $this->_helper->viewRenderer->setNoRender ();
@@ -293,7 +314,7 @@ class TitulodocumentosController extends Zend_Controller_Action
       echo $combo;
     }
 
-	public function getemolumentoAction()
+    public function getEmolumentoAction()
     {
        $this->_helper->layout ()->disableLayout ();
 	   $this->_helper->viewRenderer->setNoRender ();
@@ -315,8 +336,8 @@ class TitulodocumentosController extends Zend_Controller_Action
   	   
   	   exit ();
     }
-	
-	public function getUltimoPedido()
+
+    public function getUltimoPedido()
     {
     	$model_pedido = new Pedido();
 
@@ -327,14 +348,14 @@ class TitulodocumentosController extends Zend_Controller_Action
     	$pedido = $model_pedido->fetchAll($select);
     	
     	if(count($pedido) == 0){
-    		$model_pedido->insert(array('pedido' => 1, 'situacao' => 1, 'data_pedido' => date('Y-m-d h:i:s')));
+    		$model_pedido->insert(array('pedido' => 1, 'situacao' => 1));
     		return $model_pedido->getAdapter()->lastInsertId();
     	}
                
         return $pedido[count($pedido)-1]->idPedido;
     }
 
-	public function getUltimoProtocolo()
+    public function getUltimoProtocolo()
     {
     	$model_protocolo = new Protocolo();
 
@@ -346,14 +367,14 @@ class TitulodocumentosController extends Zend_Controller_Action
     	$protocolo = $model_protocolo->fetchAll($select);
     	
     	if(count($protocolo) == 0){
-    		$model_protocolo->insert(array('protocolo' => 1, 'situacao' => 1, 'data' => date('Y-m-d h:i:s')));
+    		$model_protocolo->insert(array('protocolo' => 1, 'situacao' => 1));
     		return $model_protocolo->getAdapter()->lastInsertId();
     	}
 		
         return $protocolo[count($protocolo)-1]->idProtocolo;
     }
-	
-	public function updateProtocolo($idProtocolo)
+
+    public function updateProtocolo($idProtocolo)
     {
     	$model_protocolo = new Protocolo();
 
@@ -379,8 +400,8 @@ class TitulodocumentosController extends Zend_Controller_Action
 		}
     	
     }
-	
-	public function updatePedido($idPedido)
+
+    public function updatePedido($idPedido)
     {
     	$model_pedido = new Pedido();
 
@@ -403,8 +424,8 @@ class TitulodocumentosController extends Zend_Controller_Action
 		}
     	
     }
-	
-	public function cadastrarPedido($data)
+
+    public function cadastrarPedido($data)
     {
 		$model_pedido = new Pedidos();
 	
@@ -426,8 +447,8 @@ class TitulodocumentosController extends Zend_Controller_Action
             return $idPedido;
 		}	
     }
-	
-	public function cadastrarItemPedido($data)
+
+    public function cadastrarItemPedido($data)
     {
 		
 		$model_itempedido = new ItemPedidos();
@@ -447,10 +468,35 @@ class TitulodocumentosController extends Zend_Controller_Action
 			
 			$this->updateProtocolo($data['idProtocolo']);
 			 
-            return true;
+            return $idItempedido;
 		}	
     }
+
+    public function cadastrarHistoricoPedidos($data)
+    {
+    	$model_historico = new Historico();
+		
+		$model_historico->insert($data);
+		
+		return $model_historico->getAdapter()->lastInsertId();
+		
+    }
+
+    public function acompanhamentoAction()
+    {
+		$data = $this->model_pedidos->selectPedidos();
 	
-	
-	
+		
+		$this->view->pedidos = $data;
+    }
+
+    public function itenspedidoAction()
+    {
+        // action body
+    }
+
+
 }
+
+
+

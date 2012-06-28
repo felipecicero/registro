@@ -223,7 +223,7 @@ class Registro_Form_Pedido extends Zend_Form
 		}
 		
 		$model_situacao = new Situacoes();
-	    $pedido_situacao = new Zend_Form_Element_Select('idSituacao');
+	    $pedido_situacao = new Zend_Form_Element_Select('pedido_situacao');
 		$pedido_situacao -> clearDecorators();
 		$pedido_situacao -> addDecorators($decorator_default);
 		$pedido_situacao -> setLabel('Situação:');

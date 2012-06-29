@@ -75,36 +75,24 @@ class TitulodocumentosController extends Zend_Controller_Action
 			$requerente['bairro_requerente']			= $this->_request->getPost('bairro_requerente');
 			$requerente['numero_requerente']			= $this->_request->getPost('numero_requerente');
 			$requerente['estado_requerente'] 			= $this->_request->getPost('estado_requerente');
+			$requerente['notificante'] 					= $this->_request->getPost('notificante');
 			$requerente['cidade_requerente']			= $this->_request->getPost('cidade_requerente');
 			$requerente['obs_requerente'] 				= $this->_request->getPost('obs_requerente');
-						
+
 			$form->data_pedido->setValue(date('d-m-Y'));
 			$form->data_prevista->setValue($pedido['data_prevista']);
 			$form->data_entrega->setValue($pedido['data_entrega']);
-			$form->situacao->setValue($pedido['idSituacoes']);
+			$form->idSituacao->setValue($pedido['idSituacoes']);
 			$form->valor_pedido->setValue($pedido['valor_pedido']);
 			$form->valor_deposito->setValue($pedido['valor_deposito']);
 			$form->valor_receber->setValue($pedido['valor_receber']);
-			$form->tipo_identificacao_requerente->setValue($requerente['tipo_identificacao_requerente']);
-			$form->documento_requerente->setValue($requerente['documento_requerente']);
-			$form->nome_requerente->setValue($requerente['nome_requerente']);
-			$form->telefone_requerente->setValue($requerente['telefone_requerente']);
-			$form->cep_requerente->setValue($requerente['cep_requerente']);
-			$form->endereco_requerente->setValue($requerente['endereco_requerente']);
-			$form->complemento_requerente->setValue($requerente['complemento_requerente']);
-			$form->bairro_requerente->setValue($requerente['bairro_requerente']);
-			$form->numero_requerente->setValue($requerente['numero_requerente']);
-			$form->estado_requerente->setValue($requerente['estado_requerente']);
 			
-			$model_cidade = new Cidade();
-			$cidade = $model_cidade->findcity($this->_request->getPost('cidade_requerente'));
 			
-			$form->cidade_requerente->addMultiOption($cidade->idCidade, $cidade->nome);
-			$form->cidade_requerente->setValue($cidade->nome);
-			$form->obs_requerente->setValue($requerente['obs_requerente']);
 			
 			$this->view->form = $form;
-			$this->view->form = $form->itensPedido();
+			$this->view->requerente = $form->Requerente();
+			$this->view->itempedido = $form->itensPedido();
+			$this->view->notificante = $form->Notificante();
 			
 			if ( $this->_request->getPost('adicionar') || $this->_request->getPost('submitfinal')){
 					
@@ -131,7 +119,6 @@ class TitulodocumentosController extends Zend_Controller_Action
 				
 				$data_historico['usuario'] = $user->user->idUsuario;
 				
-				
 				$data_requerente = array(
 					'tipo_identificacao'	=> $requerente['tipo_identificacao_requerente'],
 					'numeroidentificacao'	=> preg_replace('/[^0-9]/', '', $requerente['documento_requerente']),	
@@ -145,7 +132,7 @@ class TitulodocumentosController extends Zend_Controller_Action
 					'cidade' 				=> strtoupper ($requerente['cidade_requerente']),
 					'observacoes' 			=> strtoupper ($requerente['obs_requerente'])
 				);
-							
+				
 				$data_pedido = array(
 					'idPedidoFK'	=> $this->getUltimoPedido(),
 					'datapedido' 	=> date('Y-m-d h:i:s'),
@@ -161,7 +148,7 @@ class TitulodocumentosController extends Zend_Controller_Action
 				$idPedido = $this->cadastrarPedido($data_pedido);
 				
 				$data_historico['idPedido'] = $idPedido;
-
+				
 				
 				foreach($_SESSION['itempedido'] as $itens){
 				
@@ -195,6 +182,7 @@ class TitulodocumentosController extends Zend_Controller_Action
 			}
 		}
 		$this->view->form = $form;
+		$this->view->requerente = $form->Requerente();
     }
 
     public function getpessoaAction()
@@ -260,7 +248,7 @@ class TitulodocumentosController extends Zend_Controller_Action
 			$model_pessoa->insert($data);
             return $model_pessoa->getAdapter()->lastInsertId();
 		
-		
+		}
     }
 
     public function cadastrarEndereco($data, $id = '')
@@ -492,11 +480,59 @@ class TitulodocumentosController extends Zend_Controller_Action
 
     public function itenspedidoAction()
     {
-        // action body
+        $form = new Registro_Form_Itenspedido();
+		
+		$pedido = $this->model_pedidos->selectPedido((int) $this->_getParam('idItempedido'));
+
+		$form->pedido->setValue($pedido->pedido);
+		$form->item_pedido->setValue($pedido->protocolo);
+		$form->pedido_situacao->setValue($pedido->situacao);
+		$form->tipodocumentos->setValue($pedido->idTipodocumentos);
+		$form->tipoemolumento->setValue($pedido->idEmolumentos);
+		$form->numeropaginas->setValue($pedido->numeropaginas);
+		$form->numerovias->setValue($pedido->numerovias);
+		$form->numeropessoas->setValue($pedido->numeropessoas);
+			
+			if ( $this->_request->isPost()){
+			
+				$this->view->form = $form;
+				
+				
+				if ( $this->_request->getPost('adicionar') || $this->_request->getPost('submitfinal')){
+				
+					print_r('<pre>');
+					print_r($this->_request->getPost());
+					print_r('<pre>');
+					
+					$pessoas['documento_citado']	= $this->_request->getPost('documento_citado');
+					$pessoas['nome_citado']			= $this->_request->getPost('nome_citado');
+					$pessoas['cep_citado']			= $this->_request->getPost('cep_citado');
+					$pessoas['endereco_citado']		= $this->_request->getPost('endereco_citado');
+					$pessoas['telefone_citado']		= $this->_request->getPost('telefone_citado');
+					$pessoas['numerovias']			= $this->_request->getPost('complemento_citado');
+					$pessoas['complemento_citado']	= $this->_request->getPost('bairro_citado');
+					$pessoas['numero_citado']		= $this->_request->getPost('numero_citado');
+					$pessoas['estado_citado']		= $this->_request->getPost('estado_citado');
+					$pessoas['valor_correio']		= $this->_request->getPost('valor_correio');
+					$pessoas['cidade_citado']		= $this->_request->getPost('cidade_citado');
+					$pessoas['notificar']			= $this->_request->getPost('notificar');//1 = sim //0 = nao
+					$pessoas['obs_citado']			= $this->_request->getPost('obs_citado');
+
+					$_SESSION['pessoascitadas'][] = $pessoas;
+					
+			
+				}
+				
+				if($this->_request->getPost('submitfinal')){
+				
+				
+				}
+				
+				$this->view->formP = $form->pessoasCitadas();
+			}
+			
+		$this->view->form = $form;
+		$this->view->formP = $form->pessoasCitadas();
+	
     }
-
-
 }
-
-
-

@@ -1,4 +1,153 @@
-<br /><br />
-<div id="view-content">
-	<p>View script for controller <b>Titulodocumentos</b> and script/action name <b>itenspedido</b></p>
-</div>
+<a href="<?php echo $this->url(array('module' => 'registro', 'controller' => 'titulodocumentos', 'action' => 'acompanhamento'), null, true); ?>" id="back-link">voltar</a>
+
+<h1>Cadastro de Pedido </h1>
+
+<div id="messenger"><?php echo $this->flashMessenger();?></div>
+
+<?php echo $this->form;
+		
+echo $this->formP;
+?>
+
+<table cellspacing="1" cellpadding="1" border="1" class="display" id="tabela"  >
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Documento</th>
+			<th>Nome</th>
+            <th>Notificar</th>
+        </tr>
+    </thead>
+    <tbody>
+<?php
+	if(isset($_SESSION['pessoascitadas'])){
+		$i = 0;
+		foreach ($_SESSION['pessoascitadas'] as $pessoa) {
+?> 
+        <tr>
+            <td align="center"><?php echo $i; ?></td>
+            <td align="center"><?php echo $this->escape($pessoa['documento_citado']); ?></td>
+			<td align="center"><?php echo $this->escape($pessoa['nome_citado']); ?></td>
+            <td align="center"><?php echo $this->escape($pessoa['notificar']); ?></td>
+        </tr> 
+<?php
+			$i++;
+		}
+	}
+?> 		
+    </tbody>
+				
+</table>
+
+
+<style>
+input{
+	text-transform: uppercase;
+} 
+</style>
+
+<script type="text/javascript">
+
+
+	$(function() {
+		var tabs = $('#form-tab');
+		var legends = $(tabs).find('fieldset').get();
+		
+		var titles = $('<ul></ul>');
+		$.each(legends, function(index, value) { 
+			var legend = $(value).find('legend');
+			
+			var id = $(value).attr('id');
+			var a = $('<a></a>').attr('href', '#' + id).text($(legend).text());
+			var li = $('<li></li>').append(a);
+			
+			$(legend).remove();
+			
+			$(titles).append(li);			
+			var div = $('<div></div>').attr('id', id);
+			$(div).html($(value).html());
+			$(tabs).append(div);
+			
+			$(value).remove();
+		});
+		$(tabs).prepend(titles);
+		$(tabs).tabs();
+		
+		$('input[name="cep_requerente"]').setMask('99.999-999');
+		$('input[name="telefone_requerente"]').setMask('(99)9999-9999');
+		$('input[name="datasituacao"]').setMask('date');
+		$('input[name="valordocumento"]').setMask('decimal');
+		$('input[name="emolumento"]').setMask('decimal');
+		$('input[name="valor_correio"]').setMask('decimal');
+		$('input[name="outrasdespesas"]').setMask('decimal');
+		$('input[name="taxa_judiciaria"]').setMask('decimal');
+		$('input[name="funcivil"]').setMask('decimal');
+		$('input[name="total_custas"]').setMask('decimal');
+		
+		$('input[name="documento_citado"]').setMask('cnpj');
+		$('input[name="tipo_identificacao_citado"]').change(function(){
+			if($(this).val() == '2'){	
+				$('input[name="documento_citado"]').setMask('cpf');		
+			}else{
+				$('input[name="documento_citado"]').setMask('cnpj');
+			}
+		})
+		
+		$('#estado_citado').change(function() { 
+		
+	    	var id = $(this).val();		    	    			     
+
+	    	$.ajax({
+	    		url:"<?php echo $this->url(array('module' => 'registro', 'controller' => 'titulodocumentos', 'action' => 'getcidades'), null, true); ?>",
+    			dataType:'html',
+    			encoding: 'utf-8',
+   				data:{id: id},
+    			type:'GET',
+    			success: function(data){
+            				$('#cidade_requerente').html(data);
+    			}
+			});
+		});
+		
+		$('#documento_citado').change(function() { 
+			
+	    	var doc = $(this).val();
+			var i = doc.replace(/[^0-9]/g, "");
+	    		
+	    	$.ajax({
+	    		url:"<?php echo $this->url(array('module' => 'registro', 'controller' => 'titulodocumentos' , 'action' => 'getpessoa'), null, true); ?>",
+    			dataType:'html',
+    			//encoding: 'iso-8859-1',
+   				data:{doc: doc},
+    			type:'GET',
+    			onFailure: function() {
+                    	    alert("Falha na execução desta tarefa.");
+                },
+    			success: function(data){
+                	$('#nome_citado').html(data);
+                	$("#nome_citado").val($('#idnome'+i).val()) ;
+                	$("#telefone_citado").val($('#idtelefone'+i).val());
+					$("#cep_citado").val($('#idcep'+i).val());
+                	$("#endereco_citado").val($('#idendereco'+i).val());
+                	$("#complemento_citado").val($('#idcomplemento'+i).val());
+                	$("#bairro_citado").val($('#idbairro'+i).val());
+                	$("#numero_citado").val($('#idnumero'+i).val());
+					$("#obs_citado").val($('#idobs'+i).val());
+					var uf = $('#iduf'+i).val();
+                	$("#estado_citado").val(uf);
+        	    	$.ajax({
+        	    		url:"<?php echo $this->url(array('module' => 'registro', 'controller' => 'titulodocumentos', 'action' => 'getcidades'), null, true); ?>",
+            			dataType:'html',
+            			encoding: 'utf-8',
+           				data:{id: uf},
+            			type:'GET',
+            			success: function(data){
+                    				$('#cidade_citado').html(data);
+            					 }
+        			});
+    			}
+			});
+		});
+
+	});
+</script>

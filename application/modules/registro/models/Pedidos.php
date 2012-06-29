@@ -17,6 +17,30 @@ class Pedidos extends Zend_Db_Table_Abstract{
     	return $this->fetchAll($select);
     }
 	
+	public function selectPedido($idItempedido){
+	
+		$select = $this->select();
+    	
+    	$select->setIntegrityCheck(false);
+		
+		$select->from(array('ite' => 'car_itempedidos'), array('numeropaginas', 'numerovias', 'numeropessoas', 'idTipodocumentos', 'idEmolumentos', 'idSituacoes'));
+		
+		$select->joinInner(array('pro' => 'car_protocolo'), 'pro.idProtocolo = ite.idProtocolo', array('protocolo'));
+		
+		$select->joinInner(array('sit' => 'car_situacoes'), 'sit.idSituacoes = ite.idSituacoes', array('situacao' => 'nome'));
+		
+		$select->joinInner(array('ped' => 'car_pedidos'), 'ite.idPedido = ped.idPedido', array('idPedidoFK'));
+    	
+		$select->joinInner(array('pe' => 'car_pedido'), 'ped.idPedidoFK = pe.idPedido', array('pedido'));
+		
+		$select->where('ite.idItempedido = ?', $idItempedido);
+		
+		//$sql = (string) $select;    
+    	//print_r($sql);exit;
+		
+    	return $this->fetchAll($select)->Current();
+	}
+	
 	public function selectPedidos(){
 		
 		$select = $this->select();

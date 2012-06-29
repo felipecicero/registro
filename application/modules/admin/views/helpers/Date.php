@@ -18,6 +18,7 @@ class Zend_View_Helper_Date extends Zend_View_Helper_Abstract
 	     */
 	    public function date($value, $format = Zend_Date::DATETIME_MEDIUM)
 	    {
+	    	
 	        $date = $this->getDate();
 	        return $date->set($value)->get($format);
 	    }
@@ -33,4 +34,5 @@ class Zend_View_Helper_Date extends Zend_View_Helper_Abstract
 	        }
 	        return self::$_date;
 	    }
+	    
 }

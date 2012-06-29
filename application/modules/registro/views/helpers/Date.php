@@ -18,8 +18,7 @@ class Zend_View_Helper_Date extends Zend_View_Helper_Abstract
 	     */
 	    public function date($value, $format = Zend_Date::DATETIME_MEDIUM)
 	    {
-	    	//$locale = new Zend_Locale('de_AT');
-			//$date = new Zend_Date(1234567890, false, $locale);
+	    	
 	        $date = $this->getDate();
 	        return $date->set($value)->get($format);
 	    }
@@ -35,4 +34,5 @@ class Zend_View_Helper_Date extends Zend_View_Helper_Abstract
 	        }
 	        return self::$_date;
 	    }
+	    
 }

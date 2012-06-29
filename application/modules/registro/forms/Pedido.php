@@ -95,8 +95,19 @@ class Registro_Form_Pedido extends Zend_Form
     	$valor_receber -> setLabel("Valor à Receber:");
 		$valor_receber -> setAttrib('class', 'half');
     	$valor_receber -> setRequired(true);
+		
+		$this->addElements(array($pedido, $situacao, $data_pedido, $data_prevista, $data_entrega, $valor_pedido, $valor_deposito, $valor_receber));
+		
+	}
 
-		//Requerente
+	public function Requerente(){
+	
+		$this->setDecorators(array( 'FormElements', 'Form')); 
+		$decorator_default = array('ViewHelper','Errors','Description','HtmlTag','Label',array(array('row' => 'HtmlTag'),array('tag' => 'div', 'class' => 'field')));
+		$decorator_check = array('ViewHelper','Errors','Description','HtmlTag','Label',array(array('row' => 'HtmlTag'),array('tag' => 'div', 'class' => 'field checkbox')));
+		$decorator_margin = array('ViewHelper','Errors','Description','HtmlTag','Label',array(array('row' => 'HtmlTag'),array('tag' => 'div', 'class' => 'field margin')));
+		$decorator_textarea = array('ViewHelper','Errors','Description','HtmlTag','Label',array(array('row' => 'HtmlTag'),array('tag' => 'div', 'class' => 'field textarea')));
+		$decorator_option = array('ViewHelper','Errors','Label',array(array('row' => 'HtmlTag'),array('class' => 'option-field')));
 		
     	$tipo_identificacao_requerente = new Zend_Form_Element_Radio('tipo_identificacao_requerente');
 		$tipo_identificacao_requerente -> clearDecorators();
@@ -191,17 +202,114 @@ class Registro_Form_Pedido extends Zend_Form
 		$submit -> clearDecorators();
 		$submit -> setDecorators(array('ViewHelper'));
 		
-		$this->addElements(array($pedido, $situacao, $data_pedido, $data_prevista, $data_entrega, $valor_pedido, $valor_deposito, $valor_receber));
-		
 		$this->addElements(array($tipo_identificacao_requerente, $documento_requerente, $nome_requerente, $telefone_requerente, $cep_requerente, 
 								$endereco_requerente, $complemento_requerente, $bairro_requerente, $numero_requerente, 
 								$estado_requerente, $cidade_requerente, $obs_requerente));
 		
 		$this->addElements(array($submit));	
+	}
+	public function Notificante(){
 		
+		$this->setDecorators(array( 'FormElements', 'Form')); 
+		$decorator_default = array('ViewHelper','Errors','Description','HtmlTag','Label',array(array('row' => 'HtmlTag'),array('tag' => 'div', 'class' => 'field')));
+		$decorator_check = array('ViewHelper','Errors','Description','HtmlTag','Label',array(array('row' => 'HtmlTag'),array('tag' => 'div', 'class' => 'field checkbox')));
+		$decorator_margin = array('ViewHelper','Errors','Description','HtmlTag','Label',array(array('row' => 'HtmlTag'),array('tag' => 'div', 'class' => 'field margin')));
+		$decorator_textarea = array('ViewHelper','Errors','Description','HtmlTag','Label',array(array('row' => 'HtmlTag'),array('tag' => 'div', 'class' => 'field textarea')));
+		$decorator_option = array('ViewHelper','Errors','Label',array(array('row' => 'HtmlTag'),array('class' => 'option-field')));
+		
+		$tipo_identificacao_notificante = new Zend_Form_Element_Radio('tipo_identificacao_notificante');
+		$tipo_identificacao_notificante -> clearDecorators();
+		$tipo_identificacao_notificante -> addDecorators($decorator_default);
+        $tipo_identificacao_notificante -> setLabel('Tipo do documento:');
+        $tipo_identificacao_notificante -> addMultiOptions(array(
+													'1' => 'CNPJ',
+													'2' => 'CPF'));
+      	$tipo_identificacao_notificante -> setSeparator('');
+      	$tipo_identificacao_notificante -> setValue('1');
+         
+    	$documento_notificante = new Zend_Form_Element_Text('documento_notificante');
+		$documento_notificante -> clearDecorators();
+		$documento_notificante -> addDecorators($decorator_default);
+    	$documento_notificante -> setLabel("Documento:");
+		$documento_notificante -> setAttrib('class', 'half');
+                  
+        $nome_notificante = new Zend_Form_Element_Text('nome_notificante');
+		$nome_notificante -> clearDecorators();
+		$nome_notificante -> addDecorators($decorator_default);
+    	$nome_notificante -> setLabel("Nome:");
+		$nome_notificante -> setAttrib('class', 'half');
+    		 
+    	$cep_notificante = new Zend_Form_Element_Text('cep_notificante');
+		$cep_notificante -> clearDecorators();
+		$cep_notificante -> addDecorators($decorator_default);
+    	$cep_notificante -> setLabel("CEP:");
+		$cep_notificante -> setAttrib('class', 'half');
+    	
+    	$endereco_notificante = new Zend_Form_Element_Text('endereco_notificante');
+		$endereco_notificante -> clearDecorators();
+		$endereco_notificante -> addDecorators($decorator_default);
+    	$endereco_notificante -> setLabel("Endereço:");
+		$endereco_notificante -> setAttrib('class', 'half');
+						
+						
+		$telefone_notificante = new Zend_Form_Element_Text('telefone_notificante');
+		$telefone_notificante -> clearDecorators();
+		$telefone_notificante -> addDecorators($decorator_default);
+    	$telefone_notificante -> setLabel("Telefone:");
+    	$telefone_notificante -> setAttrib('size', '14');
+		
+
+    	$complemento_notificante = new Zend_Form_Element_Text('complemento_notificante');
+		$complemento_notificante -> clearDecorators();
+		$complemento_notificante -> addDecorators($decorator_default);
+    	$complemento_notificante -> setLabel("Complemento:");
+		$complemento_notificante -> setAttrib('class', 'half');
+    		 
+    	$bairro_notificante = new Zend_Form_Element_Text('bairro_notificante');
+		$bairro_notificante -> clearDecorators();
+		$bairro_notificante -> addDecorators($decorator_default);
+    	$bairro_notificante -> setLabel("Bairro:");
+		$bairro_notificante -> setAttrib('class', 'half');
+    		 
+    	$numero_notificante = new Zend_Form_Element_Text('numero_notificante');
+		$numero_notificante -> clearDecorators();
+		$numero_notificante -> addDecorators($decorator_default);
+    	$numero_notificante -> setLabel("Número:");
+		$numero_notificante -> setAttrib('class', 'half');
+    	
+		$model_estado = new Estado();
+    	$estado_notificante = new Zend_Form_Element_Select('estado_notificante');
+		$estado_notificante -> clearDecorators();
+		$estado_notificante -> addDecorators($decorator_default);
+		$estado_notificante -> setLabel('UF:');
+		$estado_notificante -> setAttrib('class', 'half');
+		$estado_notificante -> setRequired(true);
+		$estado_notificante -> addMultiOption('0', 'Selecione o Estado');		
+	    foreach ($model_estado->findForSelect() as $uf) {
+	    	$estado_notificante -> addMultiOption($uf->idEstado, $uf->sigla);
+		} 
+    		    		 		   	 
+    	$cidade_notificante = new Zend_Form_Element_Select('cidade_notificante');
+    	$cidade_notificante -> clearDecorators();
+		$cidade_notificante -> addDecorators($decorator_default);
+		$cidade_notificante -> setLabel("Cidade:");
+		$cidade_notificante -> setAttrib('class', 'half');
+		$cidade_notificante -> setRegisterInArrayValidator(false);
+		$cidade_notificante -> setRequired(true);
+        
+		$obs_notificante = new Zend_Form_Element_Textarea('obs_notificante');
+		$obs_notificante -> clearDecorators();
+		$obs_notificante -> addDecorators($decorator_textarea);
+        $obs_notificante -> setLabel('Observações:');
+		$obs_notificante -> setAttrib('rows','5');
+		$obs_notificante -> setAttrib('cols','40');
+		$obs_notificante -> addFilter('StripTags');
+		
+		$this->addElements(array($tipo_identificacao_notificante, $documento_notificante, $nome_notificante, $telefone_notificante, $cep_notificante, 
+								$endereco_notificante, $complemento_notificante, $bairro_notificante, $numero_notificante, 
+								$estado_notificante, $cidade_notificante, $obs_notificante));
 		
 	}
-
 	public function itensPedido(){
 		
 		$this->setDecorators(array( 'FormElements', 'Form')); 

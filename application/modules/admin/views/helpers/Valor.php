@@ -7,8 +7,8 @@
  */
 class Zend_View_Helper_Valor extends Zend_View_Helper_Abstract
 {
-	    public function valor($dado){	    	
-	    	if ($dado != ""){	
+	    public function valor($dado){			
+			if ($dado != ""){	
 				return number_format($dado, 2, ",", ".");	
 			} 
 			else {	

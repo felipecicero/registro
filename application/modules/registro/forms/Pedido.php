@@ -96,8 +96,20 @@ class Registro_Form_Pedido extends Zend_Form
 		$valor_receber -> setAttrib('class', 'half');
     	$valor_receber -> setRequired(true);
 		
-		$this->addElements(array($pedido, $situacao, $data_pedido, $data_prevista, $data_entrega, $valor_pedido, $valor_deposito, $valor_receber));
+		$submit = new Zend_Form_Element_Submit('Salvar');
+        $submit -> setAttrib('id', 'submitbutton-import');
+		$submit -> clearDecorators();
+		$submit -> setDecorators(array('ViewHelper'));
 		
+		$this->addElements(array($pedido, $situacao, $data_pedido, $data_prevista, $data_entrega, $valor_pedido, $valor_deposito, $valor_receber, $submit));
+		
+		$this->addDisplayGroup(array('idPedido','idSituacao','data_pedido','data_prevista','data_entrega','valor_pedido','valor_deposito','valor_receber', 'Salvar'),'pedido',array('legend' => 'Pedido'));
+        $pedido_group = $this->getDisplayGroup('pedido');
+		$pedido_group->setDecorators(array(	'FormElements',
+											'Fieldset',
+										array('HtmlTag',
+											array(	'tag' => 'div'
+		))));
 	}
 
 	public function Requerente(){
@@ -197,16 +209,21 @@ class Registro_Form_Pedido extends Zend_Form
 		$obs_requerente -> setAttrib('cols','40');
 		$obs_requerente -> addFilter('StripTags');
 		
-		$submit = new Zend_Form_Element_Submit('Salvar');
-        $submit -> setAttrib('id', 'submitbutton-import');
-		$submit -> clearDecorators();
-		$submit -> setDecorators(array('ViewHelper'));
-		
 		$this->addElements(array($tipo_identificacao_requerente, $documento_requerente, $nome_requerente, $telefone_requerente, $cep_requerente, 
 								$endereco_requerente, $complemento_requerente, $bairro_requerente, $numero_requerente, 
 								$estado_requerente, $cidade_requerente, $obs_requerente));
 		
-		$this->addElements(array($submit));	
+		
+		$this->addDisplayGroup(array('tipo_identificacao_requerente', 'documento_requerente', 'nome_requerente', 'telefone_requerente', 'cep_requerente', 
+								'endereco_requerente', 'complemento_requerente', 'bairro_requerente', 'numero_requerente', 
+								'estado_requerente', 'cidade_requerente', 'obs_requerente'),'requerente',array('legend' => 'Requerente'));
+        $requerente = $this->getDisplayGroup('requerente');
+		$requerente->setDecorators(array(	'FormElements',
+											'Fieldset',
+										array('HtmlTag',
+											array(	'tag' 	=> 'div'
+		))));
+		
 	}
 	public function Notificante(){
 		
@@ -308,6 +325,16 @@ class Registro_Form_Pedido extends Zend_Form
 		$this->addElements(array($tipo_identificacao_notificante, $documento_notificante, $nome_notificante, $telefone_notificante, $cep_notificante, 
 								$endereco_notificante, $complemento_notificante, $bairro_notificante, $numero_notificante, 
 								$estado_notificante, $cidade_notificante, $obs_notificante));
+								
+		$this->addDisplayGroup(array('tipo_identificacao_notificante', 'documento_notificante', 'nome_notificante', 'telefone_notificante', 'cep_notificante', 
+								'endereco_notificante', 'complemento_notificante', 'bairro_notificante', 'numero_notificante', 
+								'estado_notificante', 'cidade_notificante', 'obs_notificante'),'notificante',array('legend' => 'Notificante'));
+        $notificante = $this->getDisplayGroup('notificante');
+		$notificante->setDecorators(array(	'FormElements',
+											'Fieldset',
+										array('HtmlTag',
+											array(	'tag' 	=> 'div'
+		))));
 		
 	}
 	public function itensPedido(){
@@ -470,7 +497,17 @@ class Registro_Form_Pedido extends Zend_Form
 		$submit_final -> clearDecorators();
 		$submit_final -> setDecorators(array('ViewHelper'));
 		
+		
 		$this->addElements(array($item_pedido, $pedido_situacao, $data_situacao, $tipodocumentos, $tipoemolumento, $numeropaginas, $numerovias, $numeropessoas, $valor_documento, $emolumento, $valor_correio, $outras_despesas, $taxa_judiciaria, $funcivil, $total_custas, $observacao, $submit_temp, $submit_final));
+		
+		$this->addDisplayGroup(array('idItempedido', 'pedido_situacao',  'datasituacao', 'tipodocumentos', 'tipoemolumento', 'numeropaginas', 'numerovias', 'numeropessoas', 'valordocumento', 'emolumento', 'valor_correio', 'outrasdespesas', 'taxajudiciaria', 'funcivil', 'total_custas', 'observacao', 'adicionar', 'submitfinal'),'itempedido',array('legend' => 'Itens do Pedido'));
+        $itempedido = $this->getDisplayGroup('itempedido');
+		$itempedido->setDecorators(array(	'FormElements',
+											'Fieldset',
+										array('HtmlTag',
+											array(	'tag' => 'div'  ))
+										)
+									);
 		
 	}
 	

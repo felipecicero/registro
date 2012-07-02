@@ -87,8 +87,6 @@ class TitulodocumentosController extends Zend_Controller_Action
 			$form->valor_deposito->setValue($pedido['valor_deposito']);
 			$form->valor_receber->setValue($pedido['valor_receber']);
 			
-			
-			
 			$this->view->form = $form;
 			$this->view->requerente = $form->Requerente();
 			$this->view->itempedido = $form->itensPedido();
@@ -96,20 +94,38 @@ class TitulodocumentosController extends Zend_Controller_Action
 			
 			if ( $this->_request->getPost('adicionar') || $this->_request->getPost('submitfinal')){
 					
-				$itens['datasituacao']		= $this->_request->getPost('datasituacao');
-				$itens['tipodocumentos']	= $this->_request->getPost('tipodocumentos');
-				$itens['idSituacoes']		= $this->_request->getPost('pedido_situacao');
-				$itens['tipoemolumento']	= $this->_request->getPost('tipoemolumento');
-				$itens['numeropaginas']		= $this->_request->getPost('numeropaginas');
-				$itens['numerovias']		= $this->_request->getPost('numerovias');
-				$itens['numeropessoas']		= $this->_request->getPost('numeropessoas');
-				$itens['valordocumento']	= $this->_request->getPost('valordocumento');
-				$itens['emolumento']		= $this->_request->getPost('emolumento');
-				$itens['valor_correio']		= $this->_request->getPost('valor_correio');
-				$itens['outrasdespesas']	= $this->_request->getPost('outrasdespesas');
-				$itens['total_custas']		= $this->_request->getPost('observacao');
+				$itens = array( 
+					'datasituacao'		=> $this->_request->getPost('datasituacao'),
+					'tipodocumentos'	=> $this->_request->getPost('tipodocumentos'),
+					'idSituacoes'		=> $this->_request->getPost('pedido_situacao'),
+					'tipoemolumento'	=> $this->_request->getPost('tipoemolumento'),
+					'numeropaginas'		=> $this->_request->getPost('numeropaginas'),
+					'numerovias'		=> $this->_request->getPost('numerovias'),
+					'numeropessoas'		=> $this->_request->getPost('numeropessoas'),
+					'valordocumento'	=> $this->_request->getPost('valordocumento'),
+					'emolumento'		=> $this->_request->getPost('emolumento'),
+					'valor_correio'		=> $this->_request->getPost('valor_correio'),
+					'outrasdespesas'	=> $this->_request->getPost('outrasdespesas'),
+					'total_custas'		=> $this->_request->getPost('observacao')
+				);
+				
+				$notificante = array(
+					'tipo_identificacao'	=> $this->_request->getPost('tipo_identificacao_notificante'),
+					'numeroidentificacao'	=> preg_replace('/[^0-9]/', '', $this->_request->getPost('documento_notificante')),	
+					'nome' 					=> strtoupper ($this->_request->getPost('nome_requerente')),
+					'telefone' 				=> preg_replace('/[^0-9]/', '', $this->_request->getPost('telefone_notificante')),
+					'cep' 					=> preg_replace('/[^0-9]/', '', $this->_request->getPost('cep_notificante')),
+					'rua' 					=> strtoupper ($this->_request->getPost('endereco_notificante')),
+					'complemento' 			=> strtoupper ($this->_request->getPost('complemento_notificante')),
+					'bairro' 				=> strtoupper ($this->_request->getPost('bairro_notificante')),
+					'numero' 				=> strtoupper ($this->_request->getPost('numero_notificante')),
+					'cidade' 				=> strtoupper ($this->_request->getPost('cidade_notificante')),
+					'observacoes' 			=> strtoupper ($this->_request->getPost('obs_notificante'))
+				);
 				
 				$_SESSION['itempedido'][] = $itens;
+				$_SESSION['itempedido']['notificante'] = $notificante;
+				
 					
 			}
 				
@@ -151,20 +167,35 @@ class TitulodocumentosController extends Zend_Controller_Action
 				
 				
 				foreach($_SESSION['itempedido'] as $itens){
-				
+					
+					$data_notificante = array(
+						'tipo_identificacao'	=> $itens['notificante']['tipo_identificacao_requerente'],
+						'numeroidentificacao'	=> preg_replace('/[^0-9]/', '', $itens['notificante']['documento_requerente']),	
+						'nome' 					=> strtoupper ($itens['notificante']['nome_requerente']),
+						'telefone' 				=> preg_replace('/[^0-9]/', '', $itens['notificante']['telefone_requerente']),
+						'cep' 					=> preg_replace('/[^0-9]/', '', $itens['notificante']['cep_requerente']),
+						'rua' 					=> strtoupper ($itens['notificante']['endereco_requerente']),
+						'complemento' 			=> strtoupper ($itens['notificante']['complemento_requerente']),
+						'bairro' 				=> strtoupper ($itens['notificante']['bairro_requerente']),
+						'numero' 				=> strtoupper ($itens['notificante']['numero_requerente']),
+						'cidade' 				=> strtoupper ($itens['notificante']['cidade_requerente']),
+						'observacoes' 			=> strtoupper ($itens['notificante']['obs_requerente'])
+					);
+					
 					$data_itempedido = array(
-						'idPedido' 			=> $idPedido,
-						'idProtocolo' 		=> $this->getUltimoProtocolo(),
-						'idTipodocumentos' 	=> preg_replace('/[^0-9]/', '', $itens['tipodocumentos']),
-						'idEmolumentos' 	=> preg_replace('/[^0-9]/', '', $itens['tipoemolumento']),
-						'idSituacoes	' 	=> preg_replace('/[^0-9]/', '', $itens['pedido_situacao']),
-						'datasituacao' 		=> date('Y-m-d h:i:s'),
-						'numeropaginas' 	=> preg_replace('/[^0-9]/', '', $itens['numeropaginas']),
-						'numerovias' 		=> preg_replace('/[^0-9]/', '', $itens['numerovias']),
-						'numeropessoas' 	=> preg_replace('/[^0-9]/', '', $itens['numeropessoas']),
-						'valordocumento' 	=> preg_replace('/[^0-9]/', '', $itens['valordocumento']),
-						'valorcorreio' 		=> preg_replace('/[^0-9]/', '', $itens['valor_correio']),
-						'outrasdespesas' 	=> preg_replace('/[^0-9]/', '', $itens['outrasdespesas'])
+						'idPedido' 				=> $idPedido,
+						'idProtocolo' 			=> $this->getUltimoProtocolo(),
+						'idTipodocumentos' 		=> preg_replace('/[^0-9]/', '', $itens['tipodocumentos']),
+						'idEmolumentos' 		=> preg_replace('/[^0-9]/', '', $itens['tipoemolumento']),
+						'idSituacoes' 			=> preg_replace('/[^0-9]/', '', $itens['pedido_situacao']),
+						'datasituacao' 			=> date('Y-m-d h:i:s'),
+						'numeropaginas' 		=> preg_replace('/[^0-9]/', '', $itens['numeropaginas']),
+						'numerovias' 			=> preg_replace('/[^0-9]/', '', $itens['numerovias']),
+						'numeropessoas' 		=> preg_replace('/[^0-9]/', '', $itens['numeropessoas']),
+						'valordocumento' 		=> preg_replace('/[^0-9]/', '', $itens['valordocumento']),
+						'valorcorreio' 			=> preg_replace('/[^0-9]/', '', $itens['valor_correio']),
+						'outrasdespesas' 		=> preg_replace('/[^0-9]/', '', $itens['outrasdespesas']),
+						'idPessoasnotificante' 	=> $this->cadastrarPessoa($data_notificante),	
 					);
 							
 					$data_historico['idItempedido'] = $this->cadastrarItemPedido($data_itempedido);
@@ -183,7 +214,9 @@ class TitulodocumentosController extends Zend_Controller_Action
 		}
 		$this->view->form = $form;
 		$this->view->requerente = $form->Requerente();
-    }
+
+	}
+
 
     public function getpessoaAction()
     {

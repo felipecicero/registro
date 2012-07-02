@@ -93,6 +93,22 @@ input{
 			});
 		});
 		
+		$('#estado_notificante').change(function() { 
+		
+	    	var id = $(this).val();		    	    			     
+
+	    	$.ajax({
+	    		url:"<?php echo $this->url(array('module' => 'registro', 'controller' => 'titulodocumentos', 'action' => 'getcidades'), null, true); ?>",
+    			dataType:'html',
+    			encoding: 'utf-8',
+   				data:{id: id},
+    			type:'GET',
+    			success: function(data){
+            				$('#cidade_notificante').html(data);
+    			}
+			});
+		});
+		
 		$('input[name="cep_requerente"]').setMask('99.999-999');
 		$('input[name="telefone_requerente"]').setMask('(99)9999-9999');
 		$('input[name="data_pedido"]').setMask('date');
@@ -153,6 +169,55 @@ input{
             			type:'GET',
             			success: function(data){
                     				$('#cidade_requerente').html(data);
+            					 }
+        			});
+    			}
+			});
+		});
+		
+		$('input[name="documento_notificante"]').setMask('cnpj');
+		$('input[name="tipo_identificacao_notificante"]').change(function(){
+			if($(this).val() == '2'){	
+				$('input[name="documento_notificante"]').setMask('cpf');		
+			}else{
+				$('input[name="documento_notificante"]').setMask('cnpj');
+			}
+		})
+		
+		$('#documento_notificante').change(function() { 
+			
+	    	var doc = $(this).val();
+			var i = doc.replace(/[^0-9]/g, "");
+	    		
+	    	$.ajax({
+	    		url:"<?php echo $this->url(array('module' => 'registro', 'controller' => 'titulodocumentos' , 'action' => 'getpessoa'), null, true); ?>",
+    			dataType:'html',
+    			//encoding: 'iso-8859-1',
+   				data:{doc: doc},
+    			type:'GET',
+    			onFailure: function() {
+                    	    alert("Falha na execução desta tarefa.");
+                },
+    			success: function(data){
+                	$('#nome_notificante').html(data);
+                	$("#nome_notificante").val($('#idnome'+i).val()) ;
+                	$("#telefone_notificante").val($('#idtelefone'+i).val());
+					$("#cep_notificante").val($('#idcep'+i).val());
+                	$("#endereco_notificante").val($('#idendereco'+i).val());
+                	$("#complemento_notificante").val($('#idcomplemento'+i).val());
+                	$("#bairro_notificante").val($('#idbairro'+i).val());
+                	$("#numero_notificante").val($('#idnumero'+i).val());
+					$("#obs_notificante").val($('#idobs'+i).val());
+					var uf = $('#iduf'+i).val();
+                	$("#estado_notificante").val(uf);
+        	    	$.ajax({
+        	    		url:"<?php echo $this->url(array('module' => 'registro', 'controller' => 'titulodocumentos', 'action' => 'getcidades'), null, true); ?>",
+            			dataType:'html',
+            			encoding: 'utf-8',
+           				data:{id: uf},
+            			type:'GET',
+            			success: function(data){
+                    				$('#cidade_notificante').html(data);
             					 }
         			});
     			}

@@ -58,27 +58,16 @@ class TitulodocumentosController extends Zend_Controller_Action
 		//if(isset($_SESSION['itempedido'])) unset($_SESSION['itempedido']);
 		if ( $this->_request->isPost()){
 			
-			$pedido['data_pedido']						= $this->_request->getPost('data_pedido');
-			$pedido['data_prevista']					= $this->_request->getPost('data_prevista');
-			$pedido['data_entrega']						= $this->_request->getPost('data_entrega');
-			$pedido['idSituacoes']						= $this->_request->getPost('idSituacao');
-			$pedido['valor_pedido']						= $this->_request->getPost('valor_pedido');
-			$pedido['valor_deposito']					= $this->_request->getPost('valor_deposito');
-			$pedido['valor_receber']					= $this->_request->getPost('valor_receber');
-			$requerente['tipo_identificacao_requerente']= $this->_request->getPost('tipo_identificacao_requerente');
-			$requerente['documento_requerente']			= $this->_request->getPost('documento_requerente');
-			$requerente['nome_requerente']				= $this->_request->getPost('nome_requerente');
-			$requerente['telefone_requerente']			= $this->_request->getPost('telefone_requerente');
-			$requerente['cep_requerente']				= $this->_request->getPost('cep_requerente');
-			$requerente['endereco_requerente']			= $this->_request->getPost('endereco_requerente');
-			$requerente['complemento_requerente']		= $this->_request->getPost('complemento_requerente');
-			$requerente['bairro_requerente']			= $this->_request->getPost('bairro_requerente');
-			$requerente['numero_requerente']			= $this->_request->getPost('numero_requerente');
-			$requerente['estado_requerente'] 			= $this->_request->getPost('estado_requerente');
-			$requerente['notificante'] 					= $this->_request->getPost('notificante');
-			$requerente['cidade_requerente']			= $this->_request->getPost('cidade_requerente');
-			$requerente['obs_requerente'] 				= $this->_request->getPost('obs_requerente');
-
+			$pedido['data_pedido']		= $this->_request->getPost('data_pedido');
+			$pedido['data_prevista']	= $this->_request->getPost('data_prevista');
+			$pedido['data_entrega']		= $this->_request->getPost('data_entrega');
+			$pedido['idSituacoes']		= $this->_request->getPost('idSituacao');
+			$pedido['valor_pedido']		= $this->_request->getPost('valor_pedido');
+			$pedido['valor_deposito']	= $this->_request->getPost('valor_deposito');
+			$pedido['valor_receber']	= $this->_request->getPost('valor_receber');
+			
+			$requerente = $this->_request->getPost('Requerente');
+			
 			$form->data_pedido->setValue(date('d-m-Y'));
 			$form->data_prevista->setValue($pedido['data_prevista']);
 			$form->data_entrega->setValue($pedido['data_entrega']);
@@ -86,47 +75,40 @@ class TitulodocumentosController extends Zend_Controller_Action
 			$form->valor_pedido->setValue($pedido['valor_pedido']);
 			$form->valor_deposito->setValue($pedido['valor_deposito']);
 			$form->valor_receber->setValue($pedido['valor_receber']);
+			$form->Requerente->tipo_identificacao_requerente->setValue($requerente['tipo_identificacao_requerente']);
+			$form->Requerente->documento_requerente->setValue($requerente['documento_requerente']);
+			$form->Requerente->nome_requerente->setValue($requerente['nome_requerente']);
+			$form->Requerente->telefone_requerente->setValue($requerente['telefone_requerente']);
+			$form->Requerente->cep_requerente->setValue($requerente['cep_requerente']);
+			$form->Requerente->endereco_requerente->setValue($requerente['endereco_requerente']);
+			$form->Requerente->complemento_requerente->setValue($requerente['complemento_requerente']);
+			$form->Requerente->bairro_requerente->setValue($requerente['bairro_requerente']);
+			$form->Requerente->numero_requerente->setValue($requerente['numero_requerente']);
+			$form->Requerente->estado_requerente->setValue($requerente['estado_requerente']);
 			
+			$city = new Cidade();
+			$cidade = $city->findcity($requerente['cidade_requerente']);
+			
+			$form->Requerente->cidade_requerente->addMultiOption($cidade->idCidade, $cidade->nome);
+			$form->Requerente->cidade_requerente->setValue($requerente['cidade_requerente']);
+			$form->Requerente->obs_requerente->setValue($requerente['obs_requerente']);
+			
+			$form->itensPedido();
 			$this->view->form = $form;
-			$this->view->requerente = $form->Requerente();
-			$this->view->itempedido = $form->itensPedido();
-			$this->view->notificante = $form->Notificante();
 			
 			if ( $this->_request->getPost('adicionar') || $this->_request->getPost('submitfinal')){
-					
-				$itens = array( 
-					'datasituacao'		=> $this->_request->getPost('datasituacao'),
-					'tipodocumentos'	=> $this->_request->getPost('tipodocumentos'),
-					'idSituacoes'		=> $this->_request->getPost('pedido_situacao'),
-					'tipoemolumento'	=> $this->_request->getPost('tipoemolumento'),
-					'numeropaginas'		=> $this->_request->getPost('numeropaginas'),
-					'numerovias'		=> $this->_request->getPost('numerovias'),
-					'numeropessoas'		=> $this->_request->getPost('numeropessoas'),
-					'valordocumento'	=> $this->_request->getPost('valordocumento'),
-					'emolumento'		=> $this->_request->getPost('emolumento'),
-					'valor_correio'		=> $this->_request->getPost('valor_correio'),
-					'outrasdespesas'	=> $this->_request->getPost('outrasdespesas'),
-					'total_custas'		=> $this->_request->getPost('observacao')
-				);
+								
+				$itens = $this->_request->getPost('itempedido');
 				
-				$notificante = array(
-					'tipo_identificacao'	=> $this->_request->getPost('tipo_identificacao_notificante'),
-					'numeroidentificacao'	=> preg_replace('/[^0-9]/', '', $this->_request->getPost('documento_notificante')),	
-					'nome' 					=> strtoupper ($this->_request->getPost('nome_requerente')),
-					'telefone' 				=> preg_replace('/[^0-9]/', '', $this->_request->getPost('telefone_notificante')),
-					'cep' 					=> preg_replace('/[^0-9]/', '', $this->_request->getPost('cep_notificante')),
-					'rua' 					=> strtoupper ($this->_request->getPost('endereco_notificante')),
-					'complemento' 			=> strtoupper ($this->_request->getPost('complemento_notificante')),
-					'bairro' 				=> strtoupper ($this->_request->getPost('bairro_notificante')),
-					'numero' 				=> strtoupper ($this->_request->getPost('numero_notificante')),
-					'cidade' 				=> strtoupper ($this->_request->getPost('cidade_notificante')),
-					'observacoes' 			=> strtoupper ($this->_request->getPost('obs_notificante'))
-				);
+				//$notificante = $itens['notificante'];
+				//$notificado = $itens['notificado'];
+				
+				//unset($itens['notificante']);
+				//unset($itens['notificado']);
 				
 				$_SESSION['itempedido'][] = $itens;
-				$_SESSION['itempedido']['notificante'] = $notificante;
+			
 				
-					
 			}
 				
 			if($this->_request->getPost('submitfinal')){
@@ -169,17 +151,31 @@ class TitulodocumentosController extends Zend_Controller_Action
 				foreach($_SESSION['itempedido'] as $itens){
 					
 					$data_notificante = array(
-						'tipo_identificacao'	=> $itens['notificante']['tipo_identificacao_requerente'],
-						'numeroidentificacao'	=> preg_replace('/[^0-9]/', '', $itens['notificante']['documento_requerente']),	
-						'nome' 					=> strtoupper ($itens['notificante']['nome_requerente']),
-						'telefone' 				=> preg_replace('/[^0-9]/', '', $itens['notificante']['telefone_requerente']),
-						'cep' 					=> preg_replace('/[^0-9]/', '', $itens['notificante']['cep_requerente']),
-						'rua' 					=> strtoupper ($itens['notificante']['endereco_requerente']),
-						'complemento' 			=> strtoupper ($itens['notificante']['complemento_requerente']),
-						'bairro' 				=> strtoupper ($itens['notificante']['bairro_requerente']),
-						'numero' 				=> strtoupper ($itens['notificante']['numero_requerente']),
-						'cidade' 				=> strtoupper ($itens['notificante']['cidade_requerente']),
-						'observacoes' 			=> strtoupper ($itens['notificante']['obs_requerente'])
+						'tipo_identificacao'	=> $itens['notificante']['tipo_identificacao_notificante'],
+						'numeroidentificacao'	=> preg_replace('/[^0-9]/', '', $itens['notificante']['documento_notificante']),	
+						'nome' 					=> strtoupper ($itens['notificante']['nome_notificante']),
+						'telefone' 				=> preg_replace('/[^0-9]/', '', $itens['notificante']['telefone_notificante']),
+						'cep' 					=> preg_replace('/[^0-9]/', '', $itens['notificante']['cep_notificante']),
+						'rua' 					=> strtoupper ($itens['notificante']['endereco_notificante']),
+						'complemento' 			=> strtoupper ($itens['notificante']['complemento_notificante']),
+						'bairro' 				=> strtoupper ($itens['notificante']['bairro_notificante']),
+						'numero' 				=> strtoupper ($itens['notificante']['numero_notificante']),
+						'cidade' 				=> strtoupper ($itens['notificante']['cidade_notificante']),
+						'observacoes' 			=> strtoupper ($itens['notificante']['obs_notificante'])
+					);
+					
+					$data_notificado = array(
+						'tipo_identificacao'	=> $itens['notificado']['tipo_identificacao_notificado'],
+						'numeroidentificacao'	=> preg_replace('/[^0-9]/', '', $itens['notificado']['documento_notificado']),	
+						'nome' 					=> strtoupper ($itens['notificado']['nome_notificado']),
+						'telefone' 				=> preg_replace('/[^0-9]/', '', $itens['notificado']['telefone_notificado']),
+						'cep' 					=> preg_replace('/[^0-9]/', '', $itens['notificado']['cep_notificado']),
+						'rua' 					=> strtoupper ($itens['notificado']['endereco_notificado']),
+						'complemento' 			=> strtoupper ($itens['notificado']['complemento_notificado']),
+						'bairro' 				=> strtoupper ($itens['notificado']['bairro_notificado']),
+						'numero' 				=> strtoupper ($itens['notificado']['numero_notificado']),
+						'cidade' 				=> strtoupper ($itens['notificado']['cidade_notificado']),
+						'observacoes' 			=> strtoupper ($itens['notificado']['obs_notificado'])
 					);
 					
 					$data_itempedido = array(
@@ -195,6 +191,7 @@ class TitulodocumentosController extends Zend_Controller_Action
 						'valordocumento' 		=> preg_replace('/[^0-9]/', '', $itens['valordocumento']),
 						'valorcorreio' 			=> preg_replace('/[^0-9]/', '', $itens['valor_correio']),
 						'outrasdespesas' 		=> preg_replace('/[^0-9]/', '', $itens['outrasdespesas']),
+						'idPessoasnotificado' 	=> $this->cadastrarPessoa($data_notificado),	
 						'idPessoasnotificante' 	=> $this->cadastrarPessoa($data_notificante),	
 					);
 							
@@ -213,11 +210,8 @@ class TitulodocumentosController extends Zend_Controller_Action
 			}
 		}
 		$this->view->form = $form;
-		$this->view->requerente = $form->Requerente();
-
 	}
-
-
+	
     public function getpessoaAction()
     {
 		$this->_helper->layout ()->disableLayout ();
@@ -267,6 +261,7 @@ class TitulodocumentosController extends Zend_Controller_Action
 		$data_endereco['numero'] = $data['numero']; unset($data['numero']);
 		$data_endereco['idCidade'] = $data['cidade']; unset($data['cidade']);
         
+		
 		if(count($pessoa) > 0){
 			
 			$model_pessoa->update($data, "idPessoas = " . $pessoa->Current()->idPessoas);

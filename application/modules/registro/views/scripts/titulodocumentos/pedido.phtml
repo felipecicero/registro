@@ -30,7 +30,7 @@
         <tr>
             <td><?php echo $this->escape($item['datasituacao']); ?></td>
             <td><?php echo $this->escape($item['tipodocumentos']); ?></td>
-			<td><?php echo $this->escape($item['tipoemolumento']); ?></td>
+			<td><?php echo $this->escape($item['pedido_situacao']); ?></td>
             <td><?php echo $this->escape($item['valordocumento']); ?></td>
         </tr> 
 <?php
@@ -77,7 +77,7 @@ input{
 		$(tabs).tabs();
 		
 		
-		$('#estado_requerente').change(function() { 
+		$('#Requerente-estado_requerente').change(function() { 
 		
 	    	var id = $(this).val();		    	    			     
 
@@ -88,12 +88,12 @@ input{
    				data:{id: id},
     			type:'GET',
     			success: function(data){
-            				$('#cidade_requerente').html(data);
+            				$('#Requerente-cidade_requerente').html(data);
     			}
 			});
 		});
 		
-		$('#estado_notificante').change(function() { 
+		$('#itempedido-estado_notificante').change(function() { 
 		
 	    	var id = $(this).val();		    	    			     
 
@@ -109,33 +109,34 @@ input{
 			});
 		});
 		
-		$('input[name="cep_requerente"]').setMask('99.999-999');
-		$('input[name="telefone_requerente"]').setMask('(99)9999-9999');
-		$('input[name="data_pedido"]').setMask('date');
-		$('input[name="data_prevista"]').setMask('date');
-		$('input[name="datasituacao"]').setMask('date');
-		$('input[name="data_entrega"]').setMask('date');
-		$('input[name="valor_pedido"]').setMask('decimal');
-		$('input[name="valordocumento"]').setMask('decimal');
-		$('input[name="emolumento"]').setMask('decimal');
-		$('input[name="outrasdespesas"]').setMask('decimal');
-		$('input[name="funcivil"]').setMask('decimal');
-		$('input[name="total_custas"]').setMask('decimal');
-		$('input[name="taxajudiciaria"]').setMask('decimal');
-		$('input[name="valor_correio"]').setMask('decimal');
-		$('input[name="valor_deposito"]').setMask('decimal');
-		$('input[name="valor_receber"]').setMask('decimal');
+		$('#Requerente-cep_requerente').setMask('99.999-999');
+		$('#Requerente-telefone_requerente').setMask('(99)9999-9999');
+		$('#data_pedido').setMask('date');
+		$('#data_prevista').setMask('date');
+		$('#data_entrega').setMask('date');
+		$('#itempedido-datasituacao').setMask('date');
+		$('#valor_pedido').setMask('decimal');
+		$('#valor_deposito').setMask('decimal');
+		$('#valor_receber').setMask('decimal');
+		$('#itempedido-valordocumento').setMask('decimal');
+		$('#itempedido-emolumento').setMask('decimal');
+		$('#itempedido-valor_correio').setMask('decimal');
+		$('#itempedido-outrasdespesas').setMask('decimal');
+		$('#itempedido-taxajudiciaria').setMask('decimal');
+		$('#itempedido-funcivil').setMask('decimal');
+		$('#itempedido-total_custas').setMask('decimal');
 		
-		$('input[name="documento_requerente"]').setMask('cnpj');
-		$('input[name="tipo_identificacao_requerente"]').change(function(){
+		
+		$('#Requerente-documento_requerente').setMask('cnpj');
+		$('input[name="Requerente[tipo_identificacao_requerente]"]').change(function(){
 			if($(this).val() == '2'){	
-				$('input[name="documento_requerente"]').setMask('cpf');		
+				$('#Requerente-documento_requerente').setMask('cpf');		
 			}else{
-				$('input[name="documento_requerente"]').setMask('cnpj');
+				$('#Requerente-documento_requerente').setMask('cnpj');
 			}
 		})
 		
-		$('#documento_requerente').change(function() { 
+		$('#Requerente-documento_requerente').change(function() { 
 			
 	    	var doc = $(this).val();
 			var i = doc.replace(/[^0-9]/g, "");
@@ -150,17 +151,17 @@ input{
                     	    alert("Falha na execução desta tarefa.");
                 },
     			success: function(data){
-                	$('#nome_requerente').html(data);
-                	$("#nome_requerente").val($('#idnome'+i).val()) ;
-                	$("#telefone_requerente").val($('#idtelefone'+i).val());
-					$("#cep_requerente").val($('#idcep'+i).val());
-                	$("#endereco_requerente").val($('#idendereco'+i).val());
-                	$("#complemento_requerente").val($('#idcomplemento'+i).val());
-                	$("#bairro_requerente").val($('#idbairro'+i).val());
-                	$("#numero_requerente").val($('#idnumero'+i).val());
-					$("#obs_requerente").val($('#idobs'+i).val());
+                	$('#Requerente-nome_requerente').html(data);
+                	$("#Requerente-nome_requerente").val($('#idnome'+i).val()) ;
+                	$("#Requerente-telefone_requerente").val($('#idtelefone'+i).val());
+					$("#Requerente-cep_requerente").val($('#idcep'+i).val());
+                	$("#Requerente-endereco_requerente").val($('#idendereco'+i).val());
+                	$("#Requerente-complemento_requerente").val($('#idcomplemento'+i).val());
+                	$("#Requerente-bairro_requerente").val($('#idbairro'+i).val());
+                	$("#Requerente-numero_requerente").val($('#idnumero'+i).val());
+					$("#Requerente-obs_requerente").val($('#idobs'+i).val());
 					var uf = $('#iduf'+i).val();
-                	$("#estado_requerente").val(uf);
+                	$("#Requerente-estado_requerente").val(uf);
         	    	$.ajax({
         	    		url:"<?php echo $this->url(array('module' => 'registro', 'controller' => 'titulodocumentos', 'action' => 'getcidades'), null, true); ?>",
             			dataType:'html',
@@ -168,23 +169,23 @@ input{
            				data:{id: uf},
             			type:'GET',
             			success: function(data){
-                    				$('#cidade_requerente').html(data);
+                    				$('#Requerente-cidade_requerente').html(data);
             					 }
         			});
     			}
 			});
 		});
 		
-		$('input[name="documento_notificante"]').setMask('cnpj');
-		$('input[name="tipo_identificacao_notificante"]').change(function(){
+		$('#itempedido-notificante-documento_notificante').setMask('cnpj');
+		$('input[name="itempedido[notificante][tipo_identificacao_notificante]"]').change(function(){
 			if($(this).val() == '2'){	
-				$('input[name="documento_notificante"]').setMask('cpf');		
+				$('#itempedido-notificante-documento_notificante').setMask('cpf');		
 			}else{
-				$('input[name="documento_notificante"]').setMask('cnpj');
+				$('#itempedido-notificante-documento_notificante"]').setMask('cnpj');
 			}
 		})
 		
-		$('#documento_notificante').change(function() { 
+		$('#itempedido-notificante-documento_notificante').change(function() { 
 			
 	    	var doc = $(this).val();
 			var i = doc.replace(/[^0-9]/g, "");
@@ -199,17 +200,17 @@ input{
                     	    alert("Falha na execução desta tarefa.");
                 },
     			success: function(data){
-                	$('#nome_notificante').html(data);
-                	$("#nome_notificante").val($('#idnome'+i).val()) ;
-                	$("#telefone_notificante").val($('#idtelefone'+i).val());
-					$("#cep_notificante").val($('#idcep'+i).val());
-                	$("#endereco_notificante").val($('#idendereco'+i).val());
-                	$("#complemento_notificante").val($('#idcomplemento'+i).val());
-                	$("#bairro_notificante").val($('#idbairro'+i).val());
-                	$("#numero_notificante").val($('#idnumero'+i).val());
-					$("#obs_notificante").val($('#idobs'+i).val());
+                	$('#itempedido-notificante-documento_notificante').html(data);
+                	$("#itempedido-notificante-nome_notificante").val($('#idnome'+i).val()) ;
+                	$("#itempedido-notificante-telefone_notificante").val($('#idtelefone'+i).val());
+					$("#itempedido-notificante-cep_notificante").val($('#idcep'+i).val());
+                	$("#itempedido-notificante-endereco_notificante").val($('#idendereco'+i).val());
+                	$("#itempedido-notificante-complemento_notificante").val($('#idcomplemento'+i).val());
+                	$("#itempedido-notificante-bairro_notificante").val($('#idbairro'+i).val());
+                	$("#itempedido-notificante-numero_notificante").val($('#idnumero'+i).val());
+					$("#itempedido-notificante-obs_notificante").val($('#idobs'+i).val());
 					var uf = $('#iduf'+i).val();
-                	$("#estado_notificante").val(uf);
+                	$("#itempedido-notificante-estado_notificante").val(uf);
         	    	$.ajax({
         	    		url:"<?php echo $this->url(array('module' => 'registro', 'controller' => 'titulodocumentos', 'action' => 'getcidades'), null, true); ?>",
             			dataType:'html',
@@ -217,7 +218,56 @@ input{
            				data:{id: uf},
             			type:'GET',
             			success: function(data){
-                    				$('#cidade_notificante').html(data);
+                    				$('#itempedido-notificante-cidade_notificante').html(data);
+            					 }
+        			});
+    			}
+			});
+		});
+		
+		$('#itempedido-notificado-documento_notificado').setMask('cnpj');
+		$('input[name="itempedido[notificado][tipo_identificacao_notificado]"]').change(function(){
+			if($(this).val() == '2'){	
+				$('#itempedido-notificado-documento_notificado').setMask('cpf');		
+			}else{
+				$('#itempedido-notificado-documento_notificado"]').setMask('cnpj');
+			}
+		})
+		
+		$('#itempedido-notificado-documento_notificado').change(function() { 
+			
+	    	var doc = $(this).val();
+			var i = doc.replace(/[^0-9]/g, "");
+	    		
+	    	$.ajax({
+	    		url:"<?php echo $this->url(array('module' => 'registro', 'controller' => 'titulodocumentos' , 'action' => 'getpessoa'), null, true); ?>",
+    			dataType:'html',
+    			//encoding: 'iso-8859-1',
+   				data:{doc: doc},
+    			type:'GET',
+    			onFailure: function() {
+                    	    alert("Falha na execução desta tarefa.");
+                },
+    			success: function(data){
+                	$('#itempedido-notificado-documento_notificado').html(data);
+                	$("#itempedido-notificado-nome_notificado").val($('#idnome'+i).val()) ;
+                	$("#itempedido-notificado-telefone_notificado").val($('#idtelefone'+i).val());
+					$("#itempedido-notificado-cep_notificado").val($('#idcep'+i).val());
+                	$("#itempedido-notificado-endereco_notificado").val($('#idendereco'+i).val());
+                	$("#itempedido-notificado-complemento_notificado").val($('#idcomplemento'+i).val());
+                	$("#itempedido-notificado-bairro_notificado").val($('#idbairro'+i).val());
+                	$("#itempedido-notificado-numero_notificado").val($('#idnumero'+i).val());
+					$("#itempedido-notificado-obs_notificado").val($('#idobs'+i).val());
+					var uf = $('#iduf'+i).val();
+                	$("#itempedido-notificado-estado_notificado").val(uf);
+        	    	$.ajax({
+        	    		url:"<?php echo $this->url(array('module' => 'registro', 'controller' => 'titulodocumentos', 'action' => 'getcidades'), null, true); ?>",
+            			dataType:'html',
+            			encoding: 'utf-8',
+           				data:{id: uf},
+            			type:'GET',
+            			success: function(data){
+                    				$('#itempedido-notificado-cidade_notificado').html(data);
             					 }
         			});
     			}

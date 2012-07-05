@@ -15,19 +15,19 @@ echo $this->formP;
             <th>#</th>
             <th>Documento</th>
 			<th>Nome</th>
-            <th>Notificar</th>
+            <th>Ação</th>
         </tr>
     </thead>
     <tbody>
 <?php
 	if(isset($_SESSION['pessoascitadas'])){
-		$i = 0;
+		$i = 1;
 		foreach ($_SESSION['pessoascitadas'] as $pessoa) {
 ?> 
         <tr>
             <td align="center"><?php echo $i; ?></td>
-            <td align="center"><?php echo $this->escape($pessoa['documento_citado']); ?></td>
-			<td align="center"><?php echo $this->escape($pessoa['nome_citado']); ?></td>
+            <td align="center"><?php echo $this->documento($pessoa['numeroidentificacao'], $pessoa['tipo_identificacao']);?></td>
+			<td align="center"><?php echo $this->escape($pessoa['nome']); ?></td>
             <td align="center"><?php echo $this->escape($pessoa['notificar']); ?></td>
         </tr> 
 <?php
@@ -73,27 +73,27 @@ input{
 		$(tabs).prepend(titles);
 		$(tabs).tabs();
 		
-		$('input[name="cep_requerente"]').setMask('99.999-999');
-		$('input[name="telefone_requerente"]').setMask('(99)9999-9999');
-		$('input[name="datasituacao"]').setMask('date');
-		$('input[name="valordocumento"]').setMask('decimal');
-		$('input[name="emolumento"]').setMask('decimal');
-		$('input[name="valor_correio"]').setMask('decimal');
-		$('input[name="outrasdespesas"]').setMask('decimal');
-		$('input[name="taxa_judiciaria"]').setMask('decimal');
-		$('input[name="funcivil"]').setMask('decimal');
-		$('input[name="total_custas"]').setMask('decimal');
+		$('#Pessoa-cep_citado').setMask('99.999-999');
+		$('#Pessoa-telefone_citado').setMask('(99)9999-9999');
+		$('#datasituacao').setMask('date');
+		$('#valordocumento').setMask('decimal');
+		$('#emolumento').setMask('decimal');
+		$('#valor_correio').setMask('decimal');
+		$('#outrasdespesas').setMask('decimal');
+		$('#taxa_judiciaria').setMask('decimal');
+		$('#funcivil').setMask('decimal');
+		$('#total_custas').setMask('decimal');
 		
-		$('input[name="documento_citado"]').setMask('cnpj');
-		$('input[name="tipo_identificacao_citado"]').change(function(){
+		$('#Pessoa-documento_citado').setMask('cnpj');
+		$('input[name="Pessoa[tipo_identificacao_citado]"]').change(function(){
 			if($(this).val() == '2'){	
-				$('input[name="documento_citado"]').setMask('cpf');		
+				$('#Pessoa-documento_citado').setMask('cpf');		
 			}else{
-				$('input[name="documento_citado"]').setMask('cnpj');
+				$('#Pessoa-documento_citado').setMask('cnpj');
 			}
 		})
 		
-		$('#estado_citado').change(function() { 
+		$('#Pessoa-estado_citado').change(function() { 
 		
 	    	var id = $(this).val();		    	    			     
 
@@ -104,12 +104,12 @@ input{
    				data:{id: id},
     			type:'GET',
     			success: function(data){
-            				$('#cidade_requerente').html(data);
+            				$('#Pessoa-cidade_citado').html(data);
     			}
 			});
 		});
 		
-		$('#documento_citado').change(function() { 
+		$('#Pessoa-documento_citado').change(function() { 
 			
 	    	var doc = $(this).val();
 			var i = doc.replace(/[^0-9]/g, "");
@@ -124,17 +124,17 @@ input{
                     	    alert("Falha na execução desta tarefa.");
                 },
     			success: function(data){
-                	$('#nome_citado').html(data);
-                	$("#nome_citado").val($('#idnome'+i).val()) ;
-                	$("#telefone_citado").val($('#idtelefone'+i).val());
-					$("#cep_citado").val($('#idcep'+i).val());
-                	$("#endereco_citado").val($('#idendereco'+i).val());
-                	$("#complemento_citado").val($('#idcomplemento'+i).val());
-                	$("#bairro_citado").val($('#idbairro'+i).val());
-                	$("#numero_citado").val($('#idnumero'+i).val());
-					$("#obs_citado").val($('#idobs'+i).val());
+                	$('#Pessoa-nome_citado').html(data);
+                	$("#Pessoa-nome_citado").val($('#idnome'+i).val()) ;
+                	$("#Pessoa-telefone_citado").val($('#idtelefone'+i).val());
+					$("#Pessoa-cep_citado").val($('#idcep'+i).val());
+                	$("#Pessoa-endereco_citado").val($('#idendereco'+i).val());
+                	$("#Pessoa-complemento_citado").val($('#idcomplemento'+i).val());
+                	$("#Pessoa-bairro_citado").val($('#idbairro'+i).val());
+                	$("#Pessoa-numero_citado").val($('#idnumero'+i).val());
+					$("#Pessoa-obs_citado").val($('#idobs'+i).val());
 					var uf = $('#iduf'+i).val();
-                	$("#estado_citado").val(uf);
+                	$("#Pessoa-estado_citado").val(uf);
         	    	$.ajax({
         	    		url:"<?php echo $this->url(array('module' => 'registro', 'controller' => 'titulodocumentos', 'action' => 'getcidades'), null, true); ?>",
             			dataType:'html',
@@ -142,7 +142,7 @@ input{
            				data:{id: uf},
             			type:'GET',
             			success: function(data){
-                    				$('#cidade_citado').html(data);
+                    				$('#Pessoa-cidade_citado').html(data);
             					 }
         			});
     			}

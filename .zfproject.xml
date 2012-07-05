@@ -382,13 +382,16 @@
             <modelFile modelName="Pedidos"/>
             <modelFile modelName="Pessoas"/>
             <modelFile modelName="Itempedidos"/>
-            <modelFile modelName="Registros"/>
             <modelFile modelName="Protocolo"/>
             <modelFile modelName="Situacoes"/>
             <modelFile modelName="ItemPedidos"/>
             <modelFile modelName="Pessoascitadas"/>
             <modelFile modelName="Pedido"/>
             <modelFile modelName="Itempedido"/>
+            <modelFile modelName="RegistroA"/>
+            <modelFile modelName="RegistroB"/>
+            <modelFile modelName="RegistroC"/>
+            <modelFile modelName="Enredeco"/>
           </modelsDirectory>
           <viewsDirectory>
             <viewScriptsDirectory>

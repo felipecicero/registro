@@ -6,11 +6,17 @@ div#tabela_length{float: left;margin-bottom: 20px;}
 div#tabela_filter{float: right;margin-bottom: 20px;}
 
 /* Tabela */
-table#tabela{ width: 100%; border-collapse: collapse;margin-bottom: 20px;border: none;}
+table#tabela { width: 100%; border-collapse: collapse;margin-bottom: 20px;border: none;}
 table#tabela tr.odd{background:#;}
 table#tabela tr.even{background:#d9e6ef;}
 table#tabela tr th{ padding: 3px 4px;background: #adcde5;border: none;	}
 table#tabela tr td{ padding: 3px 4px;border: none;}
+
+table#tabela_pessoas { width: 100%; border-collapse: collapse;margin-bottom: 20px;border: none;}
+table#tabela_pessoas  tr.odd{background:#;}
+table#tabela_pessoas  tr.even{background:#d9e6ef;}
+table#tabela_pessoas  tr th{ padding: 3px 4px;background: #adcde5;border: none;	}
+table#tabela_pessoas  tr td{ padding: 3px 4px;border: none;}
 
 /* Infos */
 div#tabela_info{float: left;font-size: 12px;}

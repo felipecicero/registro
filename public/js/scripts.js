@@ -71,41 +71,6 @@ $(document).ready(function() {
 	})
 	
 	
-	$('input[name="documento_devedor"]').setMask('cnpj');
-	$('input[name="tipo_identificacao_devedor"]').change(function(){
-		if($(this).val() == '2'){	
-			$('input[name="documento_devedor"]').setMask('cpf');		
-		}else{
-			$('input[name="documento_devedor"]').setMask('cnpj');
-		}
-	})
-	
-	$('input[name="documento_cedente"]').setMask('cnpj');
-	$('input[name="tipo_identificacao_cedente"]').change(function(){
-		if($(this).val() == '2'){	
-			$('input[name="documento_cedente"]').setMask('cpf');		
-		}else{
-			$('input[name="documento_cedente"]').setMask('cnpj');
-		}
-	})
-	
-	$('input[name="documento_sacador"]').setMask('cnpj');
-	$('input[name="tipo_identificacao_sacador"]').change(function(){
-		if($(this).val() == '2'){	
-			$('input[name="documento_sacador"]').setMask('cpf');		
-		}else{
-			$('input[name="documento_sacador"]').setMask('cnpj');
-		}
-	})
-	
-	$('input[name="documento_apresentante"]').setMask('cnpj');
-	$('input[name="tipo_identificacao_apresentante"]').change(function(){
-		if($(this).val() == '2'){	
-			$('input[name="documento_apresentante"]').setMask('cpf');		
-		}else{
-			$('input[name="documento_apresentante"]').setMask('cnpj');
-		}
-	})
 	
 	
 	$('input[name="documento"]').setMask('cnpj');
@@ -144,6 +109,8 @@ $(document).ready(function() {
 		"sPaginationType": "full_numbers"
 			
 	});
+	
+    
 	
 	$("tfoot input").keyup( function () {
         /* Filter on the column (the index) of this element */

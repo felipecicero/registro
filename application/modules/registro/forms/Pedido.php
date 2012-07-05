@@ -2,9 +2,6 @@
 
 class Registro_Form_Pedido extends Zend_Form
 {
-
-	public $flagPedido = null;
-
     public function init()
     {
         $this->setDecorators(array( 'FormElements', 'Form')); 

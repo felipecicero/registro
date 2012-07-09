@@ -363,19 +363,21 @@
           <controllersDirectory>
             <controllerFile controllerName="Titulodocumentos">
               <actionMethod actionName="index"/>
-              <actionMethod actionName="cadastrotitulodocumento"/>
               <actionMethod actionName="pedido"/>
               <actionMethod actionName="getpessoa"/>
               <actionMethod actionName="getcidades"/>
               <actionMethod actionName="cadastrarpedido"/>
               <actionMethod actionName="acompanhamento"/>
               <actionMethod actionName="itenspedido"/>
+              <actionMethod actionName="pesquisa"/>
+              <actionMethod actionName="removesession"/>
             </controllerFile>
           </controllersDirectory>
           <formsDirectory>
             <formFile formName="Titulodocumentos"/>
             <formFile formName="Pedido"/>
             <formFile formName="Itenspedido"/>
+            <formFile formName="Pesquisa"/>
           </formsDirectory>
           <layoutsDirectory enabled="false"/>
           <modelsDirectory>
@@ -405,9 +407,6 @@
                 <viewScriptFile forActionName="getcidades"/>
               </viewControllerScriptsDirectory>
               <viewControllerScriptsDirectory forControllerName="Titulodocumentos">
-                <viewScriptFile forActionName="cadastrotitulodocumento"/>
-              </viewControllerScriptsDirectory>
-              <viewControllerScriptsDirectory forControllerName="Titulodocumentos">
                 <viewScriptFile forActionName="pedido"/>
               </viewControllerScriptsDirectory>
               <viewControllerScriptsDirectory forControllerName="Titulodocumentos">
@@ -418,6 +417,9 @@
               </viewControllerScriptsDirectory>
               <viewControllerScriptsDirectory forControllerName="Titulodocumentos">
                 <viewScriptFile forActionName="itenspedido"/>
+              </viewControllerScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="Titulodocumentos">
+                <viewScriptFile forActionName="pesquisa"/>
               </viewControllerScriptsDirectory>
             </viewScriptsDirectory>
             <viewHelpersDirectory/>
@@ -433,11 +435,8 @@
           <viewControllerScriptsDirectory forControllerName="Error">
             <viewScriptFile forActionName="error"/>
           </viewControllerScriptsDirectory>
-          <viewControllerScriptsDirectory forControllerName="Cartorio">
-            <viewScriptFile forActionName="getagencias"/>
-          </viewControllerScriptsDirectory>
-          <viewControllerScriptsDirectory forControllerName="Cartorio">
-            <viewScriptFile forActionName="getcidades"/>
+          <viewControllerScriptsDirectory forControllerName="Titulodocumentos">
+            <viewScriptFile forActionName="unsetSession"/>
           </viewControllerScriptsDirectory>
         </viewScriptsDirectory>
         <viewHelpersDirectory/>

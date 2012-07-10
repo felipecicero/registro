@@ -393,14 +393,15 @@ CREATE TABLE IF NOT EXISTS `car_cartorio` (
   `codigo_empresa` int(10) DEFAULT NULL,
   PRIMARY KEY (`idCartorio`,`idEndereco`),
   KEY `cap_cartorio_FK_enderecos` (`idEndereco`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
 
 --
 -- Extraindo dados da tabela `car_cartorio`
 --
 
 INSERT INTO `car_cartorio` (`idCartorio`, `idEndereco`, `nome`, `nomefantasia`, `cnpj`, `codigo`, `telefone`, `site`, `email`, `idAgencia`, `conta`, `carteira`, `tabeliao`, `substituto`, `escrevente`, `notificacao`, `razao`, `codigo_empresa`) VALUES
-(1, 1, 'Cartório de Registro Civil de Pessoas Juridicas, Títulos e Documentos e Tabelionato de Protestos de Palmas', 'Cartório Moromizato', '26750752000163', 99, '6332159900', 'www.cartoriomoromizato.com.br', 'cartorio@catoriomoromizato.com.br', 1, '6963', '09', 'Geraldo Henrique Moromizato', 'Adriano Moromizato', 'Ferdinando do Couto Souza', 1, NULL, NULL);
+(1, 1, 'Cartório de Registro Civil de Pessoas Juridicas, Títulos e Documentos e Tabelionato de Protestos de Palmas', 'Cartório Moromizato', '26750752000163', 99, '6332159900', 'www.cartoriomoromizato.com.br', 'cartorio@catoriomoromizato.com.br', 1, '6963', '09', 'Geraldo Henrique Moromizato', 'Adriano Moromizato', 'Ferdinando do Couto Souza', 1, NULL, NULL),
+(2, 12, 'Cartório de Registro Civil de Pessoas Juridicas, Títulos e Documentos e Tabelionato de Protestos de Palmas', 'Cartório Moromizato', '26750752000163', 99, '6332159900', 'www.cartoriomoromizato.com.br', 'cartorio@catoriomoromizato.com.br', 1, '6963', '09', 'Geraldo Henrique Moromizato', 'Adriano Moromizato', 'Ferdinando do Couto Souza', 1, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -10575,14 +10576,15 @@ CREATE TABLE IF NOT EXISTS `car_enderecos` (
   `cep` int(11) DEFAULT NULL,
   `bairro` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`idEndereco`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=13 ;
 
 --
 -- Extraindo dados da tabela `car_enderecos`
 --
 
 INSERT INTO `car_enderecos` (`idEndereco`, `idCidade`, `rua`, `numero`, `complemento`, `cep`, `bairro`) VALUES
-(2, 9899, '1104 SUL ALAMEDA 10', '18', '', 77014024, 'CENTRO');
+(2, 9899, '1104 SUL ALAMEDA 10', '18', '', 77014024, 'CENTRO'),
+(12, 9899, '108 Sul LO 03', '', 'LT 24', 77020098, 'Centro');
 
 -- --------------------------------------------------------
 
@@ -10672,13 +10674,24 @@ INSERT INTO `car_feriados` (`idFeriado`, `date`, `descricao`) VALUES
 
 CREATE TABLE IF NOT EXISTS `car_historico` (
   `idHistorico` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `idSituacao` int(10) unsigned NOT NULL,
+  `usuario` int(10) unsigned NOT NULL,
   `idPedido` int(10) unsigned NOT NULL,
-  `idItemPedido` int(10) unsigned NOT NULL,
+  `idItempedido` int(10) unsigned NOT NULL,
   `descricao` varchar(100) DEFAULT NULL,
   `data_historico` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`idHistorico`,`idSituacao`,`idPedido`,`idItemPedido`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+  PRIMARY KEY (`idHistorico`,`usuario`,`idPedido`,`idItempedido`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=21 ;
+
+--
+-- Extraindo dados da tabela `car_historico`
+--
+
+INSERT INTO `car_historico` (`idHistorico`, `usuario`, `idPedido`, `idItempedido`, `descricao`, `data_historico`) VALUES
+(16, 2, 42, 47, 'Item de Pedido Cadastrado.', '2012-07-03 20:08:30'),
+(17, 2, 42, 48, 'Item de Pedido Cadastrado.', '2012-07-03 20:08:31'),
+(18, 2, 42, 48, 'Item registrado', '2012-07-05 19:25:15'),
+(19, 2, 43, 49, 'Item de Pedido Cadastrado.', '2012-07-05 19:43:40'),
+(20, 2, 43, 50, 'Item de Pedido Cadastrado.', '2012-07-05 19:43:41');
 
 -- --------------------------------------------------------
 
@@ -10688,8 +10701,8 @@ CREATE TABLE IF NOT EXISTS `car_historico` (
 
 CREATE TABLE IF NOT EXISTS `car_itempedidos` (
   `idItempedido` int(11) NOT NULL AUTO_INCREMENT,
-  `datasituacao` date DEFAULT NULL,
   `idProtocolo` int(11) DEFAULT NULL,
+  `datasituacao` date DEFAULT NULL,
   `numeropaginas` int(11) NOT NULL,
   `numerovias` varchar(45) DEFAULT NULL,
   `numeropessoas` int(11) DEFAULT NULL,
@@ -10697,8 +10710,6 @@ CREATE TABLE IF NOT EXISTS `car_itempedidos` (
   `outrasdespesas` double DEFAULT NULL,
   `motivo` blob,
   `valorcorreio` double NOT NULL,
-  `idNotificantePessoa` int(11) DEFAULT NULL,
-  `idNotificadoPessoa` int(11) DEFAULT NULL,
   `idEmolumentos` int(11) NOT NULL,
   `idPedido` int(11) NOT NULL,
   `idSituacoes` int(11) NOT NULL,
@@ -10706,29 +10717,17 @@ CREATE TABLE IF NOT EXISTS `car_itempedidos` (
   `idPessoasnotificado` int(11) NOT NULL,
   `idPessoasnotificante` int(11) NOT NULL,
   PRIMARY KEY (`idItempedido`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=30 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=51 ;
 
 --
 -- Extraindo dados da tabela `car_itempedidos`
 --
 
-INSERT INTO `car_itempedidos` (`idItempedido`, `datasituacao`, `idProtocolo`, `numeropaginas`, `numerovias`, `numeropessoas`, `valordocumento`, `outrasdespesas`, `motivo`, `valorcorreio`, `idNotificantePessoa`, `idNotificadoPessoa`, `idEmolumentos`, `idPedido`, `idSituacoes`, `idTipodocumentos`, `idPessoasnotificado`, `idPessoasnotificante`) VALUES
-(28, '2012-06-27', 6, 12413, '12413', 12413, 13121, 124, NULL, 12424, NULL, NULL, 20, 20, 0, 20, 0, 0),
-(29, '2012-06-27', 7, 412141, '2424', 332, 453453, 456456, NULL, 565, NULL, NULL, 15, 20, 0, 20, 0, 0);
-
--- --------------------------------------------------------
-
---
--- Estrutura da tabela `car_livro`
---
-
-CREATE TABLE IF NOT EXISTS `car_livro` (
-  `idLivro` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `folha` int(10) unsigned DEFAULT NULL,
-  `livro` int(10) unsigned DEFAULT NULL,
-  `data_protesto` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`idLivro`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+INSERT INTO `car_itempedidos` (`idItempedido`, `idProtocolo`, `datasituacao`, `numeropaginas`, `numerovias`, `numeropessoas`, `valordocumento`, `outrasdespesas`, `motivo`, `valorcorreio`, `idEmolumentos`, `idPedido`, `idSituacoes`, `idTipodocumentos`, `idPessoasnotificado`, `idPessoasnotificante`) VALUES
+(47, 25, '2012-07-05', 22, '222', 222, 0, 0, NULL, 0, 15, 42, 2, 20, 2, 2),
+(48, 26, '2012-07-05', 33, '333', 33, 0, 0, NULL, 0, 15, 42, 2, 20, 2, 2),
+(49, 27, '2012-07-05', 11, '2', 2, 202, 22, NULL, 2002, 19, 43, 1, 20, 2, 2),
+(50, 28, '2012-07-05', 22, '3', 3, 3003, 33, NULL, 303, 15, 43, 1, 20, 2, 2);
 
 -- --------------------------------------------------------
 
@@ -10778,15 +10777,16 @@ CREATE TABLE IF NOT EXISTS `car_pedido` (
   `data_pedido` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `pedido` int(11) DEFAULT NULL,
   PRIMARY KEY (`idPedido`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=7 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=33 ;
 
 --
 -- Extraindo dados da tabela `car_pedido`
 --
 
 INSERT INTO `car_pedido` (`idPedido`, `situacao`, `data_pedido`, `pedido`) VALUES
-(5, 2, '2012-06-27 09:18:14', 1),
-(6, 1, NULL, 2);
+(30, 2, '2012-07-03 19:55:47', 14),
+(31, 2, '2012-07-03 20:08:29', 15),
+(32, 1, '2012-07-05 19:43:40', 16);
 
 -- --------------------------------------------------------
 
@@ -10823,14 +10823,15 @@ CREATE TABLE IF NOT EXISTS `car_pedidos` (
   `idSituacoes` int(11) NOT NULL,
   `idRequerente` int(11) NOT NULL,
   PRIMARY KEY (`idPedido`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=21 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=44 ;
 
 --
 -- Extraindo dados da tabela `car_pedidos`
 --
 
 INSERT INTO `car_pedidos` (`idPedido`, `idPedidoFK`, `datapedido`, `dataprevista`, `dataentrega`, `valorpedido`, `valordeposito`, `valorreceber`, `idSituacoes`, `idRequerente`) VALUES
-(20, 5, '2012-06-27 09:18:14', '0000-00-00', '0000-00-00', 1234, 1234, 1234, 0, 2);
+(42, 30, '2012-07-03 11:08:29', '1111-11-11', '1111-11-11', 11111, 100011, 111111, 1, 2),
+(43, 31, '2012-07-05 10:43:40', '1111-11-11', '0000-00-00', 10001, 1001, 111, 1, 2);
 
 -- --------------------------------------------------------
 
@@ -10847,7 +10848,7 @@ CREATE TABLE IF NOT EXISTS `car_pessoas` (
   `observacoes` varchar(100) DEFAULT NULL,
   `telefone` varchar(10) DEFAULT NULL,
   PRIMARY KEY (`idPessoas`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
 
 --
 -- Extraindo dados da tabela `car_pessoas`
@@ -10865,12 +10866,17 @@ INSERT INTO `car_pessoas` (`idPessoas`, `tipo_identificacao`, `numeroidentificac
 CREATE TABLE IF NOT EXISTS `car_pessoascitadas` (
   `idPessoascitadas` int(11) NOT NULL AUTO_INCREMENT,
   `idPessoas` int(11) NOT NULL,
-  `idRegistro` int(11) NOT NULL,
-  `notificar` enum('1','2') NOT NULL,
-  PRIMARY KEY (`idPessoascitadas`),
-  KEY `fk_car_pessoascitadas_car_pessoas1` (`idPessoas`),
-  KEY `fk_car_pessoascitadas_car_registro1` (`idRegistro`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+  `idItempedido` int(11) NOT NULL,
+  `notificar` int(1) NOT NULL,
+  PRIMARY KEY (`idPessoascitadas`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+
+--
+-- Extraindo dados da tabela `car_pessoascitadas`
+--
+
+INSERT INTO `car_pessoascitadas` (`idPessoascitadas`, `idPessoas`, `idItempedido`, `notificar`) VALUES
+(1, 2, 48, 1);
 
 -- --------------------------------------------------------
 
@@ -10898,38 +10904,82 @@ CREATE TABLE IF NOT EXISTS `car_protocolo` (
   `protocolo` int(11) DEFAULT NULL,
   `situacao` int(1) DEFAULT NULL,
   PRIMARY KEY (`idProtocolo`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=9 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=30 ;
 
 --
 -- Extraindo dados da tabela `car_protocolo`
 --
 
 INSERT INTO `car_protocolo` (`idProtocolo`, `data`, `protocolo`, `situacao`) VALUES
-(6, '2012-06-27 09:18:15', 1, 2),
-(7, NULL, 2, 2),
-(8, NULL, 3, 1);
+(25, '2012-07-03 19:55:49', 20, 2),
+(26, '2012-07-03 20:08:30', 21, 2),
+(27, '2012-07-03 20:08:31', 22, 2),
+(28, '2012-07-05 19:43:40', 23, 2),
+(29, '2012-07-05 19:43:41', 24, 1);
 
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `car_registro`
+-- Estrutura da tabela `car_registroa`
 --
 
-CREATE TABLE IF NOT EXISTS `car_registro` (
+CREATE TABLE IF NOT EXISTS `car_registroa` (
   `idRegistro` int(11) NOT NULL AUTO_INCREMENT,
+  `registro` int(11) DEFAULT NULL,
   `idProtocolo` int(11) NOT NULL,
   `idItempedido` int(11) NOT NULL,
-  `livro` varchar(1) NOT NULL,
-  `observacao` blob,
-  `idSituacoes` int(11) NOT NULL,
-  `data` date DEFAULT NULL,
+  `data` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `idControleselos` int(11) NOT NULL,
-  PRIMARY KEY (`idRegistro`,`idSituacoes`),
+  PRIMARY KEY (`idRegistro`),
   KEY `fk_registro_car_itempedidos1` (`idItempedido`),
-  KEY `fk_car_registro_car_situacoes1` (`idSituacoes`),
   KEY `fk_car_registro_car_controleselos1` (`idControleselos`),
   KEY `fk_car_registro_car_protocolo1` (`idProtocolo`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+
+--
+-- Extraindo dados da tabela `car_registroa`
+--
+
+INSERT INTO `car_registroa` (`idRegistro`, `registro`, `idProtocolo`, `idItempedido`, `data`, `idControleselos`) VALUES
+(1, 1, 26, 48, '2012-07-05 19:25:14', 0);
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura da tabela `car_registrob`
+--
+
+CREATE TABLE IF NOT EXISTS `car_registrob` (
+  `idRegistro` int(11) NOT NULL AUTO_INCREMENT,
+  `registro` int(11) DEFAULT NULL,
+  `idProtocolo` int(11) NOT NULL,
+  `idItempedido` int(11) NOT NULL,
+  `data` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `idControleselos` int(11) NOT NULL,
+  PRIMARY KEY (`idRegistro`),
+  KEY `fk_registro_car_itempedidos1` (`idItempedido`),
+  KEY `fk_car_registro_car_controleselos1` (`idControleselos`),
+  KEY `fk_car_registro_car_protocolo1` (`idProtocolo`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=COMPACT AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura da tabela `car_registroc`
+--
+
+CREATE TABLE IF NOT EXISTS `car_registroc` (
+  `idRegistro` int(11) NOT NULL AUTO_INCREMENT,
+  `registro` int(11) DEFAULT NULL,
+  `idProtocolo` int(11) NOT NULL,
+  `idItempedido` int(11) NOT NULL,
+  `data` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `idControleselos` int(11) NOT NULL,
+  PRIMARY KEY (`idRegistro`),
+  KEY `fk_registro_car_itempedidos1` (`idItempedido`),
+  KEY `fk_car_registro_car_controleselos1` (`idControleselos`),
+  KEY `fk_car_registro_car_protocolo1` (`idProtocolo`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=COMPACT AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -10967,7 +11017,7 @@ CREATE TABLE IF NOT EXISTS `car_situacoes` (
   `idSituacoes` int(11) NOT NULL AUTO_INCREMENT,
   `nome` varchar(50) NOT NULL,
   PRIMARY KEY (`idSituacoes`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
 
 --
 -- Extraindo dados da tabela `car_situacoes`
@@ -10975,7 +11025,8 @@ CREATE TABLE IF NOT EXISTS `car_situacoes` (
 
 INSERT INTO `car_situacoes` (`idSituacoes`, `nome`) VALUES
 (1, 'Aberto'),
-(2, 'Fechado');
+(2, 'Fechado'),
+(3, 'Revisado');
 
 -- --------------------------------------------------------
 
@@ -11110,22 +11161,6 @@ ALTER TABLE `car_controleselos`
 ALTER TABLE `car_pedidocertidao`
   ADD CONSTRAINT `car_pedidocertidao_ibfk_1` FOREIGN KEY (`idSituacoes`) REFERENCES `car_situacoes` (`idSituacoes`),
   ADD CONSTRAINT `car_pedidocertidao_ibfk_2` FOREIGN KEY (`idPessoas`) REFERENCES `car_pessoas` (`idPessoas`);
-
---
--- Restrições para a tabela `car_pessoascitadas`
---
-ALTER TABLE `car_pessoascitadas`
-  ADD CONSTRAINT `car_pessoascitadas_ibfk_1` FOREIGN KEY (`idPessoas`) REFERENCES `car_pessoas` (`idPessoas`),
-  ADD CONSTRAINT `car_pessoascitadas_ibfk_2` FOREIGN KEY (`idRegistro`) REFERENCES `car_registro` (`idRegistro`);
-
---
--- Restrições para a tabela `car_registro`
---
-ALTER TABLE `car_registro`
-  ADD CONSTRAINT `car_registro_ibfk_1` FOREIGN KEY (`idItempedido`) REFERENCES `car_itempedidos` (`idItempedido`),
-  ADD CONSTRAINT `car_registro_ibfk_2` FOREIGN KEY (`idSituacoes`) REFERENCES `car_situacoes` (`idSituacoes`),
-  ADD CONSTRAINT `car_registro_ibfk_3` FOREIGN KEY (`idControleselos`) REFERENCES `car_controleselos` (`idControleselos`),
-  ADD CONSTRAINT `car_registro_ibfk_4` FOREIGN KEY (`idProtocolo`) REFERENCES `car_protocolo` (`idProtocolo`);
 
 --
 -- Restrições para a tabela `car_tipodocumentos`

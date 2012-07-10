@@ -243,14 +243,17 @@ class Registro_Form_Pedido extends Zend_Form
 	}
 
 	public function itensPedido(){
+		$this->setDecorators(array('FormElements', 'Form'));
 
-		$decorator_default = array('ViewHelper','Errors','Description','HtmlTag','Label',array(array('row' => 'HtmlTag'),array('tag' => 'div', 'class' => 'field')));
+		$decorator_default = array( 'ViewHelper', 'Errors',  array( 'Description',  array(  'tag' => 'p', 'class' => 'description' ) ), 'Label', array( array('data' => 'HtmlTag'), array( 'tag' => 'div', 'class' => 'field' ) ) );
+
 		$decorator_check = array('ViewHelper','Errors','Description','HtmlTag','Label',array(array('row' => 'HtmlTag'),array('tag' => 'div', 'class' => 'field checkbox')));
 		$decorator_margin = array('ViewHelper','Errors','Description','HtmlTag','Label',array(array('row' => 'HtmlTag'),array('tag' => 'div', 'class' => 'field margin')));
 		$decorator_textarea = array('ViewHelper','Errors','Description','HtmlTag','Label',array(array('row' => 'HtmlTag'),array('tag' => 'div', 'class' => 'field textarea')));
 		$decorator_option = array('ViewHelper','Errors','Label',array(array('row' => 'HtmlTag'),array('class' => 'option-field')));
 
 		$itenspedido = new Zend_Form_SubForm();
+		$itenspedido -> removeDecorator('DtDdWrapper');
 
 		$model_protocolo = new Protocolo();
 		$item_pedido = new Zend_Form_Element_Select('idItempedido');
@@ -401,6 +404,9 @@ class Registro_Form_Pedido extends Zend_Form
 										$observacao));
 
 		$this->addSubForm($itenspedido, 'itempedido');
+		
+		$SF = $this->getSubForm('itempedido');
+		$SF -> removeDecorator('DtDdWrapper');
 
 		$notificante = new Zend_Form_SubForm();
 
@@ -500,6 +506,8 @@ class Registro_Form_Pedido extends Zend_Form
 		$notificante->setLegend('Notificante');
 
 		$itenspedido->addSubForm($notificante, 'notificante');
+		$SF = $itenspedido->getSubForm('notificante');
+		$SF->removeDecorator('DtDdWrapper');
 
 
 
@@ -601,7 +609,9 @@ class Registro_Form_Pedido extends Zend_Form
 		$notificado->setLegend('Notificado');
 
 		$itenspedido->addSubForm($notificado, 'notificado');
-
+		
+		$SF = $itenspedido->getSubForm('notificado');
+		$SF->removeDecorator('DtDdWrapper');
 	}
 
 

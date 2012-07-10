@@ -43,7 +43,7 @@ label{
 }
 
 fieldset{
-	border: solid 1px #e9e9e9;
+	border: solid 1px #ddd;
 }
 fieldset legend{
 	font-size: 18px;
@@ -305,7 +305,11 @@ input.half{ width: 188px; }
 
 #fieldset-Requerente{ width: 440px; float: right; }
 #fieldset-Requerente .field{ width: 220px; float: left; }
-#fieldset-Requerente .field input, #fieldset-Requerente .field select{ width: 170px; display:block; }
+#fieldset-Requerente .field input, #fieldset-Requerente .field select { width: 170px; display:block; }
+
+#fieldset-itempedido .field{ width: 25%; float: left; }
+#fieldset-itempedido .field input, #fieldset-itempedido .field select{ width: 90%; display:block; }
+#fieldset-itempedido .field textarea{ width: 95%; display:block; }
 
 #submits-form{ clear: both; border: none; margin: 0px; padding:0px;}
 #submits-form input{ margin: 0px; height: 30px; border: 1px solid #333; }

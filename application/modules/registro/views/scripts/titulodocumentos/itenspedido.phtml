@@ -50,48 +50,55 @@ input{
 
 
 	$(function() {
-		var tabs = $('#form-tab');
-		var legends = $(tabs).find('fieldset').get();
 		
-		var titles = $('<ul></ul>');
-		$.each(legends, function(index, value) { 
-			var legend = $(value).find('legend');
+		
+		$('input').change(function(){
+			var tipoemolumento = $("#tipoemolumento").val();
+			var valor = $("#valordocumento").val();
 			
-			var id = $(value).attr('id');
-			var a = $('<a></a>').attr('href', '#' + id).text($(legend).text());
-			var li = $('<li></li>').append(a);
-			
-			$(legend).remove();
-			
-			$(titles).append(li);			
-			var div = $('<div></div>').attr('id', id);
-			$(div).html($(value).html());
-			$(tabs).append(div);
-			
-			$(value).remove();
+			$.ajax({
+	    		url:"<?php echo $this->url(array('module' => 'registro', 'controller' => 'titulodocumentos', 'action' => 'calculocusta'), null, true); ?>",
+    			dataType:'json',
+    			encoding: 'utf-8',
+   				data:{id: tipoemolumento, valor: valor},
+    			type:'GET',
+    			success: function(data){						
+					var valordocumento = parseInt(valor);
+						
+					if(data.tipo_custa == 0)
+					{
+						var totalcustas = 0
+							
+						if($('#numeropaginas').val() > data.pagina_inicial)
+						{
+							var qtpagina = $('#numeropaginas').val() - data.pagina_inicial;
+							totalcustas = totalcustas + ($('#numerovias').val() * (qtpagina * data.pagina_extra));
+							totalcustas = totalcustas + ($('#numerovias').val() * data.emolumento);
+						}
+						else{
+							totalcustas = totalcustas + ($('#numerovias').val() * data.emolumento);
+						}
+						totalcustas = (totalcustas + (data.funcivil + data.taxa));
+									
+						$('#emolumento').val(data.emolumento);
+						$('#emolumento').setMask('decimal');
+						$('#total_custas').val(totalcustas);
+						$('#total_custas').setMask('decimal');
+						$('#taxajudiciaria').val(data.taxa);
+						$('#taxajudiciaria').setMask('decimal');
+						$('#funcivil').val(data.funcivil);
+						$('#funcivil').setMask('decimal');
+									
+						totalcustasDec = ((totalcustas + (data.funcivil + data.taxa)) / 100);
+						emolumentoDec = (data.emolumento / 100);
+						taxajudiciariaDec = (data.taxa / 100);
+						funcivilDec = (data.funcivil / 100);
+					}
+    			}
+			});
 		});
-		$(tabs).prepend(titles);
-		$(tabs).tabs();
 		
-		$('#Pessoa-cep_citado').setMask('99.999-999');
-		$('#Pessoa-telefone_citado').setMask('(99)9999-9999');
-		$('#datasituacao').setMask('date');
-		$('#valordocumento').setMask('decimal');
-		$('#emolumento').setMask('decimal');
-		$('#valor_correio').setMask('decimal');
-		$('#outrasdespesas').setMask('decimal');
-		$('#taxa_judiciaria').setMask('decimal');
-		$('#funcivil').setMask('decimal');
-		$('#total_custas').setMask('decimal');
 		
-		$('#Pessoa-documento_citado').setMask('cnpj');
-		$('input[name="Pessoa[tipo_identificacao_citado]"]').change(function(){
-			if($(this).val() == '2'){	
-				$('#Pessoa-documento_citado').setMask('cpf');		
-			}else{
-				$('#Pessoa-documento_citado').setMask('cnpj');
-			}
-		})
 		
 		$('#Pessoa-estado_citado').change(function() { 
 		

@@ -39,6 +39,20 @@ class Emolumentofixo extends Zend_Db_Table_Abstract{
 		return $this->fetchAll($select)->Current();
     }
 	
-	
+	public function getCustas($id)
+	{
+		$select = $this->select();
+		
+		$select->setIntegrityCheck(false);
+		
+		$select->from(array('emo' => 'car_emolumentofixo'), array('emolumento','pagina_extra','pagina_inicial'));
+		
+		$select->where("emo.idTipoEmolumento = ?", $id);
+		
+	//	$sql = (string) $select;
+	//	print_r($sql);exit;
+		
+		return $this->fetchAll($select)->Current();
+	}
 }
 

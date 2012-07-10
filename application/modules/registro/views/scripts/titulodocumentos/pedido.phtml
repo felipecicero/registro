@@ -77,14 +77,10 @@ input{
 		});
 		$(tabs).prepend(titles);
 		$(tabs).tabs();
-<<<<<<< HEAD
-
-
-=======
 		
-				$('input').change(function(){
-			var tipoemolumento = $("#tipoemolumento").val();
-			var valor = $("#valordocumento").val();
+		$('input').change(function(){
+			var tipoemolumento = $("#itempedido-tipoemolumento").val();
+			var valor = $("#itempedido-valordocumento").val();
 			
 			$.ajax({
 	    		url:"<?php echo $this->url(array('module' => 'registro', 'controller' => 'titulodocumentos', 'action' => 'calculocusta'), null, true); ?>",
@@ -93,44 +89,41 @@ input{
    				data:{id: tipoemolumento, valor: valor},
     			type:'GET',
     			success: function(data){						
-						var valordocumento = parseInt(valor);
+					var valordocumento = parseInt(valor);
 						
-						if(data.tipo_custa == 0)
+					if(data.tipo_custa == 0)
+					{
+						var totalcustas = 0
+							
+						if($('#itempedido-numeropaginas').val() > data.pagina_inicial)
 						{
-									var totalcustas = 0
-									
-									if($('#numeropaginas').val() > data.pagina_inicial)
-										{
-										var qtpagina = $('#numeropaginas').val() - data.pagina_inicial;
-										totalcustas = totalcustas + ($('#numerovias').val() * (qtpagina * data.pagina_extra));
-										totalcustas = totalcustas + ($('#numerovias').val() * data.emolumento);
-										}
-									else{
-										totalcustas = totalcustas + ($('#numerovias').val() * data.emolumento);
-										}
-									totalcustas = (totalcustas + (data.funcivil + data.taxa));
-									
-									$('#emolumento').val(data.emolumento);
-									$('#emolumento').setMask('decimal');
-									$('#total_custas').val(totalcustas);
-									$('#total_custas').setMask('decimal');
-									$('#taxajudiciaria').val(data.taxa);
-									$('#taxajudiciaria').setMask('decimal');
-									$('#funcivil').val(data.funcivil);
-									$('#funcivil').setMask('decimal');
-									
-									totalcustasDec = ((totalcustas + (data.funcivil + data.taxa)) / 100);
-									emolumentoDec = (data.emolumento / 100);
-									taxajudiciariaDec = (data.taxa / 100);
-									funcivilDec = (data.funcivil / 100);
+							var qtpagina = $('#itempedido-numeropaginas').val() - data.pagina_inicial;
+							totalcustas = totalcustas + ($('#itempedido-numerovias').val() * (qtpagina * data.pagina_extra));
+							totalcustas = totalcustas + ($('#itempedido-numerovias').val() * data.emolumento);
 						}
-						
+						else{
+							totalcustas = totalcustas + ($('#itempedido-numerovias').val() * data.emolumento);
+						}
+						totalcustas = (totalcustas + (data.funcivil + data.taxa));
+									
+						$('#itempedido-emolumento').val(data.emolumento);
+						$('#itempedido-emolumento').setMask('decimal');
+						$('#itempedido-total_custas').val(totalcustas);
+						$('#itempedido-total_custas').setMask('decimal');
+						$('#itempedido-taxajudiciaria').val(data.taxa);
+						$('#itempedido-taxajudiciaria').setMask('decimal');
+						$('#itempedido-funcivil').val(data.funcivil);
+						$('#itempedido-funcivil').setMask('decimal');
+									
+						totalcustasDec = ((totalcustas + (data.funcivil + data.taxa)) / 100);
+						emolumentoDec = (data.emolumento / 100);
+						taxajudiciariaDec = (data.taxa / 100);
+						funcivilDec = (data.funcivil / 100);
+					}
     			}
 			});
 		});
 
-		
->>>>>>> 4ca9c4e8ad532b9ced806dcb789b124cb02682bf
 		$('#Requerente-estado_requerente').change(function() { 
 
 	    	var id = $(this).val();		    	    			     
@@ -162,34 +155,7 @@ input{
     			}
 			});
 		});
-
-		$('#Requerente-cep_requerente').setMask('99.999-999');
-		$('#Requerente-telefone_requerente').setMask('(99)9999-9999');
-		$('#data_pedido').setMask('date');
-		$('#data_prevista').setMask('date');
-		$('#data_entrega').setMask('date');
-		$('#itempedido-datasituacao').setMask('date');
-		$('#valor_pedido').setMask('decimal');
-		$('#valor_deposito').setMask('decimal');
-		$('#valor_receber').setMask('decimal');
-		$('#itempedido-valordocumento').setMask('decimal');
-		$('#itempedido-emolumento').setMask('decimal');
-		$('#itempedido-valor_correio').setMask('decimal');
-		$('#itempedido-outrasdespesas').setMask('decimal');
-		$('#itempedido-taxajudiciaria').setMask('decimal');
-		$('#itempedido-funcivil').setMask('decimal');
-		$('#itempedido-total_custas').setMask('decimal');
-
-
-		$('#Requerente-documento_requerente').setMask('cnpj');
-		$('input[name="Requerente[tipo_identificacao_requerente]"]').change(function(){
-			if($(this).val() == '2'){	
-				$('#Requerente-documento_requerente').setMask('cpf');		
-			}else{
-				$('#Requerente-documento_requerente').setMask('cnpj');
-			}
-		})
-
+		
 		$('#Requerente-documento_requerente').change(function() { 
 
 	    	var doc = $(this).val();
@@ -229,16 +195,7 @@ input{
     			}
 			});
 		});
-
-		$('#itempedido-notificante-documento_notificante').setMask('cnpj');
-		$('input[name="itempedido[notificante][tipo_identificacao_notificante]"]').change(function(){
-			if($(this).val() == '2'){	
-				$('#itempedido-notificante-documento_notificante').setMask('cpf');		
-			}else{
-				$('#itempedido-notificante-documento_notificante"]').setMask('cnpj');
-			}
-		})
-
+		
 		$('#itempedido-notificante-documento_notificante').change(function() { 
 
 	    	var doc = $(this).val();
@@ -279,15 +236,6 @@ input{
 			});
 		});
 
-		$('#itempedido-notificado-documento_notificado').setMask('cnpj');
-		$('input[name="itempedido[notificado][tipo_identificacao_notificado]"]').change(function(){
-			if($(this).val() == '2'){	
-				$('#itempedido-notificado-documento_notificado').setMask('cpf');		
-			}else{
-				$('#itempedido-notificado-documento_notificado"]').setMask('cnpj');
-			}
-		})
-
 		$('#itempedido-notificado-documento_notificado').change(function() { 
 
 	    	var doc = $(this).val();
@@ -327,6 +275,6 @@ input{
     			}
 			});
 		});
-
 	});
+	
 </script>

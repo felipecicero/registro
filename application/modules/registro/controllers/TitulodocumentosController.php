@@ -4,21 +4,13 @@ class TitulodocumentosController extends Zend_Controller_Action
 {
 
     private $model_pedidos = null;
-
     private $model_pedido = null;
-
     private $model_protocolo = null;
-
     private $model_historico = null;
-
     private $model_itempedido = null;
-	
     private $model_tipoemolumento = null;
-
     private $model_custas = null;
-
     private $model_tabelaemolumentos = null;
-	
 	private $model_emolumentofixo = null;
 
     public function init()
@@ -80,8 +72,8 @@ class TitulodocumentosController extends Zend_Controller_Action
 			
 			$requerente = $this->_request->getPost('Requerente');
 			
-			$form->data_pedido->setValue(date('d-m-Y'));
-			$form->data_prevista->setValue($pedido['data_prevista']);
+			$form->data_pedido->setValue('data_pedido');
+			$form->data_prevista->setValue('data_prevista');
 			$form->data_entrega->setValue($pedido['data_entrega']);
 			$form->idSituacao->setValue($pedido['idSituacoes']);
 			$form->valor_pedido->setValue($pedido['valor_pedido']);
@@ -112,15 +104,8 @@ class TitulodocumentosController extends Zend_Controller_Action
 								
 				$itens = $this->_request->getPost('itempedido');
 				
-				//$notificante = $itens['notificante'];
-				//$notificado = $itens['notificado'];
-				
-				//unset($itens['notificante']);
-				//unset($itens['notificado']);
-				
 				$_SESSION['itempedido'][] = $itens;
-			
-				
+					
 			}
 				
 			if($this->_request->getPost('submitfinal')){
@@ -147,7 +132,6 @@ class TitulodocumentosController extends Zend_Controller_Action
 					'idPedidoFK'	=> $this->getUltimoPedido(),
 					'datapedido' 	=> date('Y-m-d h:i:s'),
 					'dataprevista' 	=> preg_replace('/[^0-9]/', '', $pedido['data_prevista']),
-					'dataentrega' 	=> preg_replace('/[^0-9]/', '', $pedido['data_entrega']),
 					'valorpedido' 	=> preg_replace('/[^0-9]/', '', $pedido['valor_pedido']),
 					'valordeposito' => preg_replace('/[^0-9]/', '', $pedido['valor_deposito']),
 					'valorreceber' 	=> preg_replace('/[^0-9]/', '', $pedido['valor_receber']),
@@ -221,6 +205,8 @@ class TitulodocumentosController extends Zend_Controller_Action
 				$form = new Registro_Form_Pedido();	
 			}
 		}
+		$form->data_pedido->setValue(date('dmY'));
+		$form->data_prevista->setValue($this->addDayIntoDate(date('dmY'),4));
 		$this->view->form = $form;
 	}
 	
@@ -822,23 +808,6 @@ class TitulodocumentosController extends Zend_Controller_Action
 			}
 			else if($tipocustas['tipo_custa'] == 0)
 			{
-			/*
-				$taxajudiciaria = $this->model_custas->getCustaByName('Taxa Judiciária');
-				$funcivil = $this->model_custas->getCustaByName('Funcivil');
-				$averbacao = $this->model_custas->getCustaByName('Averbação');
-				$averbacaopgextra = $this->model_custas->getCustaByName('averbação_paginaextra');
-				$notificacao = $this->model_custas->getCustaByName('notificacao_emolumento');
-				$notificacaopgextra = $this->model_custas->getCustaByName('notificacao_paginaextra');
-				$paginainicial = $this->model_emolumentofixo->getPaginainicial($idemolumento)->toArray();
-				$paginainicial = $paginainicial['pagina_inicial'];
-				
-				$taxajudiciaria = str_replace(',', '.', str_replace('.', '',$taxajudiciaria));
-				$funcivil = str_replace(',', '.', str_replace('.', '',$funcivil));
-				$averbacao = str_replace(',', '.', str_replace('.', '',$averbacao));
-				$averbacaopgextra = str_replace(',', '.', str_replace('.', '',$averbacaopgextra));
-				$notificacao = str_replace(',', '.', str_replace('.', '',$notificacao));
-				$notificacaopgextra = str_replace(',', '.', str_replace('.', '',$notificacaopgextra));
-			*/
 				$taxajudiciaria = $this->model_custas->getCustaByName('Taxa Judiciária');
 				$funcivil = $this->model_custas->getCustaByName('Funcivil');
 				
@@ -853,19 +822,6 @@ class TitulodocumentosController extends Zend_Controller_Action
 				$valores['emolumento'] =(int) str_replace('.', '', $valores['emolumento']);
 				$valores['pagina_extra'] =(int) str_replace('.', '', $valores['pagina_extra']);
 				
-			//	print_r(var_dump($valores));exit;
-				
-			//	print_r($valores);exit;
-				/*
-				
-				$valores = array('taxa' => $taxajudiciaria,
-								'funcivil' => $funcivil,
-								'averbacao' => $averbacao,
-								'averbacaopgextra' => $averbacaopgextra,
-								'notificacao' => $notificacao,
-								'notificacaopgextra' => $notificacaopgextra,
-								'paginainicial' => $paginainicial);
-				*/
 				echo Zend_Json::encode($valores);	
 				$this->_helper->viewRenderer->setNoRender(true);
 			}
@@ -873,4 +829,13 @@ class TitulodocumentosController extends Zend_Controller_Action
 				return false;
 			exit();
     }
+
+	function addDayIntoDate($date,$days) 
+	{
+		$thisyear = substr ( $date, 4, 4 );
+		$thismonth = substr ( $date, 2, 2 );
+		$thisday =  substr ( $date, 0, 2 );
+		$nextdate = mktime ( 0, 0, 0, $thismonth, $thisday + $days, $thisyear );
+		return strftime("%d%m%Y", $nextdate);
+	}
 }

@@ -12,6 +12,14 @@ class TitulodocumentosController extends Zend_Controller_Action
     private $model_historico = null;
 
     private $model_itempedido = null;
+	
+    private $model_tipoemolumento = null;
+
+    private $model_custas = null;
+
+    private $model_tabelaemolumentos = null;
+	
+	private $model_emolumentofixo = null;
 
     public function init()
     {
@@ -37,6 +45,10 @@ class TitulodocumentosController extends Zend_Controller_Action
 		$this->model_protocolo = new Protocolo();
 		$this->model_pedido = new Pedido();
 		$this->model_itempedido = new ItemPedidos();
+		$this->model_tipoemolumento = new TipoEmolumento();
+		$this->model_custas = new Custa();
+		$this->model_tabelaemolumentos = new TabelaEmolumentos();
+		$this->model_emolumentofixo = new Emolumentofixo();
 		
 		$this->view->setEncoding('ISO-8859-1');
     }
@@ -777,4 +789,88 @@ class TitulodocumentosController extends Zend_Controller_Action
 	
 	}
 	
+	public function calculocustaAction()
+    {
+       $this->_helper->layout ()->disableLayout ();
+	   $this->_helper->viewRenderer->setNoRender ();
+		
+		$idemolumento = (int) $this->_getParam('id');
+		$valor = (int) $this->_getParam('valor');		
+		
+		$tipocustas = $this->model_tipoemolumento->getCustasTotais($idemolumento);
+				
+			if($tipocustas['tipo_custa'] == 1)
+			{
+				$emolumentos = $this->model_tabelaemolumentos->getEmolumento($valor);
+				$emolumentos->toArray();
+				$emolumentos = $emolumentos['emolumento'];
+				
+			
+				$taxajudiciaria = $this->model_custas->getCustaByName('Taxa Judiciária');
+				$funcivil = $this->model_custas->getCustaByName('Funcivil');
+			
+				$taxajudiciaria = str_replace(',', '.', $taxajudiciaria);
+				$funcivil = str_replace(',', '.', $funcivil);
+				$emolumentos = str_replace(',', '.', $emolumentos);
+				
+				$soma = $taxajudiciaria + $funcivil + $emolumentos;
+				
+				$custas = array('tipo_custa' => $tipocustas['tipo_custa'],'taxa'=>$taxajudiciaria, 'funcivil'=>$funcivil, 'emolumentos'=>$emolumentos, 'soma'=>$soma);
+				
+				echo Zend_Json::encode($custas);	
+				$this->_helper->viewRenderer->setNoRender(true);
+			}
+			else if($tipocustas['tipo_custa'] == 0)
+			{
+			/*
+				$taxajudiciaria = $this->model_custas->getCustaByName('Taxa Judiciária');
+				$funcivil = $this->model_custas->getCustaByName('Funcivil');
+				$averbacao = $this->model_custas->getCustaByName('Averbação');
+				$averbacaopgextra = $this->model_custas->getCustaByName('averbação_paginaextra');
+				$notificacao = $this->model_custas->getCustaByName('notificacao_emolumento');
+				$notificacaopgextra = $this->model_custas->getCustaByName('notificacao_paginaextra');
+				$paginainicial = $this->model_emolumentofixo->getPaginainicial($idemolumento)->toArray();
+				$paginainicial = $paginainicial['pagina_inicial'];
+				
+				$taxajudiciaria = str_replace(',', '.', str_replace('.', '',$taxajudiciaria));
+				$funcivil = str_replace(',', '.', str_replace('.', '',$funcivil));
+				$averbacao = str_replace(',', '.', str_replace('.', '',$averbacao));
+				$averbacaopgextra = str_replace(',', '.', str_replace('.', '',$averbacaopgextra));
+				$notificacao = str_replace(',', '.', str_replace('.', '',$notificacao));
+				$notificacaopgextra = str_replace(',', '.', str_replace('.', '',$notificacaopgextra));
+			*/
+				$taxajudiciaria = $this->model_custas->getCustaByName('Taxa Judiciária');
+				$funcivil = $this->model_custas->getCustaByName('Funcivil');
+				
+				$taxajudiciaria =(int) str_replace(',', '', $taxajudiciaria);
+				$funcivil =(int) str_replace(',', '', $funcivil);
+				
+				$valores = $this->model_emolumentofixo->getCustas($idemolumento)->toArray();
+				$valores['tipo_custa'] = $tipocustas['tipo_custa'];
+				$valores['funcivil'] = $funcivil;
+				$valores['taxa'] = $taxajudiciaria;
+				
+				$valores['emolumento'] =(int) str_replace('.', '', $valores['emolumento']);
+				$valores['pagina_extra'] =(int) str_replace('.', '', $valores['pagina_extra']);
+				
+			//	print_r(var_dump($valores));exit;
+				
+			//	print_r($valores);exit;
+				/*
+				
+				$valores = array('taxa' => $taxajudiciaria,
+								'funcivil' => $funcivil,
+								'averbacao' => $averbacao,
+								'averbacaopgextra' => $averbacaopgextra,
+								'notificacao' => $notificacao,
+								'notificacaopgextra' => $notificacaopgextra,
+								'paginainicial' => $paginainicial);
+				*/
+				echo Zend_Json::encode($valores);	
+				$this->_helper->viewRenderer->setNoRender(true);
+			}
+			else
+				return false;
+			exit();
+    }
 }

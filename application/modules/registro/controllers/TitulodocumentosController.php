@@ -46,10 +46,15 @@ class TitulodocumentosController extends Zend_Controller_Action
         // action body
     }
 
+    public function cadastrotitulodocumentoAction()
+    {
+        // action body
+    }
+
     public function pedidoAction()
     {
         $form = new Registro_Form_Pedido();
-		$valor_total = 0;
+		
 		//if(isset($_SESSION['itempedido'])) unset($_SESSION['itempedido']);
 		if ( $this->_request->isPost()){
 			
@@ -95,11 +100,14 @@ class TitulodocumentosController extends Zend_Controller_Action
 								
 				$itens = $this->_request->getPost('itempedido');
 				
+				//$notificante = $itens['notificante'];
+				//$notificado = $itens['notificado'];
+				
+				//unset($itens['notificante']);
+				//unset($itens['notificado']);
+				
 				$_SESSION['itempedido'][] = $itens;
-				
-				
-				
-				$valor_total += $itens['total_custas'];
+			
 				
 			}
 				
@@ -202,8 +210,8 @@ class TitulodocumentosController extends Zend_Controller_Action
 			}
 		}
 		$this->view->form = $form;
-    }
-
+	}
+	
     public function getpessoaAction()
     {
 		$this->_helper->layout ()->disableLayout ();
@@ -268,10 +276,8 @@ class TitulodocumentosController extends Zend_Controller_Action
 			$model_pessoa->insert($data);
             return $model_pessoa->getAdapter()->lastInsertId();
 		
-		
-		
 		}
-	}		
+    }
 
     public function cadastrarEndereco($data, $id = '')
     {
@@ -695,9 +701,9 @@ class TitulodocumentosController extends Zend_Controller_Action
 		$this->view->form = $form;
 	
     }
-
-    public function updateItemPedido($data)
-    {
+	
+	public function updateItemPedido($data)
+	{
 		
 		$model_itempedido = new ItemPedidos();
     		  
@@ -706,8 +712,8 @@ class TitulodocumentosController extends Zend_Controller_Action
         	
         return false;
 		
-    }
-
+	}
+	
     public function cadastrarRegistroPedido($data)
     {
 	
@@ -759,8 +765,8 @@ class TitulodocumentosController extends Zend_Controller_Action
 		else return false;
 		
     }
-
-    public function cadastrarPessoasCitadas($data)
+	
+	public function cadastrarPessoasCitadas($data)
     {
 	
 		$model_pessoaCitada = new Pessoascitadas();
@@ -769,27 +775,6 @@ class TitulodocumentosController extends Zend_Controller_Action
 		
 		return true;
 	
-    }
-
-    public function pesquisaAction()
-    {
-        // action body
-    }
-
-    public function removesessionAction()
-    {	
-		$rowNumber = (int)$this->_getParam('item');
-        
-		print_r('<pre>');
-		print_r($_SESSION);
-		print_r('<pre>');exit;
-		
-		unset($_SESSION['itempedido'][$rowNumber]);
-		
-		
-    }
-
-
+	}
+	
 }
-
-

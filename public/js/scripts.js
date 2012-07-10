@@ -83,6 +83,9 @@ $(document).ready(function() {
 	})
 			
 	$('input[name="cnpj"]').setMask('cnpj');
+		
+	
+
 	
 	oTable = $('#tabela').dataTable({
 		"oLanguage": {

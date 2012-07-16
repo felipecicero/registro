@@ -57,7 +57,7 @@ $(document).ready(function() {
 	$('#emolumento').setMask('decimal');
 	$('#valor_correio').setMask('decimal');
 	$('#outrasdespesas').setMask('decimal');
-	$('#taxa_judiciaria').setMask('decimal');
+	$('#taxajudiciaria').setMask('decimal');
 	$('#funcivil').setMask('decimal');
 	$('#total_custas').setMask('decimal');
 	

@@ -2,12 +2,18 @@
 
 class Registro_Form_Pedido extends Zend_Form
 {
+
+	protected $model_cartorio = null;
+	protected $data = null;
+	
     public function init()
     {
+		$this->model_cartorio = new Cartorio();
+		$this->data = $this->model_cartorio->getLocalCartorio();
+		
 		$this->setDecorators(array('FormElements', 'Form'));
 
 		$decorator_default = array( 'ViewHelper', 'Errors',  array( 'Description',  array(  'tag' => 'p', 'class' => 'description' ) ), 'Label', array( array('data' => 'HtmlTag'), array( 'tag' => 'div', 'class' => 'field' ) ) );
-
 		$decorator_check = array('ViewHelper','Errors','Description','Label',array(array('row' => 'HtmlTag'),array('tag' => 'div', 'class' => 'field checkbox')));
 		$decorator_margin = array('ViewHelper','Errors','Description','Label',array(array('row' => 'HtmlTag'),array('tag' => 'div', 'class' => 'field margin')));
 		$decorator_textarea = array('ViewHelper','Errors','Description','Label',array(array('row' => 'HtmlTag'),array('tag' => 'div', 'class' => 'field textarea')));
@@ -23,7 +29,10 @@ class Registro_Form_Pedido extends Zend_Form
 	    foreach ($model_pedido->findForSelect() as $pedi) {
 	    	$pedido -> addMultiOption($pedi->idPedido, $this->completa(10, $pedi->pedido, "0"));
 		}
-
+		
+		$model_cartorio = new Cartorio();
+		$data = $model_cartorio->getLocalCartorio();
+		
 		$model_situacao = new Situacoes();
 	    $situacao = new Zend_Form_Element_Select('idSituacao');
 		$situacao -> clearDecorators();
@@ -34,6 +43,7 @@ class Registro_Form_Pedido extends Zend_Form
 	    foreach ($model_situacao->findForSelect() as $situa) {
 	    	$situacao->addMultiOption($situa->idSituacoes, $situa->nome);
 		}
+		
 
 		$validate = new Zend_Validate_Date(array('locale' => 'pt-Br'));
     	$data_pedido = new Zend_Form_Element_Text('data_pedido');
@@ -99,24 +109,30 @@ class Registro_Form_Pedido extends Zend_Form
 
 		$submit = new Zend_Form_Element_Submit('Salvar');
         $submit -> setAttrib('class', 'button-submit');
+        $submit -> setAttrib('title', 'Clicar para Salvar o Pedido');
+        $submit -> setLabel('Salvar Pedido');
 		$submit -> clearDecorators();
 		$submit -> setDecorators(array('ViewHelper'));
 
 		$submit_temp = new Zend_Form_Element_Submit('adicionar');
 		$submit_temp -> setAttrib('class', 'button-submit');
+		$submit_temp -> setAttrib('title', 'Clicar para Adicionar Itens ao Pedido');
+		$submit_temp -> setLabel('Adicionar Item');
 		$submit_temp -> clearDecorators();
 		$submit_temp -> setDecorators(array('ViewHelper'));
 
 		$submit_final = new Zend_Form_Element_Submit('submitfinal');
 		$submit_final -> setAttrib('class', 'button-submit');
+		$submit_final -> setAttrib('title', 'Clicar para Finalizar e Salvar o Pedido');
+		$submit_final -> setLabel('Concluir Cadastro');
 		$submit_final -> clearDecorators();
 		$submit_final -> setDecorators(array('ViewHelper'));			
 
 		$this->addElements(array($pedido, $situacao, $data_pedido, $data_prevista, $data_entrega, $valor_pedido, 
-							$valor_deposito, $valor_receber));
+							$valor_deposito, $valor_receber, $submit));
 
 		$this->addDisplayGroup( 
-			array('idPedido', 'idSituacao', 'data_pedido', 'data_prevista', 'data_entrega', 'valor_pedido','valor_deposito','valor_receber'), 'contact',
+			array('idPedido', 'idSituacao', 'data_pedido', 'data_prevista', 'data_entrega', 'valor_pedido','valor_deposito','valor_receber', 'Salvar'), 'contact',
 			array('legend' => 'Cadastro de pedido', 'id'=>'cadastro-pedido-form')
 		);
 
@@ -160,6 +176,7 @@ class Registro_Form_Pedido extends Zend_Form
 		$cep_requerente -> addDecorators($decorator_default);
 		$cep_requerente -> setLabel("CEP:");
 		$cep_requerente -> setAttrib('class', 'half');
+		$cep_requerente -> setValue($this->data->cep);
 
 		$endereco_requerente = new Zend_Form_Element_Text('endereco_requerente');
 		$endereco_requerente -> clearDecorators();
@@ -201,7 +218,8 @@ class Registro_Form_Pedido extends Zend_Form
 		$estado_requerente -> addMultiOption('0', 'Selecione o Estado');		
 		foreach ($model_estado->findForSelect() as $uf) {
 			$estado_requerente -> addMultiOption($uf->idEstado, $uf->sigla);
-		} 
+		}
+		$estado_requerente -> setValue($this->data->idEstado, $this->data->uf);
 
 		$cidade_requerente = new Zend_Form_Element_Select('cidade_requerente');
 		$cidade_requerente -> clearDecorators();
@@ -210,6 +228,8 @@ class Registro_Form_Pedido extends Zend_Form
 		$cidade_requerente -> setAttrib('class', 'half');
 		$cidade_requerente -> setRegisterInArrayValidator(false);
 		$cidade_requerente -> setRequired(true);
+		$cidade_requerente -> addMultiOption($this->data->idCidade, $this->data->cidade);
+		$cidade_requerente -> setValue($this->data->idCidade, $this->data->cidade);
 
 		$obs_requerente = new Zend_Form_Element_Textarea('obs_requerente');
 		$obs_requerente -> clearDecorators();
@@ -224,17 +244,17 @@ class Registro_Form_Pedido extends Zend_Form
 		$requerente->addElements(array(	$tipo_identificacao_requerente, $documento_requerente, $nome_requerente, 
 										$telefone_requerente, $cep_requerente, $endereco_requerente, 
 										$complemento_requerente, $bairro_requerente, $numero_requerente, 
-										$estado_requerente, $cidade_requerente, $obs_requerente));
+										$estado_requerente, $cidade_requerente, $obs_requerente, $submit_temp));
 
 		$this->addSubForm($requerente, 'Requerente');
 
 		$displayGroup = $this->getSubForm('Requerente');
 		$displayGroup -> removeDecorator('DtDdWrapper');
 
-		$this->addElements(array($submit, $submit_temp, $submit_final));
+		$this->addElements(array($submit_final));
 
 		$this->addDisplayGroup( 
-			array('Salvar', 'adicionar', 'submitfinal'), 'submits',
+			array('submitfinal'), 'submits',
 			array('legend' => '', 'id'=>'submits-form')
 		);
 
@@ -437,6 +457,7 @@ class Registro_Form_Pedido extends Zend_Form
 		$cep_notificante -> addDecorators($decorator_default);
 		$cep_notificante -> setLabel("CEP:");
 		$cep_notificante -> setAttrib('class', 'half');
+		$cep_notificante -> setValue($this->data->cep);
 
 		$endereco_notificante = new Zend_Form_Element_Text('endereco_notificante');
 		$endereco_notificante -> clearDecorators();
@@ -480,7 +501,8 @@ class Registro_Form_Pedido extends Zend_Form
 		$estado_notificante -> addMultiOption('0', 'Selecione o Estado');		
 		foreach ($model_estado->findForSelect() as $uf) {
 			$estado_notificante -> addMultiOption($uf->idEstado, $uf->sigla);
-		} 
+		}
+		$estado_notificante -> setValue($this->data->idEstado, $this->data->uf);
 
 		$cidade_notificante = new Zend_Form_Element_Select('cidade_notificante');
 		$cidade_notificante -> clearDecorators();
@@ -489,6 +511,8 @@ class Registro_Form_Pedido extends Zend_Form
 		$cidade_notificante -> setAttrib('class', 'half');
 		$cidade_notificante -> setRegisterInArrayValidator(false);
 		$cidade_notificante -> setRequired(true);
+		$cidade_notificante -> addMultiOption($this->data->idCidade, $this->data->cidade);
+		$cidade_notificante -> setValue($this->data->idCidade, $this->data->cidade);
 
 		$obs_notificante = new Zend_Form_Element_Textarea('obs_notificante');
 		$obs_notificante -> clearDecorators();
@@ -540,6 +564,7 @@ class Registro_Form_Pedido extends Zend_Form
 		$cep_notificado -> addDecorators($decorator_default);
 		$cep_notificado -> setLabel("CEP:");
 		$cep_notificado -> setAttrib('class', 'half');
+		$cep_notificado -> setValue($this->data->cep);
 
 		$endereco_notificado = new Zend_Form_Element_Text('endereco_notificado');
 		$endereco_notificado -> clearDecorators();
@@ -583,7 +608,8 @@ class Registro_Form_Pedido extends Zend_Form
 		$estado_notificado -> addMultiOption('0', 'Selecione o Estado');		
 		foreach ($model_estado->findForSelect() as $uf) {
 			$estado_notificado -> addMultiOption($uf->idEstado, $uf->sigla);
-		} 
+		}
+		$estado_notificado -> setValue($this->data->idEstado, $this->data->uf);
 
 		$cidade_notificado = new Zend_Form_Element_Select('cidade_notificado');
 		$cidade_notificado -> clearDecorators();
@@ -592,6 +618,8 @@ class Registro_Form_Pedido extends Zend_Form
 		$cidade_notificado -> setAttrib('class', 'half');
 		$cidade_notificado -> setRegisterInArrayValidator(false);
 		$cidade_notificado -> setRequired(true);
+		$cidade_notificado -> addMultiOption($this->data->idCidade, $this->data->cidade);
+		$cidade_notificado -> setValue($this->data->idCidade, $this->data->cidade);
 
 		$obs_notificado = new Zend_Form_Element_Textarea('obs_notificado');
 		$obs_notificado -> clearDecorators();

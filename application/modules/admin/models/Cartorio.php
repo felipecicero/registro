@@ -30,5 +30,27 @@ class Cartorio extends Zend_Db_Table_Abstract{
 		exit;*/
     	return $data->current();
     }
+	
+	public function getLocalCartorio()
+    {
+    	$select = $this->select();  
+    	  	
+    	$select->setIntegrityCheck(false);
+    	
+    	$select->from(array('car' => 'car_cartorio'), array('nome'));
+    	
+    	$select->joinInner(array('end' => 'car_enderecos'), 'car.idEndereco = end.idEndereco', array('cep' => 'cep'));
+    	    	
+    	$select->joinInner(array('cid' => 'car_cidades'), 'cid.idCidade = end.idCidade', array('idCidade', 'cidade' => 'nome' ));
+    	
+    	$select->joinInner(array('est' => 'car_estados'), 'cid.idEstado = est.idEstado', array('idEstado', 'uf' => 'sigla' ));
+    	
+    	/*$sql = (string) $select;
+    	print_r('<pre>');
+		print_r($sql);
+		print_r('</pre>');
+		exit;*/
+    	return $this->fetchAll($select)->current();
+    }
 
 }

@@ -10516,12 +10516,9 @@ CREATE TABLE IF NOT EXISTS `car_custas` (
 --
 
 INSERT INTO `car_custas` (`idCusta`, `idVigencia`, `nome`, `valor`) VALUES
-(1, 1, 'Teste 1', 4.4),
-(2, 1, 'teste 2', 3.56),
 (3, 2, 'Taxa Judiciária', 3),
 (4, 2, 'Funcivil', 7.05),
-(5, 2, 'Registro de jornal', 42.31),
-(6, 2, 'Averbação', 10.58);
+(5, 2, 'Registro de jornal', 42.31);
 
 -- --------------------------------------------------------
 
@@ -10551,7 +10548,7 @@ CREATE TABLE IF NOT EXISTS `car_emolumentofixo` (
   `idTipoEmolumento` int(10) DEFAULT NULL,
   `pagina_inicial` int(2) NOT NULL DEFAULT '1',
   PRIMARY KEY (`idEmolumentoFixo`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
 
 --
 -- Extraindo dados da tabela `car_emolumentofixo`
@@ -10559,7 +10556,8 @@ CREATE TABLE IF NOT EXISTS `car_emolumentofixo` (
 
 INSERT INTO `car_emolumentofixo` (`idEmolumentoFixo`, `emolumento`, `pagina_extra`, `idTipoEmolumento`, `pagina_inicial`) VALUES
 (1, 10.5, 3, 20, 3),
-(2, 10.29, 930, 21, 4);
+(2, 10.29, 3, 21, 4),
+(3, 16.45, 2.35, 22, 1);
 
 -- --------------------------------------------------------
 
@@ -11048,7 +11046,7 @@ CREATE TABLE IF NOT EXISTS `car_tabelaemolumentos` (
 --
 
 INSERT INTO `car_tabelaemolumentos` (`idTabelaEmolumento`, `valor_inicial`, `valor_final`, `emolumento`, `idVigencia`) VALUES
-(1, 0, 50, 50, 2);
+(1, 0, 50, 10.58, 2);
 
 -- --------------------------------------------------------
 
@@ -11084,7 +11082,7 @@ CREATE TABLE IF NOT EXISTS `car_tipoemolumentos` (
   `idVigencia` int(11) NOT NULL,
   `idNatureza` int(11) NOT NULL,
   PRIMARY KEY (`idEmolumentos`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=22 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=23 ;
 
 --
 -- Extraindo dados da tabela `car_tipoemolumentos`
@@ -11094,7 +11092,8 @@ INSERT INTO `car_tipoemolumentos` (`idEmolumentos`, `tipo_custa`, `emolumento`, 
 (15, 1, 'emolumento 3', 2, 9),
 (19, 1, 'emolumento com valor', 2, 11),
 (20, 0, 'emolumento sem valor', 2, 11),
-(21, 0, 'Teste tabela', 2, 10);
+(21, 0, 'Teste tabela', 2, 10),
+(22, 0, 'notificacao', 2, 11);
 
 -- --------------------------------------------------------
 

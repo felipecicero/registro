@@ -320,9 +320,8 @@ input.half{ width: 188px; }
 #fieldset-Pessoa .field input, #fieldset-Pessoa .field select { width: 170px; display:block; }
 
 
-
 #submits-form{ float: none;  clear: both; border: none; margin: 0px; padding:5px;}
-#submits-form input{ margin-top: 20px; margin-left: 398px; height: 30px; border: 1px solid #333; }
+#submits-form input{ margin-top: 10px; margin-left: 200px; height: 30px; border: 1px solid #333; }
 #submits-form input:focus, #submits-form input:hover{ border: 1px solid #003c58; cursor: pointer; background: #aee5ff;}
 #submits-form input:active{ border: 1px solid #001f3c; background: #00498d; color: #fff;}
 

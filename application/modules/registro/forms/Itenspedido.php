@@ -151,7 +151,7 @@ class Registro_Form_Itenspedido extends Zend_Form
 		
 		
 		$model_custa = new Custa();
-		$valor = $model_custa->getCustaByName('taxa_judiciaria');
+		$valor = $model_custa->getCustaByName('taxa judiciaria');
     	$taxa_judiciaria = new Zend_Form_Element_Text('taxajudiciaria');
 		$taxa_judiciaria -> clearDecorators();
 		$taxa_judiciaria -> addDecorators($decorator_default);

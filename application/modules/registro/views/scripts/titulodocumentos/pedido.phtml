@@ -53,8 +53,8 @@ input{
 
 
 	$(function() {
-		var taxajudiciaria, funcivil, averbacao, averbacaopgextra, notificacao, notificacaopgextra, notificacaopgextra, soma;
-
+		
+		
 		var tabs = $('#form-tab');
 		var legends = $(tabs).find('fieldset').get();
 
@@ -81,7 +81,7 @@ input{
 		$('input').change(function(){
 			var tipoemolumento = $("#itempedido-tipoemolumento").val();
 			var valor = $("#itempedido-valordocumento").val();
-			
+			//alert(valor);
 			$.ajax({
 	    		url:"<?php echo $this->url(array('module' => 'registro', 'controller' => 'titulodocumentos', 'action' => 'calculocusta'), null, true); ?>",
     			dataType:'json',
@@ -89,12 +89,11 @@ input{
    				data:{id: tipoemolumento, valor: valor},
     			type:'GET',
     			success: function(data){						
-					var valordocumento = parseInt(valor);
-						
+					//var valordocumento = parseInt(valor);
 					if(data.tipo_custa == 0)
 					{
-						var totalcustas = 0
-							
+						var totalcustas = new Number(0);
+						
 						if($('#itempedido-numeropaginas').val() > data.pagina_inicial)
 						{
 							var qtpagina = $('#itempedido-numeropaginas').val() - data.pagina_inicial;
@@ -104,8 +103,22 @@ input{
 						else{
 							totalcustas = totalcustas + ($('#itempedido-numerovias').val() * data.emolumento);
 						}
-						totalcustas = (totalcustas + (data.funcivil + data.taxa));
-									
+						var valor_correio = parseFloat(($('#itempedido-valor_correio').val()).replace(/[$,]+/g,""));
+						var outrasdespesas = parseFloat(($('#itempedido-outrasdespesas').val()).replace(/[$,]+/g,""));
+						
+						funcivil =  parseInt((data.funcivil).replace(/[$.]+/g,""));
+						taxa = parseInt((data.taxa).replace(/[$.]+/g,""));										
+						
+						totalcustas = totalcustas + (valor_correio + outrasdespesas + (funcivil + taxa));
+						parseFloat(totalcustas);
+						alert(totalcustas);
+						totalcustas = totalcustas *100;
+						alert(totalcustas);
+						totalcustas = Math.floor(totalcustas);
+						alert(totalcustas);
+						totalcustas = totalcustas / 100;
+						alert(totalcustas + '..');
+							
 						$('#itempedido-emolumento').val(data.emolumento);
 						$('#itempedido-emolumento').setMask('decimal');
 						$('#itempedido-total_custas').val(totalcustas);
@@ -114,15 +127,49 @@ input{
 						$('#itempedido-taxajudiciaria').setMask('decimal');
 						$('#itempedido-funcivil').val(data.funcivil);
 						$('#itempedido-funcivil').setMask('decimal');
-									
+						
 						totalcustasDec = ((totalcustas + (data.funcivil + data.taxa)) / 100);
 						emolumentoDec = (data.emolumento / 100);
 						taxajudiciariaDec = (data.taxa / 100);
 						funcivilDec = (data.funcivil / 100);
+							
 					}
-    			}
+					else if(data.tipo_custa == 1)
+					{
+						var custas = data.soma;
+						var totalcustas = new Number();
+						//var mult = new Number();
+						var outrasdespesas = parseFloat(($('#itempedido-outrasdespesas').val()).replace(/[$,]+/g,"."));
+						var valor_correio = parseFloat(($('#itempedido-valor_correio').val()).replace(/[$,]+/g,"."));
+						var numerovias = parseInt($('#itempedido-numerovias').val());
+						
+						custas = parseFloat(custas);
+						emolumentos = parseFloat(data.emolumento);
+						mult = parseFloat(numerovias * (emolumentos));
+						
+						totalcustas = custas + emolumentos +  mult + outrasdespesas + valor_correio;
+						totalcustas = totalcustas *100;
+						alert(totalcustas);
+						totalcustas = Math.floor(totalcustas);
+						alert(totalcustas);
+						totalcustas = totalcustas / 100;
+						alert(totalcustas);
+						
+						alert(emolumentos);
+						
+						$('#itempedido-emolumento').val(data.emolumento);
+						$('#itempedido-emolumento').setMask('decimal');
+						$('#itempedido-total_custas').val(totalcustas);
+						$('#itempedido-total_custas').setMask('decimal');
+						$('#itempedido-taxajudiciaria').val(data.taxa);
+						$('#itempedido-taxajudiciaria').setMask('decimal');
+						$('#itempedido-funcivil').val(data.funcivil);
+						$('#itempedido-funcivil').setMask('decimal');
+					}
+				}
 			});
 		});
+		
 
 		$('#Requerente-estado_requerente').change(function() { 
 

@@ -781,45 +781,38 @@ class TitulodocumentosController extends Zend_Controller_Action
 	   $this->_helper->viewRenderer->setNoRender ();
 		
 		$idemolumento = (int) $this->_getParam('id');
-		$valor = (int) $this->_getParam('valor');		
-		
+		$valor =(float) str_replace(',', '.', $this->_getParam('valor'));
 		$tipocustas = $this->model_tipoemolumento->getCustasTotais($idemolumento);
-				
+
 			if($tipocustas['tipo_custa'] == 1)
 			{
-				$emolumentos = $this->model_tabelaemolumentos->getEmolumento($valor);
+				$emolumentos = $this->model_tabelaemolumentos->getEmolumento($valor); 
 				$emolumentos->toArray();
 				$emolumentos = $emolumentos['emolumento'];
 				
-			
 				$taxajudiciaria = $this->model_custas->getCustaByName('Taxa Judiciária');
 				$funcivil = $this->model_custas->getCustaByName('Funcivil');
-			
-				$taxajudiciaria = str_replace(',', '.', $taxajudiciaria);
-				$funcivil = str_replace(',', '.', $funcivil);
-				$emolumentos = str_replace(',', '.', $emolumentos);
 				
-				$soma = $taxajudiciaria + $funcivil + $emolumentos;
+				$soma = $taxajudiciaria + $funcivil;
 				
-				$custas = array('tipo_custa' => $tipocustas['tipo_custa'],'taxa'=>$taxajudiciaria, 'funcivil'=>$funcivil, 'emolumentos'=>$emolumentos, 'soma'=>$soma);
+				
+				$custas = array('tipo_custa' => $tipocustas['tipo_custa'],'taxa'=>$taxajudiciaria, 'funcivil'=>$funcivil, 'emolumento'=>$emolumentos, 'soma'=>$soma);
 				
 				echo Zend_Json::encode($custas);	
 				$this->_helper->viewRenderer->setNoRender(true);
 			}
 			else if($tipocustas['tipo_custa'] == 0)
 			{
+
 				$taxajudiciaria = $this->model_custas->getCustaByName('Taxa Judiciária');
 				$funcivil = $this->model_custas->getCustaByName('Funcivil');
-				
-				$taxajudiciaria =(int) str_replace(',', '', $taxajudiciaria);
-				$funcivil =(int) str_replace(',', '', $funcivil);
 				
 				$valores = $this->model_emolumentofixo->getCustas($idemolumento)->toArray();
 				$valores['tipo_custa'] = $tipocustas['tipo_custa'];
 				$valores['funcivil'] = $funcivil;
 				$valores['taxa'] = $taxajudiciaria;
 				
-				$valores['emolumento'] =(int) str_replace('.', '', $valores['emolumento']);
+				$valores['emolumento'] = str_replace('.', '', $valores['emolumento']);
 				$valores['pagina_extra'] =(int) str_replace('.', '', $valores['pagina_extra']);
 				
 				echo Zend_Json::encode($valores);	

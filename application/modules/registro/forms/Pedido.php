@@ -244,17 +244,17 @@ class Registro_Form_Pedido extends Zend_Form
 		$requerente->addElements(array(	$tipo_identificacao_requerente, $documento_requerente, $nome_requerente, 
 										$telefone_requerente, $cep_requerente, $endereco_requerente, 
 										$complemento_requerente, $bairro_requerente, $numero_requerente, 
-										$estado_requerente, $cidade_requerente, $obs_requerente, $submit_temp));
+										$estado_requerente, $cidade_requerente, $obs_requerente));
 
 		$this->addSubForm($requerente, 'Requerente');
 
 		$displayGroup = $this->getSubForm('Requerente');
 		$displayGroup -> removeDecorator('DtDdWrapper');
 
-		$this->addElements(array($submit_final));
+		$this->addElements(array($submit_temp, $submit_final));
 
 		$this->addDisplayGroup( 
-			array('submitfinal'), 'submits',
+			array('adicionar', 'submitfinal'), 'submits',
 			array('legend' => '', 'id'=>'submits-form')
 		);
 
@@ -383,7 +383,7 @@ class Registro_Form_Pedido extends Zend_Form
 
 
 		$model_custa = new Custa();
-		$valor = $model_custa->getCustaByName('taxa_judiciária');
+		$valor = $model_custa->getCustaByName('Taxa Judiciária');
 		$taxa_judiciaria = new Zend_Form_Element_Text('taxajudiciaria');
 		$taxa_judiciaria -> clearDecorators();
 		$taxa_judiciaria -> addDecorators($decorator_default);

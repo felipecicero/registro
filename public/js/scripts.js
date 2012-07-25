@@ -1,5 +1,7 @@
 $(document).ready(function() {
 	
+	
+	
 	var tabs = $('#form-tab');
 	var legends = $(tabs).find('fieldset').get();
 		
@@ -69,6 +71,7 @@ $(document).ready(function() {
 			$('#Pessoa-documento_citado').setMask('cnpj');
 		}
 	})
+
 	
 	$('#Requerente-cep_requerente').setMask('99.999-999');
 	$('#Requerente-telefone_requerente').setMask('(99)9999-9999');

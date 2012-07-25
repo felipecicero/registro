@@ -84,8 +84,8 @@ class Registro_Form_Itenspedido extends Zend_Form
 	    $tipodocumentos = new Zend_Form_Element_Select('tipodocumentos');
 		$tipodocumentos -> clearDecorators();
 		$tipodocumentos -> addDecorators($decorator_default);
-		$tipodocumentos -> setLabel('Tipo do Docuemento:');
-		$tipodocumentos -> setAttrib('class', 'half');
+		$tipodocumentos -> setLabel('Tipo do Documento:');
+		$tipodocumentos -> setAttrib('class', 'valor');
 	    foreach ($model_tipodocumento->findForSelect() as $tdoc) {
 	    	$tipodocumentos -> addMultiOption($tdoc->idTipodocumentos, $tdoc->nome);
 		}
@@ -95,7 +95,7 @@ class Registro_Form_Itenspedido extends Zend_Form
 		$tipoemolumento -> clearDecorators();
 		$tipoemolumento -> addDecorators($decorator_default);
 		$tipoemolumento -> setLabel('Tipo do Emolumento:');
-		$tipoemolumento -> setAttrib('class', 'half');
+		$tipoemolumento -> setAttrib('class', 'valor');
 	    foreach ($model_tipoemolumento->findForSelectForm() as $temo) {
 	    	$tipoemolumento -> addMultiOption($temo->idEmolumentos, $temo->emolumento);
 		}
@@ -104,49 +104,49 @@ class Registro_Form_Itenspedido extends Zend_Form
 		$numeropaginas -> clearDecorators();
 		$numeropaginas -> addDecorators($decorator_default);
     	$numeropaginas -> setLabel("Número de Páginas:");
-		$numeropaginas -> setAttrib('class', 'half');
+		$numeropaginas -> setAttrib('class', 'valor');
     	$numeropaginas -> setRequired(true);
 		
 		$numerovias = new Zend_Form_Element_Text('numerovias');
 		$numerovias -> clearDecorators();
 		$numerovias -> addDecorators($decorator_default);
     	$numerovias -> setLabel("Número de Vias:");
-		$numerovias -> setAttrib('class', 'half');
+		$numerovias -> setAttrib('class', 'valor');
     	$numerovias -> setRequired(true);
 		
 		$numeropessoas = new Zend_Form_Element_Text('numeropessoas');
 		$numeropessoas -> clearDecorators();
 		$numeropessoas -> addDecorators($decorator_default);
     	$numeropessoas -> setLabel("Número de Pessoas Notificadas:");
-		$numeropessoas -> setAttrib('class', 'half');
+		$numeropessoas -> setAttrib('class', 'valor');
     	$numeropessoas -> setRequired(true);
 		
 		$valor_documento = new Zend_Form_Element_Text('valordocumento');
 		$valor_documento -> clearDecorators();
 		$valor_documento -> addDecorators($decorator_default);
     	$valor_documento -> setLabel("Valor do Documento:");
-		$valor_documento -> setAttrib('class', 'half');
+		$valor_documento -> setAttrib('class', 'valor');
     	$valor_documento -> setRequired(true);
 		
 		$emolumento = new Zend_Form_Element_Text('emolumento');
 		$emolumento -> clearDecorators();
 		$emolumento -> addDecorators($decorator_default);
     	$emolumento -> setLabel("Emolumento:");
-		$emolumento -> setAttrib('class', 'half');
+		$emolumento -> setAttrib('class', 'valor');
     	$emolumento -> setRequired(true);
 		
 		$valor_correio = new Zend_Form_Element_Text('valor_correio');
 		$valor_correio -> clearDecorators();
 		$valor_correio -> addDecorators($decorator_default);
     	$valor_correio -> setLabel("Valor dos Correios:");
-		$valor_correio -> setAttrib('class', 'half');
+		$valor_correio -> setAttrib('class', 'valor');
     	$valor_correio -> setRequired(true);
 		
 		$outras_despesas = new Zend_Form_Element_Text('outrasdespesas');
 		$outras_despesas -> clearDecorators();
 		$outras_despesas -> addDecorators($decorator_default);
     	$outras_despesas -> setLabel("Outras Despesas:");
-		$outras_despesas -> setAttrib('class', 'half');
+		$outras_despesas -> setAttrib('class', 'valor');
     	$outras_despesas -> setRequired(true);
 		
 		
@@ -156,7 +156,7 @@ class Registro_Form_Itenspedido extends Zend_Form
 		$taxa_judiciaria -> clearDecorators();
 		$taxa_judiciaria -> addDecorators($decorator_default);
     	$taxa_judiciaria -> setLabel("Taxa Judiciária:");
-		$taxa_judiciaria -> setAttrib('class', 'half');
+		$taxa_judiciaria -> setAttrib('class', 'valor');
     	$taxa_judiciaria -> setAttrib('disabled', 'disabled');
     	$taxa_judiciaria -> setValue($valor);
 		
@@ -165,7 +165,7 @@ class Registro_Form_Itenspedido extends Zend_Form
 		$funcivil -> clearDecorators();
 		$funcivil -> addDecorators($decorator_default);
     	$funcivil -> setLabel("FUNCIVIL:");
-		$funcivil -> setAttrib('class', 'half');
+		$funcivil -> setAttrib('class', 'valor');
     	$funcivil -> setAttrib('disabled', 'disabled');
     	$funcivil -> setValue($valorf);
 		
@@ -173,7 +173,7 @@ class Registro_Form_Itenspedido extends Zend_Form
 		$total_custas -> clearDecorators();
 		$total_custas -> addDecorators($decorator_default);
     	$total_custas -> setLabel("Total das Custas:");
-		$total_custas -> setAttrib('class', 'half');
+		$total_custas -> setAttrib('class', 'valor');
     	$total_custas -> setRequired(true);
 		
 		$submit = new Zend_Form_Element_Submit('Salvar');
@@ -315,17 +315,19 @@ class Registro_Form_Itenspedido extends Zend_Form
 			
 			$pessoa->setLegend('Pessoas Citadas');
 			
-			$pessoa->addElements(array($tipo_identificacao_citado, $documento_citado, $nome_citado, $cep_citado, $endereco_citado, $telefone_citado, $complemento_citado, $bairro_citado, $numero_citado, $estado_citado, $cidade_citado, $obs_citado, $notificar, $submit_temp));
+			$pessoa->addElements(array($tipo_identificacao_citado, $documento_citado, $nome_citado, $cep_citado, 
+										$endereco_citado, $telefone_citado, $complemento_citado, $bairro_citado, 
+										$numero_citado, $estado_citado, $cidade_citado, $obs_citado, $notificar));
 		
 		$this->addSubForm($pessoa, 'Pessoa');
 		
 		$displayGroup = $this->getSubForm('Pessoa');
 		$displayGroup -> removeDecorator('DtDdWrapper');
 
-		$this->addElements(array($submit_final));
+		$this->addElements(array($submit_temp, $submit_final));
 
 		$this->addDisplayGroup( 
-			array('submitfinal'), 'submits',
+			array('adicionar', 'submitfinal'), 'submits',
 			array('legend' => '', 'id'=>'submits-form')
 		);
 

@@ -61,7 +61,7 @@ class TitulodocumentosController extends Zend_Controller_Action
 		
 		//if(isset($_SESSION['itempedido'])) unset($_SESSION['itempedido']);
 		if ( $this->_request->isPost()){
-			
+		
 			$pedido['data_pedido']		= $this->_request->getPost('data_pedido');
 			$pedido['data_prevista']	= $this->_request->getPost('data_prevista');
 			$pedido['data_entrega']		= $this->_request->getPost('data_entrega');
@@ -69,7 +69,7 @@ class TitulodocumentosController extends Zend_Controller_Action
 			$pedido['valor_pedido']		= $this->_request->getPost('valor_pedido');
 			$pedido['valor_deposito']	= $this->_request->getPost('valor_deposito');
 			$pedido['valor_receber']	= $this->_request->getPost('valor_receber');
-			
+						
 			$requerente = $this->_request->getPost('Requerente');
 			
 			$form->data_pedido->setValue('data_pedido');
@@ -101,11 +101,23 @@ class TitulodocumentosController extends Zend_Controller_Action
 			$this->view->form = $form;
 			
 			if ( $this->_request->getPost('adicionar') || $this->_request->getPost('submitfinal')){
-								
+			
 				$itens = $this->_request->getPost('itempedido');
 				
+				$itens['pedidoView'] = $this->pesquisaCamposPedido($itens);
+				
+				$valor_parcial = str_replace(',', '.', $itens['total_custas']);
+
+				$valor_pedido 	= str_replace(',', '.', $this->_request->getPost('valor_pedido'));
+				$valor_deposito = str_replace(',', ',', $this->_request->getPost('valor_deposito'));
+				
+				$valor_pedido += $valor_parcial;
+
+				$form->valor_deposito->setValue($valor_deposito);
+				$form->valor_pedido->setValue($valor_pedido);
+				
 				$_SESSION['itempedido'][] = $itens;
-					
+
 			}
 				
 			if($this->_request->getPost('submitfinal')){
@@ -823,12 +835,29 @@ class TitulodocumentosController extends Zend_Controller_Action
 			exit();
     }
 
-	function addDayIntoDate($date,$days) 
+	public function addDayIntoDate($date,$days) 
 	{
 		$thisyear = substr ( $date, 4, 4 );
 		$thismonth = substr ( $date, 2, 2 );
 		$thisday =  substr ( $date, 0, 2 );
 		$nextdate = mktime ( 0, 0, 0, $thismonth, $thisday + $days, $thisyear );
 		return strftime("%d%m%Y", $nextdate);
+	}
+
+	public function pesquisaCamposPedido($item){
+		
+		$model_tipodocumento = new Tipodocumento();
+		$nome = $model_tipodocumento->selectTipo($item['tipodocumentos']);
+		$data['nometipodocumento'] = $nome->nome;
+		
+		$model_situacao = new Situacoes();
+		$situa = $model_situacao->selectTipo($item['pedido_situacao']);
+		$data['nomesituacao'] = $situa->nome;
+		
+		$model_protocolo = new Protocolo();
+		$iten = $model_protocolo->findForSelect();
+		$data['itempedidon'] = $iten[0]->protocolo;
+	
+		return $data;
 	}
 }

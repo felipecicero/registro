@@ -30,5 +30,21 @@ class Tipodocumento extends Zend_Db_Table_Abstract{
     	$select->order('nome');
     	return $this->fetchAll($select);
     }
+	
+	public function selectTipo($idTipo)
+    {
+		
+		$select = $this->select();
+    	
+    	$select->setIntegrityCheck(false);
+    	
+    	$select->from(array('tip' => 'car_tipodocumentos'), array('nome'));
+    	
+    	$select->where("tip.idTipodocumentos = ?", $idTipo);
+		
+		//$sql = (string) $select;
+		//print_r($sql);exit;
+		return $this->fetchAll($select)->Current();
+	}
 }
 

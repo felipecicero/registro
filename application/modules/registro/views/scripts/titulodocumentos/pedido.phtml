@@ -16,6 +16,7 @@
 <table cellspacing="1" cellpadding="1" border="1" class="display" id="tabela"  >
     <thead>
         <tr>
+            <th>#</th>
             <th>Item pedido</th>
             <th>Tipo do Documento</th>
 			<th>Situação</th>
@@ -25,15 +26,19 @@
     <tbody>
 <?php
 	if(isset($_SESSION['itempedido'])){
+		$i = 1;
 		foreach ($_SESSION['itempedido'] as $item) {
-?> 
+			$protocolo = $item['pedidoView']['itempedidon'] + $i;
+?> 		
         <tr>
-            <td><?php echo $this->escape($item['datasituacao']); ?></td>
-            <td><?php echo $this->escape($item['tipodocumentos']); ?></td>
-			<td><?php echo $this->escape($item['pedido_situacao']); ?></td>
-            <td><?php echo $this->escape($item['valordocumento']); ?></td>
+			<td align="center"><?php echo $i; ?></td>
+            <td align="center"><?php echo $this->escape($protocolo); ?></td>
+            <td align="center"><?php echo $this->escape($item['pedidoView']['nometipodocumento']); ?></td>
+			<td align="center"><?php echo $this->escape($item['pedidoView']['nomesituacao']); ?></td>
+            <td align="center"><?php echo $this->escape($item['total_custas']); ?></td>
         </tr> 
 <?php
+		$i++;
 		}
 	}
 ?> 		
@@ -53,7 +58,16 @@ input{
 
 
 	$(function() {
+	
+		var valor_receber = 0.00;
+		var valor_pedido = parseFloat(($('#valor_pedido').val()).replace(/[$,]+/g,""));
+		var valor_deposito = parseFloat(($('#valor_deposito').val()).replace(/[$,]+/g,""));
+		valor_receber = (valor_pedido - valor_deposito);
+		valor_receber = valor_receber;
+		$('#valor_receber').val(valor_receber);
+		$('#valor_receber').setMask('decimal');
 		
+		var taxajudiciaria, funcivil, averbacao, averbacaopgextra, notificacao, notificacaopgextra, notificacaopgextra, soma;
 		
 		var tabs = $('#form-tab');
 		var legends = $(tabs).find('fieldset').get();
@@ -78,10 +92,11 @@ input{
 		$(tabs).prepend(titles);
 		$(tabs).tabs();
 		
-		$('input').change(function(){
+		
+		$('.valor').change(function(){
 			var tipoemolumento = $("#itempedido-tipoemolumento").val();
 			var valor = $("#itempedido-valordocumento").val();
-			//alert(valor);
+
 			$.ajax({
 	    		url:"<?php echo $this->url(array('module' => 'registro', 'controller' => 'titulodocumentos', 'action' => 'calculocusta'), null, true); ?>",
     			dataType:'json',
@@ -111,13 +126,9 @@ input{
 						
 						totalcustas = totalcustas + (valor_correio + outrasdespesas + (funcivil + taxa));
 						parseFloat(totalcustas);
-						alert(totalcustas);
 						totalcustas = totalcustas *100;
-						alert(totalcustas);
 						totalcustas = Math.floor(totalcustas);
-						alert(totalcustas);
 						totalcustas = totalcustas / 100;
-						alert(totalcustas + '..');
 							
 						$('#itempedido-emolumento').val(data.emolumento);
 						$('#itempedido-emolumento').setMask('decimal');
@@ -149,13 +160,8 @@ input{
 						
 						totalcustas = custas + emolumentos +  mult + outrasdespesas + valor_correio;
 						totalcustas = totalcustas *100;
-						alert(totalcustas);
 						totalcustas = Math.floor(totalcustas);
-						alert(totalcustas);
 						totalcustas = totalcustas / 100;
-						alert(totalcustas);
-						
-						alert(emolumentos);
 						
 						$('#itempedido-emolumento').val(data.emolumento);
 						$('#itempedido-emolumento').setMask('decimal');
@@ -165,7 +171,7 @@ input{
 						$('#itempedido-taxajudiciaria').setMask('decimal');
 						$('#itempedido-funcivil').val(data.funcivil);
 						$('#itempedido-funcivil').setMask('decimal');
-					}
+					}					
 				}
 			});
 		});

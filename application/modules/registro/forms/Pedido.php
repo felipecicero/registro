@@ -308,6 +308,7 @@ class Registro_Form_Pedido extends Zend_Form
 		$data_situacao -> setAttrib('onKeyDown', 'Mascara(this,mdata);');
 		$data_situacao -> setAttrib('onKeyPress', 'Mascara(this,mdata);');
 		$data_situacao -> setAttrib('onKeyUp', 'Mascara(this,mdata);');
+		$data_situacao -> setValue(date('d-m-Y'));
 		$data_situacao -> addValidator($validate);
 		$data_situacao -> addValidator($validator_date);
 		$data_situacao -> setRequired(true);

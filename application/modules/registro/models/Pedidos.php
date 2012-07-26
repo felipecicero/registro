@@ -23,7 +23,7 @@ class Pedidos extends Zend_Db_Table_Abstract{
     	
     	$select->setIntegrityCheck(false);
 		
-		$select->from(array('ite' => 'car_itempedidos'), array('idItempedido', 'idPedido', 'idProtocolo', 'numeropaginas', 'numerovias', 'numeropessoas', 'idTipodocumentos', 'idEmolumentos', 'idSituacoes'));
+		$select->from(array('ite' => 'car_itempedidos'), array('idItempedido', 'idPedido', 'idProtocolo', 'numeropaginas', 'numerovias', 'numeropessoas', 'idTipodocumentos', 'idEmolumentos', 'idSituacoes', 'valordocumento', 'outrasdespesas', 'valorcorreio'));
 		
 		$select->where('ite.idItempedido = ?', $idItempedido);
 		

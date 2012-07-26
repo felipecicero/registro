@@ -8,7 +8,7 @@ class Registro_Bootstrap extends Zend_Application_Module_Bootstrap
         $loader->setFallbackAutoloader(true);
     	
         $autoloader = new Zend_Application_Module_Autoloader(array(
-            'namespace' => 'Protesto_',
+            'namespace' => 'Registro_',
             'basePath'  => APPLICATION_PATH .'/modules/registro',
             'resourceTypes' => array (
                 'form' => array(

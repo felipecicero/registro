@@ -324,10 +324,10 @@ class Registro_Form_Itenspedido extends Zend_Form
 		$displayGroup = $this->getSubForm('Pessoa');
 		$displayGroup -> removeDecorator('DtDdWrapper');
 
-		$this->addElements(array($submit_temp, $submit_final));
+		$this->addElements(array($submit_final, $submit_temp));
 
 		$this->addDisplayGroup( 
-			array('adicionar', 'submitfinal'), 'submits',
+			array('submitfinal', 'adicionar'), 'submits',
 			array('legend' => '', 'id'=>'submits-form')
 		);
 

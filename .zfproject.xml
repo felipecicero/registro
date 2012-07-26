@@ -370,7 +370,7 @@
               <actionMethod actionName="acompanhamento"/>
               <actionMethod actionName="itenspedido"/>
               <actionMethod actionName="pesquisa"/>
-              <actionMethod actionName="removesession"/>
+              <actionMethod actionName="removerpessoascitadas"/>
             </controllerFile>
           </controllersDirectory>
           <formsDirectory>
@@ -434,9 +434,6 @@
           </viewControllerScriptsDirectory>
           <viewControllerScriptsDirectory forControllerName="Error">
             <viewScriptFile forActionName="error"/>
-          </viewControllerScriptsDirectory>
-          <viewControllerScriptsDirectory forControllerName="Titulodocumentos">
-            <viewScriptFile forActionName="unsetSession"/>
           </viewControllerScriptsDirectory>
         </viewScriptsDirectory>
         <viewHelpersDirectory/>

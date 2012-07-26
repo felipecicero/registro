@@ -28,7 +28,9 @@ echo $this->formP;
             <td align="center"><?php echo $i; ?></td>
             <td align="center"><?php echo $this->documento($pessoa['numeroidentificacao'], $pessoa['tipo_identificacao']);?></td>
 			<td align="center"><?php echo $this->escape($pessoa['nome']); ?></td>
-            <td align="center"><?php echo $this->escape($pessoa['notificar']); ?></td>
+            <td align="center" class="slide"><?php echo $this->escape($pessoa['notificar']); ?>
+				<div class="edit"><a href="<?php echo $this->url(array('module' => 'registro', 'controller' => 'titulodocumentos', 'action' => 'removerpessoascitadas', 'remove' => ($i-1)), null, true); ?>" id="editarPessoasCitadas">Remover Pessoa</a>
+			</td>
         </tr> 
 <?php
 			$i++;
@@ -51,91 +53,100 @@ input{
 
 	$(function() {
 		
+		$('.slide').click(function() {
+		
+			if ($('.edit').is(":hidden")) {
+				$(".edit").slideDown("slow");
+			} else {
+				$(".edit").slideUp("slow");
+			}
+		});
+		
 		var taxajudiciaria, funcivil, averbacao, averbacaopgextra, notificacao, notificacaopgextra, notificacaopgextra, soma;
 		
-		$('.valor').change(function(){
-			var tipoemolumento = $("#tipoemolumento").val();
-			var valor = $("#valordocumento").val();
 
-			$.ajax({
-	    		url:"<?php echo $this->url(array('module' => 'registro', 'controller' => 'titulodocumentos', 'action' => 'calculocusta'), null, true); ?>",
-    			dataType:'json',
-    			encoding: 'utf-8',
-   				data:{id: tipoemolumento, valor: valor},
-    			type:'GET',
-    			success: function(data){						
+		var tipoemolumento = $("#tipoemolumento").val();
+		var valor = $("#valordocumento").val();
 
-					if(data.tipo_custa == 0)
+		$.ajax({
+			url:"<?php echo $this->url(array('module' => 'registro', 'controller' => 'titulodocumentos', 'action' => 'calculocusta'), null, true); ?>",
+			dataType:'json',
+			encoding: 'utf-8',
+			data:{id: tipoemolumento, valor: valor},
+			type:'GET',
+			success: function(data){						
+
+				if(data.tipo_custa == 0)
+				{
+					var totalcustas = new Number(0);
+					
+					if($('#numeropaginas').val() > data.pagina_inicial)
 					{
-						var totalcustas = new Number(0);
-						
-						if($('#numeropaginas').val() > data.pagina_inicial)
-						{
-							var qtpagina = $('#numeropaginas').val() - data.pagina_inicial;
-							totalcustas = totalcustas + ($('#numerovias').val() * (qtpagina * data.pagina_extra));
-							totalcustas = totalcustas + ($('#numerovias').val() * data.emolumento);
-						}
-						else{
-							totalcustas = totalcustas + ($('#numerovias').val() * data.emolumento);
-						}
-						var valor_correio = parseFloat(($('#valor_correio').val()).replace(/[$,]+/g,""));
-						var outrasdespesas = parseFloat(($('#outrasdespesas').val()).replace(/[$,]+/g,""));
-						
-						funcivil =  parseInt((data.funcivil).replace(/[$.]+/g,""));
-						taxa = parseInt((data.taxa).replace(/[$.]+/g,""));										
-						
-						totalcustas = totalcustas + (valor_correio + outrasdespesas + (funcivil + taxa));
-						parseFloat(totalcustas);
-						totalcustas = totalcustas *100;
-						totalcustas = Math.floor(totalcustas);
-						totalcustas = totalcustas / 100;
-							
-						$('#emolumento').val(data.emolumento);
-						$('#emolumento').setMask('decimal');
-						$('#total_custas').val(totalcustas);
-						$('#total_custas').setMask('decimal');
-						$('#taxajudiciaria').val(data.taxa);
-						$('#taxajudiciaria').setMask('decimal');
-						$('#funcivil').val(data.funcivil);
-						$('#funcivil').setMask('decimal');
-						
-						totalcustasDec = ((totalcustas + (data.funcivil + data.taxa)) / 100);
-						emolumentoDec = (data.emolumento / 100);
-						taxajudiciariaDec = (data.taxa / 100);
-						funcivilDec = (data.funcivil / 100);
-							
+						var qtpagina = $('#numeropaginas').val() - data.pagina_inicial;
+						totalcustas = totalcustas + ($('#numerovias').val() * (qtpagina * data.pagina_extra));
+						totalcustas = totalcustas + ($('#numerovias').val() * data.emolumento);
 					}
-					else if(data.tipo_custa == 1)
-					{
-						var custas = data.soma;
-						var totalcustas = new Number();
-						var outrasdespesas = parseFloat(($('#outrasdespesas').val()).replace(/[$,]+/g,"."));
-						var valor_correio = parseFloat(($('#valor_correio').val()).replace(/[$,]+/g,"."));
-						var numerovias = parseInt($('#numerovias').val());
-						
-						custas = parseFloat(custas);
-						emolumentos = parseFloat(data.emolumento);
-						mult = parseFloat(numerovias * (emolumentos));
-						
-						totalcustas = custas + emolumentos +  mult + outrasdespesas + valor_correio;
-						totalcustas = totalcustas *100;
-						totalcustas = Math.floor(totalcustas);
-						totalcustas = totalcustas / 100;
-
-
-						
-						$('#emolumento').val(data.emolumento);
-						$('#emolumento').setMask('decimal');
-						$('#total_custas').val(totalcustas);
-						$('#total_custas').setMask('decimal');
-						$('#taxajudiciaria').val(data.taxa);
-						$('#taxajudiciaria').setMask('decimal');
-						$('#funcivil').val(data.funcivil);
-						$('#funcivil').setMask('decimal');
+					else{
+						totalcustas = totalcustas + ($('#numerovias').val() * data.emolumento);
 					}
+					var valor_correio = parseFloat(($('#valor_correio').val()).replace(/[$,]+/g,""));
+					var outrasdespesas = parseFloat(($('#outrasdespesas').val()).replace(/[$,]+/g,""));
+					
+					funcivil =  parseInt((data.funcivil).replace(/[$.]+/g,""));
+					taxa = parseInt((data.taxa).replace(/[$.]+/g,""));										
+					
+					totalcustas = totalcustas + (valor_correio + outrasdespesas + (funcivil + taxa));
+					parseFloat(totalcustas);
+					totalcustas = totalcustas *100;
+					totalcustas = Math.floor(totalcustas);
+					totalcustas = totalcustas / 100;
+						
+					$('#emolumento').val(data.emolumento);
+					$('#emolumento').setMask('decimal');
+					$('#total_custas').val(totalcustas);
+					$('#total_custas').setMask('decimal');
+					$('#taxajudiciaria').val(data.taxa);
+					$('#taxajudiciaria').setMask('decimal');
+					$('#funcivil').val(data.funcivil);
+					$('#funcivil').setMask('decimal');
+					
+					totalcustasDec = ((totalcustas + (data.funcivil + data.taxa)) / 100);
+					emolumentoDec = (data.emolumento / 100);
+					taxajudiciariaDec = (data.taxa / 100);
+					funcivilDec = (data.funcivil / 100);
+						
 				}
-			});
+				else if(data.tipo_custa == 1)
+				{
+					var custas = data.soma;
+					var totalcustas = new Number();
+					var outrasdespesas = parseFloat(($('#outrasdespesas').val()).replace(/[$,]+/g,"."));
+					var valor_correio = parseFloat(($('#valor_correio').val()).replace(/[$,]+/g,"."));
+					var numerovias = parseInt($('#numerovias').val());
+					
+					custas = parseFloat(custas);
+					emolumentos = parseFloat(data.emolumento);
+					mult = parseFloat(numerovias * (emolumentos));
+					
+					totalcustas = custas + emolumentos +  mult + outrasdespesas + valor_correio;
+					totalcustas = totalcustas *100;
+					totalcustas = Math.floor(totalcustas);
+					totalcustas = totalcustas / 100;
+
+
+					
+					$('#emolumento').val(data.emolumento);
+					$('#emolumento').setMask('decimal');
+					$('#total_custas').val(totalcustas);
+					$('#total_custas').setMask('decimal');
+					$('#taxajudiciaria').val(data.taxa);
+					$('#taxajudiciaria').setMask('decimal');
+					$('#funcivil').val(data.funcivil);
+					$('#funcivil').setMask('decimal');
+				}
+			}
 		});
+
 		
 		$('#Pessoa-estado_citado').change(function() { 
 		

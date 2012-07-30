@@ -13,6 +13,14 @@ class TitulodocumentosController extends Zend_Controller_Action
 
     private $model_itempedido = null;
 
+    private $model_tipoemolumento = null;
+
+    private $model_custas = null;
+
+    private $model_tabelaemolumentos = null;
+
+    private $model_emolumentofixo = null;
+
     public function init()
     {
         if ( !Zend_Auth::getInstance()->hasIdentity() ) {
@@ -37,16 +45,15 @@ class TitulodocumentosController extends Zend_Controller_Action
 		$this->model_protocolo = new Protocolo();
 		$this->model_pedido = new Pedido();
 		$this->model_itempedido = new ItemPedidos();
+		$this->model_tipoemolumento = new TipoEmolumento();
+		$this->model_custas = new Custa();
+		$this->model_tabelaemolumentos = new TabelaEmolumentos();
+		$this->model_emolumentofixo = new Emolumentofixo();
 		
 		$this->view->setEncoding('ISO-8859-1');
     }
 
     public function indexAction()
-    {
-        // action body
-    }
-
-    public function cadastrotitulodocumentoAction()
     {
         // action body
     }
@@ -57,7 +64,7 @@ class TitulodocumentosController extends Zend_Controller_Action
 		
 		//if(isset($_SESSION['itempedido'])) unset($_SESSION['itempedido']);
 		if ( $this->_request->isPost()){
-			
+		
 			$pedido['data_pedido']		= $this->_request->getPost('data_pedido');
 			$pedido['data_prevista']	= $this->_request->getPost('data_prevista');
 			$pedido['data_entrega']		= $this->_request->getPost('data_entrega');
@@ -65,11 +72,11 @@ class TitulodocumentosController extends Zend_Controller_Action
 			$pedido['valor_pedido']		= $this->_request->getPost('valor_pedido');
 			$pedido['valor_deposito']	= $this->_request->getPost('valor_deposito');
 			$pedido['valor_receber']	= $this->_request->getPost('valor_receber');
-			
+						
 			$requerente = $this->_request->getPost('Requerente');
 			
-			$form->data_pedido->setValue(date('d-m-Y'));
-			$form->data_prevista->setValue($pedido['data_prevista']);
+			$form->data_pedido->setValue('data_pedido');
+			$form->data_prevista->setValue('data_prevista');
 			$form->data_entrega->setValue($pedido['data_entrega']);
 			$form->idSituacao->setValue($pedido['idSituacoes']);
 			$form->valor_pedido->setValue($pedido['valor_pedido']);
@@ -97,18 +104,23 @@ class TitulodocumentosController extends Zend_Controller_Action
 			$this->view->form = $form;
 			
 			if ( $this->_request->getPost('adicionar') || $this->_request->getPost('submitfinal')){
-								
+			
 				$itens = $this->_request->getPost('itempedido');
 				
-				//$notificante = $itens['notificante'];
-				//$notificado = $itens['notificado'];
+				$itens['pedidoView'] = $this->pesquisaCamposPedido($itens);
 				
-				//unset($itens['notificante']);
-				//unset($itens['notificado']);
+				$valor_parcial = str_replace(',', '.', $itens['total_custas']);
+
+				$valor_pedido 	= str_replace(',', '.', $this->_request->getPost('valor_pedido'));
+				$valor_deposito = str_replace(',', ',', $this->_request->getPost('valor_deposito'));
+				
+				$valor_pedido += $valor_parcial;
+
+				$form->valor_deposito->setValue($valor_deposito);
+				$form->valor_pedido->setValue($valor_pedido);
 				
 				$_SESSION['itempedido'][] = $itens;
-			
-				
+
 			}
 				
 			if($this->_request->getPost('submitfinal')){
@@ -135,7 +147,6 @@ class TitulodocumentosController extends Zend_Controller_Action
 					'idPedidoFK'	=> $this->getUltimoPedido(),
 					'datapedido' 	=> date('Y-m-d h:i:s'),
 					'dataprevista' 	=> preg_replace('/[^0-9]/', '', $pedido['data_prevista']),
-					'dataentrega' 	=> preg_replace('/[^0-9]/', '', $pedido['data_entrega']),
 					'valorpedido' 	=> preg_replace('/[^0-9]/', '', $pedido['valor_pedido']),
 					'valordeposito' => preg_replace('/[^0-9]/', '', $pedido['valor_deposito']),
 					'valorreceber' 	=> preg_replace('/[^0-9]/', '', $pedido['valor_receber']),
@@ -209,9 +220,11 @@ class TitulodocumentosController extends Zend_Controller_Action
 				$form = new Registro_Form_Pedido();	
 			}
 		}
+		$form->data_pedido->setValue(date('dmY'));
+		$form->data_prevista->setValue($this->addDayIntoDate(date('dmY'),4));
 		$this->view->form = $form;
-	}
-	
+    }
+
     public function getpessoaAction()
     {
 		$this->_helper->layout ()->disableLayout ();
@@ -275,9 +288,8 @@ class TitulodocumentosController extends Zend_Controller_Action
 			 
 			$model_pessoa->insert($data);
             return $model_pessoa->getAdapter()->lastInsertId();
-		
 		}
-    }
+	}		
 
     public function cadastrarEndereco($data, $id = '')
     {
@@ -501,7 +513,7 @@ class TitulodocumentosController extends Zend_Controller_Action
     public function acompanhamentoAction()
     {
 		$data = $this->model_pedidos->selectPedidos();
-	
+		unset($_SESSION['idItempedido']);
 		
 		$this->view->pedidos = $data;
     }
@@ -509,12 +521,14 @@ class TitulodocumentosController extends Zend_Controller_Action
     public function itenspedidoAction()
     {
         $form = new Registro_Form_Itenspedido();
-		
+		unset($_SESSION['idItempedido']);
 		$pedido = $this->model_pedidos->selectPedido((int) $this->_getParam('idItempedido'));
 		
 		$idItempedido = $pedido['idItempedido'];
 		$idProtocolo = $pedido['idProtocolo'];
 		$idPedido = $pedido['idPedido'];
+		
+		$_SESSION['idItempedido'] = $idItempedido;
 		
 		$form->pedido->setValue($pedido->pedido);
 		$form->item_pedido->setValue($pedido->protocolo);
@@ -524,186 +538,189 @@ class TitulodocumentosController extends Zend_Controller_Action
 		$form->numeropaginas->setValue($pedido->numeropaginas);
 		$form->numerovias->setValue($pedido->numerovias);
 		$form->numeropessoas->setValue($pedido->numeropessoas);
+		$form->valor_correio->setValue($pedido->valorcorreio);
+		$form->valordocumento->setValue($pedido->valordocumento);
+		$form->outrasdespesas->setValue($pedido->outrasdespesas);
 		
-		$_SESSION['pessoascitadas']['notificado'] = array (
-			'tipo_identificacao'	=> $pedido['tipo_identificacao_notificado'],
-            'numeroidentificacao'	=> $pedido['numeroidentificacao_notificado'],
-            'nome' 					=> $pedido['nome_notificado'],
-            'observacoes' 			=> $pedido['observacoes_notificado'],
-            'telefone' 				=> $pedido['telefone_notificado'],
-            'rua' 					=> $pedido['rua_notificado'],
-            'numero' 				=> $pedido['numero_notificado'],
-            'complemento' 			=> $pedido['complemento_notificado'],
-            'cep' 					=> $pedido['cep_notificado'],
-            'bairro' 				=> $pedido['bairro_notificado'],
-            'cidade' 				=> $pedido['cidade_notificado'],
-            'estado' 				=> $pedido['estado_notificado'],
-            'sigla' 				=> $pedido['sigla_notificado'],
-			'notificar'				=> 'Notificar'
-		);
+		if(!isset($_SESSION['flag'])){
 		
-		$_SESSION['pessoascitadas']['notificante'] = array (
-			'tipo_identificacao'	=> $pedido['tipo_identificacao_notificante'],
-            'numeroidentificacao'	=> $pedido['numeroidentificacao_notificante'],
-            'nome' 					=> $pedido['nome_notificante'],
-            'observacoes' 			=> $pedido['observacoes_notificante'],
-            'telefone' 				=> $pedido['telefone_notificante'],
-            'rua' 					=> $pedido['rua_notificante'],
-            'numero' 				=> $pedido['numero_notificante'],
-            'complemento' 			=> $pedido['complemento_notificante'],
-            'cep' 					=> $pedido['cep_notificante'],
-            'bairro' 				=> $pedido['bairro_notificante'],
-            'cidade' 				=> $pedido['cidade_notificante'],
-            'estado' 				=> $pedido['estado_notificante'],
-            'sigla' 				=> $pedido['sigla_notificante'],
-			'notificar'				=> 'Apresentante'
-		);
-		
-			if ( $this->_request->isPost()){
+			$_SESSION['pessoascitadas'][0] = array (
+				'tipo_identificacao'	=> $pedido['tipo_identificacao_notificado'],
+				'numeroidentificacao'	=> $pedido['numeroidentificacao_notificado'],
+				'nome' 					=> $pedido['nome_notificado'],
+				'observacoes' 			=> $pedido['observacoes_notificado'],
+				'telefone' 				=> $pedido['telefone_notificado'],
+				'rua' 					=> $pedido['rua_notificado'],
+				'numero' 				=> $pedido['numero_notificado'],
+				'complemento' 			=> $pedido['complemento_notificado'],
+				'cep' 					=> $pedido['cep_notificado'],
+				'bairro' 				=> $pedido['bairro_notificado'],
+				'cidade' 				=> $pedido['cidade_notificado'],
+				'estado' 				=> $pedido['estado_notificado'],
+				'sigla' 				=> $pedido['sigla_notificado'],
+				'notificar'				=> $this->estadoPedido(1)
+			);
 			
-				$this->view->form = $form;
+			$_SESSION['pessoascitadas'][1] = array (
+				'tipo_identificacao'	=> $pedido['tipo_identificacao_notificante'],
+				'numeroidentificacao'	=> $pedido['numeroidentificacao_notificante'],
+				'nome' 					=> $pedido['nome_notificante'],
+				'observacoes' 			=> $pedido['observacoes_notificante'],
+				'telefone' 				=> $pedido['telefone_notificante'],
+				'rua' 					=> $pedido['rua_notificante'],
+				'numero' 				=> $pedido['numero_notificante'],
+				'complemento' 			=> $pedido['complemento_notificante'],
+				'cep' 					=> $pedido['cep_notificante'],
+				'bairro' 				=> $pedido['bairro_notificante'],
+				'cidade' 				=> $pedido['cidade_notificante'],
+				'estado' 				=> $pedido['estado_notificante'],
+				'sigla' 				=> $pedido['sigla_notificante'],
+				'notificar'				=> $this->estadoPedido(2)
+			);
+		}
+		
+		if ( $this->_request->isPost()){
+		
+			$this->view->form = $form;
+			
+			if ( $this->_request->getPost('adicionar') || $this->_request->getPost('submitfinal')){
 				
-				if ( $this->_request->getPost('adicionar') || $this->_request->getPost('submitfinal')){
+				$pessoas = $this->_request->getPost('Pessoa');
+				
+				if(isset($pessoas['documento_citado'])){
 					
-					$pessoas = $this->_request->getPost('Pessoa');
-					
-					if(isset($pessoas['documento_citado'])){
-						
-						$_SESSION['pessoascitadas'][] = array(
-							'tipo_identificacao'	=> $pessoas['tipo_identificacao_citado'],
-							'numeroidentificacao'	=> preg_replace('/[^0-9]/', '', $pessoas['documento_citado']),
-							'nome' 					=> $pessoas['nome_citado'],
-							'observacoes' 			=> $pessoas['obs_citado'],
-							'telefone' 				=> $pessoas['telefone_citado'],
-							'rua' 					=> $pessoas['endereco_citado'],
-							'numero' 				=> $pessoas['numero_citado'],
-							'complemento' 			=> $pessoas['complemento_citado'],
-							'cep' 					=> $pessoas['cep_citado'],
-							'bairro' 				=> $pessoas['bairro_citado'],
-							'cidade' 				=> $pessoas['cidade_citado'],
-							'estado' 				=> $pessoas['estado_citado'],
-							'notificar' 			=> $pessoas['notificar']//1 = sim //0 = nao
-						);
-						
-					}
+					$_SESSION['pessoascitadas'][] = array(
+						'tipo_identificacao'	=> $pessoas['tipo_identificacao_citado'],
+						'numeroidentificacao'	=> preg_replace('/[^0-9]/', '', $pessoas['documento_citado']),
+						'nome' 					=> $pessoas['nome_citado'],
+						'observacoes' 			=> $pessoas['obs_citado'],
+						'telefone' 				=> $pessoas['telefone_citado'],
+						'rua' 					=> $pessoas['endereco_citado'],
+						'numero' 				=> $pessoas['numero_citado'],
+						'complemento' 			=> $pessoas['complemento_citado'],
+						'cep' 					=> $pessoas['cep_citado'],
+						'bairro' 				=> $pessoas['bairro_citado'],
+						'cidade' 				=> $pessoas['cidade_citado'],
+						'estado' 				=> $pessoas['estado_citado'],
+						'notificar' 			=> $this->estadoPedido($pessoas['notificar'])//1 = sim //0 = nao
+					);
 					
 				}
-				
-				if($this->_request->getPost('submitfinal')){
-					
-					$user = new Zend_Session_Namespace('user_data');
-				
-					$data_historico['usuario'] = $user->user->idUsuario;
-					$data_historico['idPedido'] = $idPedido;
-					$data_historico['idItempedido'] = $idItempedido;
-					$data_historico['descricao'] = 'Item registrado';
-					
-					$notificado = $_SESSION['pessoascitadas']['notificado'];
-					$notificante = $_SESSION['pessoascitadas']['notificante'];
-					unset($_SESSION['pessoascitadas']['notificado']);
-					unset($_SESSION['pessoascitadas']['notificante']);
-					
-					$data_notificante = array(
-						'tipo_identificacao'	=> $notificante['tipo_identificacao'],
-						'numeroidentificacao'	=> preg_replace('/[^0-9]/', '', $notificante['numeroidentificacao']),	
-						'nome' 					=> strtoupper ($notificante['nome']),
-						'telefone' 				=> preg_replace('/[^0-9]/', '', $notificante['telefone']),
-						'cep' 					=> preg_replace('/[^0-9]/', '', $notificante['cep']),
-						'rua' 					=> strtoupper ($notificante['rua']),
-						'complemento' 			=> strtoupper ($notificante['complemento']),
-						'bairro' 				=> strtoupper ($notificante['bairro']),
-						'numero' 				=> strtoupper ($notificante['numero']),
-						'cidade' 				=> strtoupper ($notificante['cidade']),
-						'observacoes' 			=> strtoupper ($notificante['observacoes'])
-					);
-					
-					$data_notificado = array(
-						'tipo_identificacao'	=> $notificado['tipo_identificacao'],
-						'numeroidentificacao'	=> preg_replace('/[^0-9]/', '', $notificado['numeroidentificacao']),	
-						'nome' 					=> strtoupper ($notificado['nome']),
-						'telefone' 				=> preg_replace('/[^0-9]/', '', $notificado['telefone']),
-						'cep' 					=> preg_replace('/[^0-9]/', '', $notificado['cep']),
-						'rua' 					=> strtoupper ($notificado['rua']),
-						'complemento' 			=> strtoupper ($notificado['complemento']),
-						'bairro' 				=> strtoupper ($notificado['bairro']),
-						'numero' 				=> strtoupper ($notificado['numero']),
-						'cidade' 				=> strtoupper ($notificado['cidade']),
-						'observacoes' 			=> strtoupper ($notificado['observacoes'])
-					);
-					
-					$data_item = array(
-						'idItempedido'			=> $idItempedido,
-						'idTipodocumentos' 		=> preg_replace('/[^0-9]/', '', $this->_request->getPost('tipodocumentos')),
-						'idEmolumentos'			=> preg_replace('/[^0-9]/', '', $this->_request->getPost('tipoemolumento')),
-						'numeropaginas' 		=> preg_replace('/[^0-9]/', '', $this->_request->getPost('numeropaginas')),
-						'numerovias' 			=> preg_replace('/[^0-9]/', '', $this->_request->getPost('numerovias')),
-						'numeropessoas' 		=> preg_replace('/[^0-9]/', '', $this->_request->getPost('numeropessoas')),
-						'valordocumento' 		=> str_replace(',', '.', str_replace('.', '',$this->_request->getPost('valordocumento'))),
-						'valorcorreio' 			=> str_replace(',', '.', str_replace('.', '',$this->_request->getPost('valor_correio'))),
-						'outrasdespesas' 		=> str_replace(',', '.', str_replace('.', '',$this->_request->getPost('outrasdespesas'))),
-						'idSituacoes'			=> 2,
-						'datasituacao'			=> date('Y-m-d'),
-						'idPessoasnotificado' 	=> $this->cadastrarPessoa($data_notificado),	
-						'idPessoasnotificante' 	=> $this->cadastrarPessoa($data_notificante)
-					);
-					
-					$data_registro = array(
-						'idProtocolo' => $idProtocolo,
-						'idItempedido' => $idItempedido,
-						'livro' => $this->_request->getPost('livro')
-					);
-					
-					$this->updateItemPedido($data_item);
-					
-					$this->cadastrarRegistroPedido($data_registro);
-
-					
-					foreach($_SESSION['pessoascitadas'] as $pessoascitadas){
-						
-						$notificar = preg_replace('/[^0-9]/', '', $pessoascitadas['notificar']);
-						$data_citado = array(
-							'tipo_identificacao'	=> $pessoascitadas['tipo_identificacao'],
-							'numeroidentificacao'	=> preg_replace('/[^0-9]/', '', $pessoascitadas['numeroidentificacao']),	
-							'nome' 					=> strtoupper ($pessoascitadas['nome']),
-							'telefone' 				=> preg_replace('/[^0-9]/', '', $pessoascitadas['telefone']),
-							'cep' 					=> preg_replace('/[^0-9]/', '', $pessoascitadas['cep']),
-							'rua' 					=> strtoupper ($pessoascitadas['rua']),
-							'complemento' 			=> strtoupper ($pessoascitadas['complemento']),
-							'bairro' 				=> strtoupper ($pessoascitadas['bairro']),
-							'numero' 				=> strtoupper ($pessoascitadas['numero']),
-							'cidade' 				=> strtoupper ($pessoascitadas['cidade']),
-							'observacoes' 			=> strtoupper ($pessoascitadas['observacoes']),
-							
-						);
-						$idPessoa = $this->cadastrarPessoa($data_citado);
-						
-						$data_pessoaCitada = array(
-							'idPessoas' 	=> $idPessoa,
-							'idItempedido' 	=> $idItempedido,
-							'notificar' 	=> $notificar
-						);
-						
-						$this->cadastrarPessoasCitadas($data_pessoaCitada);
-					
-					}
-					
-					unset($_SESSION['pessoascitadas']);
-					
-					$this->cadastrarHistoricoPedidos($data_historico);
-					
-					ZendX_JQuery_FlashMessenger::addMessage("Título cadastrado com sucesso.");
-					$this->_redirect('/titulodocumentos/acompanhamento');
-				}
-				
 				
 			}
 			
+			if($this->_request->getPost('submitfinal')){
+				
+				$user = new Zend_Session_Namespace('user_data');
+			
+				$data_historico['usuario'] = $user->user->idUsuario;
+				$data_historico['idPedido'] = $idPedido;
+				$data_historico['idItempedido'] = $idItempedido;
+				$data_historico['descricao'] = 'Item registrado';
+				
+				$notificado = $_SESSION['pessoascitadas']['notificado'];
+				$notificante = $_SESSION['pessoascitadas']['notificante'];
+				unset($_SESSION['pessoascitadas']['notificado']);
+				unset($_SESSION['pessoascitadas']['notificante']);
+				
+				$data_notificante = array(
+					'tipo_identificacao'	=> $notificante['tipo_identificacao'],
+					'numeroidentificacao'	=> preg_replace('/[^0-9]/', '', $notificante['numeroidentificacao']),	
+					'nome' 					=> strtoupper ($notificante['nome']),
+					'telefone' 				=> preg_replace('/[^0-9]/', '', $notificante['telefone']),
+					'cep' 					=> preg_replace('/[^0-9]/', '', $notificante['cep']),
+					'rua' 					=> strtoupper ($notificante['rua']),
+					'complemento' 			=> strtoupper ($notificante['complemento']),
+					'bairro' 				=> strtoupper ($notificante['bairro']),
+					'numero' 				=> strtoupper ($notificante['numero']),
+					'cidade' 				=> strtoupper ($notificante['cidade']),
+					'observacoes' 			=> strtoupper ($notificante['observacoes'])
+				);
+				
+				$data_notificado = array(
+					'tipo_identificacao'	=> $notificado['tipo_identificacao'],
+					'numeroidentificacao'	=> preg_replace('/[^0-9]/', '', $notificado['numeroidentificacao']),	
+					'nome' 					=> strtoupper ($notificado['nome']),
+					'telefone' 				=> preg_replace('/[^0-9]/', '', $notificado['telefone']),
+					'cep' 					=> preg_replace('/[^0-9]/', '', $notificado['cep']),
+					'rua' 					=> strtoupper ($notificado['rua']),
+					'complemento' 			=> strtoupper ($notificado['complemento']),
+					'bairro' 				=> strtoupper ($notificado['bairro']),
+					'numero' 				=> strtoupper ($notificado['numero']),
+					'cidade' 				=> strtoupper ($notificado['cidade']),
+					'observacoes' 			=> strtoupper ($notificado['observacoes'])
+				);
+				
+				$data_item = array(
+					'idItempedido'			=> $idItempedido,
+					'idTipodocumentos' 		=> preg_replace('/[^0-9]/', '', $this->_request->getPost('tipodocumentos')),
+					'idEmolumentos'			=> preg_replace('/[^0-9]/', '', $this->_request->getPost('tipoemolumento')),
+					'numeropaginas' 		=> preg_replace('/[^0-9]/', '', $this->_request->getPost('numeropaginas')),
+					'numerovias' 			=> preg_replace('/[^0-9]/', '', $this->_request->getPost('numerovias')),
+					'numeropessoas' 		=> preg_replace('/[^0-9]/', '', $this->_request->getPost('numeropessoas')),
+					'valordocumento' 		=> str_replace(',', '.', str_replace('.', '',$this->_request->getPost('valordocumento'))),
+					'valorcorreio' 			=> str_replace(',', '.', str_replace('.', '',$this->_request->getPost('valor_correio'))),
+					'outrasdespesas' 		=> str_replace(',', '.', str_replace('.', '',$this->_request->getPost('outrasdespesas'))),
+					'idSituacoes'			=> 2,
+					'datasituacao'			=> date('Y-m-d'),
+					'idPessoasnotificado' 	=> $this->cadastrarPessoa($data_notificado),	
+					'idPessoasnotificante' 	=> $this->cadastrarPessoa($data_notificante)
+				);
+				
+				$data_registro = array(
+					'idProtocolo' => $idProtocolo,
+					'idItempedido' => $idItempedido,
+					'livro' => $this->_request->getPost('livro')
+				);
+				
+				$this->updateItemPedido($data_item);
+				
+				$this->cadastrarRegistroPedido($data_registro);
+				
+				foreach($_SESSION['pessoascitadas'] as $pessoascitadas){
+					
+					$notificar = preg_replace('/[^0-9]/', '', $pessoascitadas['notificar']);
+					$data_citado = array(
+						'tipo_identificacao'	=> $pessoascitadas['tipo_identificacao'],
+						'numeroidentificacao'	=> preg_replace('/[^0-9]/', '', $pessoascitadas['numeroidentificacao']),	
+						'nome' 					=> strtoupper ($pessoascitadas['nome']),
+						'telefone' 				=> preg_replace('/[^0-9]/', '', $pessoascitadas['telefone']),
+						'cep' 					=> preg_replace('/[^0-9]/', '', $pessoascitadas['cep']),
+						'rua' 					=> strtoupper ($pessoascitadas['rua']),
+						'complemento' 			=> strtoupper ($pessoascitadas['complemento']),
+						'bairro' 				=> strtoupper ($pessoascitadas['bairro']),
+						'numero' 				=> strtoupper ($pessoascitadas['numero']),
+						'cidade' 				=> strtoupper ($pessoascitadas['cidade']),
+						'observacoes' 			=> strtoupper ($pessoascitadas['observacoes']),
+						
+					);
+					$idPessoa = $this->cadastrarPessoa($data_citado);
+					
+					$data_pessoaCitada = array(
+						'idPessoas' 	=> $idPessoa,
+						'idItempedido' 	=> $idItempedido,
+						'notificar' 	=> $notificar
+					);
+					
+					$this->cadastrarPessoasCitadas($data_pessoaCitada);
+				
+				}
+				
+				unset($_SESSION['pessoascitadas']);
+				unset($_SESSION['flag']);
+				unset($_SESSION['idItempedido']);
+				
+				$this->cadastrarHistoricoPedidos($data_historico);
+				
+				ZendX_JQuery_FlashMessenger::addMessage("Título cadastrado com sucesso.");
+				$this->_redirect('/titulodocumentos/acompanhamento');
+			}
+		}
 		$this->view->form = $form;
-	
     }
-	
-	public function updateItemPedido($data)
-	{
+
+    public function updateItemPedido($data)
+    {
 		
 		$model_itempedido = new ItemPedidos();
     		  
@@ -712,8 +729,8 @@ class TitulodocumentosController extends Zend_Controller_Action
         	
         return false;
 		
-	}
-	
+    }
+
     public function cadastrarRegistroPedido($data)
     {
 	
@@ -765,8 +782,8 @@ class TitulodocumentosController extends Zend_Controller_Action
 		else return false;
 		
     }
-	
-	public function cadastrarPessoasCitadas($data)
+
+    public function cadastrarPessoasCitadas($data)
     {
 	
 		$model_pessoaCitada = new Pessoascitadas();
@@ -775,6 +792,175 @@ class TitulodocumentosController extends Zend_Controller_Action
 		
 		return true;
 	
-	}
+    }
+
+    public function calculocustaAction()
+    {
+       $this->_helper->layout ()->disableLayout ();
+	   $this->_helper->viewRenderer->setNoRender ();
+		
+		$idemolumento = (int) $this->_getParam('id');
+		$valor =(float) str_replace(',', '.', $this->_getParam('valor'));
+		$tipocustas = $this->model_tipoemolumento->getCustasTotais($idemolumento);
+
+			if($tipocustas['tipo_custa'] == 1)
+			{
+				$emolumentos = $this->model_tabelaemolumentos->getEmolumento($valor); 
+				$emolumentos->toArray();
+				$emolumentos = $emolumentos['emolumento'];
+				
+				$taxajudiciaria = $this->model_custas->getCustaByName('Taxa Judiciária');
+				$funcivil = $this->model_custas->getCustaByName('Funcivil');
+				
+				$soma = $taxajudiciaria + $funcivil;
+				
+				
+				$custas = array('tipo_custa' => $tipocustas['tipo_custa'],'taxa'=>$taxajudiciaria, 'funcivil'=>$funcivil, 'emolumento'=>$emolumentos, 'soma'=>$soma);
+				
+				echo Zend_Json::encode($custas);	
+				$this->_helper->viewRenderer->setNoRender(true);
+			}
+			else if($tipocustas['tipo_custa'] == 0)
+			{
+
+				$taxajudiciaria = $this->model_custas->getCustaByName('Taxa Judiciária');
+				$funcivil = $this->model_custas->getCustaByName('Funcivil');
+				
+				$valores = $this->model_emolumentofixo->getCustas($idemolumento)->toArray();
+				$valores['tipo_custa'] = $tipocustas['tipo_custa'];
+				$valores['funcivil'] = $funcivil;
+				$valores['taxa'] = $taxajudiciaria;
+				
+				$valores['emolumento'] = str_replace('.', '', $valores['emolumento']);
+				$valores['pagina_extra'] =(int) str_replace('.', '', $valores['pagina_extra']);
+				
+				echo Zend_Json::encode($valores);	
+				$this->_helper->viewRenderer->setNoRender(true);
+			}
+			else
+				return false;
+			exit();
+    }
+
+    public function addDayIntoDate($date, $days)
+    {
+		$thisyear = substr ( $date, 4, 4 );
+		$thismonth = substr ( $date, 2, 2 );
+		$thisday =  substr ( $date, 0, 2 );
+		$nextdate = mktime ( 0, 0, 0, $thismonth, $thisday + $days, $thisyear );
+		return strftime("%d%m%Y", $nextdate);
+    }
+
+    public function pesquisaCamposPedido($item)
+    {
+		$model_tipodocumento = new Tipodocumento();
+		$nome = $model_tipodocumento->selectTipo($item['tipodocumentos']);
+		$data['nometipodocumento'] = $nome->nome;
+		
+		$model_situacao = new Situacoes();
+		$situa = $model_situacao->selectTipo($item['pedido_situacao']);
+		$data['nomesituacao'] = $situa->nome;
+		
+		$model_protocolo = new Protocolo();
+		$iten = $model_protocolo->findForSelect();
+		$data['itempedidon'] = $iten[0]->protocolo;
 	
+		return $data;
+    }
+
+	public function estadoPedido($id)
+    {
+		if($id == 1){
+			return 'Notificado';
+		}
+		else if($id == 2){
+			return 'Apresentante';
+		}
+		else if($id == 3){
+			return 'Notificante';
+		}
+		else{
+			return 'Pessoa Citada';
+		}
+    }
+	
+    public function removerpessoascitadasAction()
+    {
+		
+		$remove = (int) $this->_getParam('remove');
+		
+		unset($_SESSION['pessoascitadas'][$remove]);
+		
+		foreach ($_SESSION['pessoascitadas'] as $item){
+			
+			$itens['pessoascitadas'][] = $item;
+			
+		}
+		
+		unset($_SESSION['pessoascitadas']);
+		
+		$_SESSION['pessoascitadas'] = $itens['pessoascitadas'];
+		
+		$_SESSION['flag'] = true;
+		
+		$this->_redirect('/titulodocumentos/itenspedido/idItempedido/' . $_SESSION['idItempedido']);
+		
+    }
+
+    public function changepessoacitadaAction()
+    {
+        $id = (int) $this->_getParam('id');
+		
+		$_SESSION['pessoascitadas'][$id]['notificar'] = $this->estadoPedido(0);
+		
+		$_SESSION['flag'] = true;
+		
+		$this->_redirect('/titulodocumentos/itenspedido/idItempedido/' . $_SESSION['idItempedido']);
+    }
+
+    public function changenotificanteAction()
+    {
+        $id = (int) $this->_getParam('id');
+		
+		$_SESSION['pessoascitadas'][$id]['notificar'] = $this->estadoPedido(3);
+		
+		$_SESSION['flag'] = true;
+		
+		$this->_redirect('/titulodocumentos/itenspedido/idItempedido/' . $_SESSION['idItempedido']);
+    }
+
+    public function changenotificadoAction()
+    {
+       $id = (int) $this->_getParam('id');
+		
+		$_SESSION['pessoascitadas'][$id]['notificar'] = $this->estadoPedido(1);
+		
+		$_SESSION['flag'] = true;
+		
+		$this->_redirect('/titulodocumentos/itenspedido/idItempedido/' . $_SESSION['idItempedido']);
+    }
+
+    public function changeapresentanteAction()
+    {
+        $id = (int) $this->_getParam('id');
+		
+		$_SESSION['pessoascitadas'][$id]['notificar'] = $this->estadoPedido(2);
+		
+		$_SESSION['flag'] = true;
+		
+		$this->_redirect('/titulodocumentos/itenspedido/idItempedido/' . $_SESSION['idItempedido']);
+		
+    }
+
 }
+
+
+
+
+
+
+
+
+
+
+

@@ -28,7 +28,15 @@ echo $this->formP;
             <td align="center"><?php echo $i; ?></td>
             <td align="center"><?php echo $this->documento($pessoa['numeroidentificacao'], $pessoa['tipo_identificacao']);?></td>
 			<td align="center"><?php echo $this->escape($pessoa['nome']); ?></td>
-            <td align="center"><?php echo $this->escape($pessoa['notificar']); ?></td>
+            <td align="center" title="Clique para modificar o status da Pessoa." class="slide"><b><?php echo $this->escape($pessoa['notificar']); ?></b>
+				<div class="edit">
+					<a title="Clique para remover a Pessoa."href="<?php echo $this->url(array('module' => 'registro', 'controller' => 'titulodocumentos', 'action' => 'removerpessoascitadas', 'remove' => ($i-1)), null, true); ?>" id="editarpessoascitadas">Remover Pessoa</a><br>
+					<a title="Clique para tornar esta Pessoa apenas Citada."href="<?php echo $this->url(array('module' => 'registro', 'controller' => 'titulodocumentos', 'action' => 'changepessoacitada', 'id' => ($i-1)), null, true); ?>" id="changepessoacitada">Pessoa Citada	</a><br>
+					<a title="Clique para tornar esta Pessoa em Notificante."href="<?php echo $this->url(array('module' => 'registro', 'controller' => 'titulodocumentos', 'action' => 'changenotificante', 'id' => ($i-1)), null, true); ?>" id="changenotificante">Notificante</a><br>
+					<a title="Clique para tornar esta Pessoa em Notificada"href="<?php echo $this->url(array('module' => 'registro', 'controller' => 'titulodocumentos', 'action' => 'changenotificado', 'id' => ($i-1)), null, true); ?>" id="changenotificado">Notificado</a><br>
+					<a title="Clique para tornar esta Pessoa em Apresentante"href="<?php echo $this->url(array('module' => 'registro', 'controller' => 'titulodocumentos', 'action' => 'changeapresentante', 'id' => ($i-1)), null, true); ?>" id="changeapresentante">Apresentante</a><br>
+				</div>
+			</td>
         </tr> 
 <?php
 			$i++;
@@ -50,48 +58,101 @@ input{
 
 
 	$(function() {
-		var tabs = $('#form-tab');
-		var legends = $(tabs).find('fieldset').get();
 		
-		var titles = $('<ul></ul>');
-		$.each(legends, function(index, value) { 
-			var legend = $(value).find('legend');
-			
-			var id = $(value).attr('id');
-			var a = $('<a></a>').attr('href', '#' + id).text($(legend).text());
-			var li = $('<li></li>').append(a);
-			
-			$(legend).remove();
-			
-			$(titles).append(li);			
-			var div = $('<div></div>').attr('id', id);
-			$(div).html($(value).html());
-			$(tabs).append(div);
-			
-			$(value).remove();
-		});
-		$(tabs).prepend(titles);
-		$(tabs).tabs();
+		$('.slide').click(function() {
 		
-		$('#Pessoa-cep_citado').setMask('99.999-999');
-		$('#Pessoa-telefone_citado').setMask('(99)9999-9999');
-		$('#datasituacao').setMask('date');
-		$('#valordocumento').setMask('decimal');
-		$('#emolumento').setMask('decimal');
-		$('#valor_correio').setMask('decimal');
-		$('#outrasdespesas').setMask('decimal');
-		$('#taxa_judiciaria').setMask('decimal');
-		$('#funcivil').setMask('decimal');
-		$('#total_custas').setMask('decimal');
-		
-		$('#Pessoa-documento_citado').setMask('cnpj');
-		$('input[name="Pessoa[tipo_identificacao_citado]"]').change(function(){
-			if($(this).val() == '2'){	
-				$('#Pessoa-documento_citado').setMask('cpf');		
-			}else{
-				$('#Pessoa-documento_citado').setMask('cnpj');
+			if ($('.edit').is(":hidden")) {
+				$(".edit").slideDown("slow");
+			} else {
+				$(".edit").slideUp("slow");
 			}
-		})
+		});
+		
+		var taxajudiciaria, funcivil, averbacao, averbacaopgextra, notificacao, notificacaopgextra, notificacaopgextra, soma;
+		
+
+		var tipoemolumento = $("#tipoemolumento").val();
+		var valor = $("#valordocumento").val();
+
+		$.ajax({
+			url:"<?php echo $this->url(array('module' => 'registro', 'controller' => 'titulodocumentos', 'action' => 'calculocusta'), null, true); ?>",
+			dataType:'json',
+			encoding: 'utf-8',
+			data:{id: tipoemolumento, valor: valor},
+			type:'GET',
+			success: function(data){						
+
+				if(data.tipo_custa == 0)
+				{
+					var totalcustas = new Number(0);
+					
+					if($('#numeropaginas').val() > data.pagina_inicial)
+					{
+						var qtpagina = $('#numeropaginas').val() - data.pagina_inicial;
+						totalcustas = totalcustas + ($('#numerovias').val() * (qtpagina * data.pagina_extra));
+						totalcustas = totalcustas + ($('#numerovias').val() * data.emolumento);
+					}
+					else{
+						totalcustas = totalcustas + ($('#numerovias').val() * data.emolumento);
+					}
+					var valor_correio = parseFloat(($('#valor_correio').val()).replace(/[$,]+/g,""));
+					var outrasdespesas = parseFloat(($('#outrasdespesas').val()).replace(/[$,]+/g,""));
+					
+					funcivil =  parseInt((data.funcivil).replace(/[$.]+/g,""));
+					taxa = parseInt((data.taxa).replace(/[$.]+/g,""));										
+					
+					totalcustas = totalcustas + (valor_correio + outrasdespesas + (funcivil + taxa));
+					parseFloat(totalcustas);
+					totalcustas = totalcustas *100;
+					totalcustas = Math.floor(totalcustas);
+					totalcustas = totalcustas / 100;
+						
+					$('#emolumento').val(data.emolumento);
+					$('#emolumento').setMask('decimal');
+					$('#total_custas').val(totalcustas);
+					$('#total_custas').setMask('decimal');
+					$('#taxajudiciaria').val(data.taxa);
+					$('#taxajudiciaria').setMask('decimal');
+					$('#funcivil').val(data.funcivil);
+					$('#funcivil').setMask('decimal');
+					
+					totalcustasDec = ((totalcustas + (data.funcivil + data.taxa)) / 100);
+					emolumentoDec = (data.emolumento / 100);
+					taxajudiciariaDec = (data.taxa / 100);
+					funcivilDec = (data.funcivil / 100);
+						
+				}
+				else if(data.tipo_custa == 1)
+				{
+					var custas = data.soma;
+					var totalcustas = new Number();
+					var outrasdespesas = parseFloat(($('#outrasdespesas').val()).replace(/[$,]+/g,"."));
+					var valor_correio = parseFloat(($('#valor_correio').val()).replace(/[$,]+/g,"."));
+					var numerovias = parseInt($('#numerovias').val());
+					
+					custas = parseFloat(custas);
+					emolumentos = parseFloat(data.emolumento);
+					mult = parseFloat(numerovias * (emolumentos));
+					
+					totalcustas = custas + emolumentos +  mult + outrasdespesas + valor_correio;
+					totalcustas = totalcustas *100;
+					totalcustas = Math.floor(totalcustas);
+					totalcustas = totalcustas / 100;
+
+
+					
+					$('#emolumento').val(data.emolumento);
+					$('#emolumento').setMask('decimal');
+					$('#total_custas').val(totalcustas);
+					$('#total_custas').setMask('decimal');
+					$('#taxajudiciaria').val(data.taxa);
+					$('#taxajudiciaria').setMask('decimal');
+					$('#funcivil').val(data.funcivil);
+					$('#funcivil').setMask('decimal');
+				}
+			}
+		});
+
 		
 		$('#Pessoa-estado_citado').change(function() { 
 		

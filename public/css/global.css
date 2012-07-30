@@ -43,27 +43,28 @@ label{
 }
 
 fieldset{
-	border: solid 1px #e9e9e9;
+	border: solid 1px #ddd;
 }
 fieldset legend{
 	font-size: 18px;
 }
+div.edit{display: none;}
 
 a img{border: none;	}
 
 input[type="text"]{ padding: 2px 5px; height: 20px; margin: 2px 0px;}
 select{ padding-left: 5px; height: 28px; max-width: 422px; margin: 2px 0px; display: block;}
-select.half{ width: 200px;}
+select.half{ width: 200px; }
 input.full{ width: 410px; }
 input.margin{ margin-bottom: 20px; }
 input.posfix{ margin-right: 200px; }
 input.half{ width: 188px; }
 .field{ max-width: 424px; padding-bottom: 5px;}
-.field.checkbox{ height: 56px; margin-bottom: 20px; }
-.field.checkbox label{ display: inline; line-height: 56px;  float: left; }
+.field.checkbox{ height: 30px; margin-bottom: 20px; }
+.field.checkbox label{ display: inline; line-height: 56px; float: left; }
 .field.checkbox >div{ display: inline; line-height: 56px; height: 56px; float: left; }
-.field.checkbox input{ width: auto; margin: 21px 5px; }
-.field.margin{ margin-bottom: 20px !important; clear: both; }
+.field.checkbox input{ width: auto; margin: 21px 5px; margin-bottom: 20px; margin-left: 40px; }
+.field.margin{ margin-bottom: 10px !important; clear: both; }
 #submitbutton-import{ margin: 14px; height: 30px; border: 1px solid #333; }
 #submitbutton-import:focus,#submitbutton-import:hover{ border: 1px solid #003c58; cursor: pointer; background: #aee5ff;}
 #submitbutton-import:active{ border: 1px solid #001f3c; background: #00498d; color: #fff;}
@@ -298,16 +299,45 @@ input.half{ width: 188px; }
 .view_modal { position: absolute; left: 50%; top: 50%; text-align: left; z-index: 99998; }
 .modal { visibility: hidden; cursor:pointer; }
 
-
 #cadastro-pedido-form{ width: 440px; float: left; }
 #cadastro-pedido-form .field{ width: 220px; float: left; }
 #cadastro-pedido-form .field input, #cadastro-pedido-form .field select{ width: 170px; display:block; }
 
 #fieldset-Requerente{ width: 440px; float: right; }
 #fieldset-Requerente .field{ width: 220px; float: left; }
-#fieldset-Requerente .field input, #fieldset-Requerente .field select{ width: 170px; display:block; }
+#fieldset-Requerente .field input, #fieldset-Requerente .field select { width: 170px; display:block; }
 
-#submits-form{ clear: both; border: none; margin: 0px; padding:0px;}
-#submits-form input{ margin: 0px; height: 30px; border: 1px solid #333; }
+#fieldset-itempedido .field{ width: 25%; float: left; }
+#fieldset-itempedido .field input, #fieldset-itempedido .field select{ width: 90%; display:block; }
+#fieldset-itempedido .field textarea{ width: 95%; display:block; }
+
+#cadastro-itempedido-form{ width: 440px; float: left; }
+#cadastro-itempedido-form .field{ width: 220px; float: left; }
+#cadastro-itempedido-form .field input, #cadastro-itempedido-form .field select{ width: 170px; display:block; }
+#fieldset-itempedido-form .field textarea{ width: 95%; display:block; }
+
+#fieldset-Pessoa{ width: 440px; float: right; }
+#fieldset-Pessoa .field{ width: 220px; float: left; }
+#fieldset-Pessoa .field input, #fieldset-Pessoa .field select { width: 170px; display:block; }
+
+
+#submits-form{ float: none;  clear: both; border: none; margin: 0px; padding:5px;}
+#submits-form input{ margin-top: 10px; margin-left: 200px; height: 30px; border: 1px solid #333; }
 #submits-form input:focus, #submits-form input:hover{ border: 1px solid #003c58; cursor: pointer; background: #aee5ff;}
 #submits-form input:active{ border: 1px solid #001f3c; background: #00498d; color: #fff;}
+
+#Requerente-adicionar{ clear: both; margin-top: 10px;  margin-left: 155px; float: left; padding:5px; height: 30px; border: 1px solid #333;}
+#Requerente-adicionar:focus, #Requerente-adicionar:hover{ border: 1px solid #003c58; cursor: pointer; background: #aee5ff;}
+#Requerente-adicionar:active{ border: 1px solid #001f3c; background: #00498d; color: #fff;}
+
+#Salvar{ clear: both; margin-top: 10px; margin-left: 155px; float: left; padding:5px; height: 30px; border: 1px solid #333;}
+#Salvar:focus, #Salvar:hover{ border: 1px solid #003c58; cursor: pointer; background: #aee5ff;}
+#Salvar:active{ border: 1px solid #001f3c; background: #00498d; color: #fff;}
+
+#submitbutton-pessoa{ clear: both; margin-top: 15px;  margin-left: 150px; margin-bottom: 15px;float: left; padding:5px; height: 30px; border: 1px solid #333;}
+#submitbutton-pessoa:focus, #submitbutton-pessoa:hover{ border: 1px solid #003c58; cursor: pointer; background: #aee5ff;}
+#submitbutton-pessoa:active{ border: 1px solid #001f3c; background: #00498d; color: #fff;}
+
+#submitbutton-import{ clear: both; margin-top: 10px;  margin-left: 150px; float: left; padding:5px; height: 30px; border: 1px solid #333;}
+#submitbutton-import:focus, #submitbutton-import:hover{ border: 1px solid #003c58; cursor: pointer; background: #aee5ff;}
+#submitbutton-import:active{ border: 1px solid #001f3c; background: #00498d; color: #fff;}

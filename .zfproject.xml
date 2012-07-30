@@ -370,7 +370,11 @@
               <actionMethod actionName="acompanhamento"/>
               <actionMethod actionName="itenspedido"/>
               <actionMethod actionName="pesquisa"/>
-              <actionMethod actionName="removesession"/>
+              <actionMethod actionName="removerpessoascitadas"/>
+              <actionMethod actionName="changepessoacitada"/>
+              <actionMethod actionName="changenotificante"/>
+              <actionMethod actionName="changenotificado"/>
+              <actionMethod actionName="changeapresentante"/>
             </controllerFile>
           </controllersDirectory>
           <formsDirectory>
@@ -436,7 +440,16 @@
             <viewScriptFile forActionName="error"/>
           </viewControllerScriptsDirectory>
           <viewControllerScriptsDirectory forControllerName="Titulodocumentos">
-            <viewScriptFile forActionName="unsetSession"/>
+            <viewScriptFile forActionName="changepessoacitada"/>
+          </viewControllerScriptsDirectory>
+          <viewControllerScriptsDirectory forControllerName="Titulodocumentos">
+            <viewScriptFile forActionName="changenotificante"/>
+          </viewControllerScriptsDirectory>
+          <viewControllerScriptsDirectory forControllerName="Titulodocumentos">
+            <viewScriptFile forActionName="changenotificado"/>
+          </viewControllerScriptsDirectory>
+          <viewControllerScriptsDirectory forControllerName="Titulodocumentos">
+            <viewScriptFile forActionName="changeapresentante"/>
           </viewControllerScriptsDirectory>
         </viewScriptsDirectory>
         <viewHelpersDirectory/>

@@ -94,5 +94,21 @@ class TipoEmolumento extends Zend_Db_Table_Abstract{
     	$select->order('emolumento');
     	return $this->fetchAll($select);
 	}
-}
+
+	public function getCustasTotais($emolumento)
+	{
+		$select = $this->select();
+		$select->setIntegrityCheck();
+		
+		$select->from(array('tem' => 'car_tipoemolumentos'), array('tipo_custa'));
+		
+		$select->where('idEmolumentos = ?', $emolumento);
+		
+		//$sql = (string) $select;
+		//print_r($sql);exit;
+		
+		return $this->fetchAll($select)->Current()->toArray();
+	}
+
+	}
 

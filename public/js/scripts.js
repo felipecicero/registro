@@ -1,5 +1,30 @@
 $(document).ready(function() {
 	
+	
+	
+	var tabs = $('#form-tab');
+	var legends = $(tabs).find('fieldset').get();
+		
+	var titles = $('<ul></ul>');
+	$.each(legends, function(index, value) { 
+		var legend = $(value).find('legend');
+		
+		var id = $(value).attr('id');
+		var a = $('<a></a>').attr('href', '#' + id).text($(legend).text());
+		var li = $('<li></li>').append(a);
+		
+		$(legend).remove();
+
+		$(titles).append(li);			
+		var div = $('<div></div>').attr('id', id);
+		$(div).html($(value).html());
+		$(tabs).append(div);
+
+		$(value).remove();
+		});
+	$(tabs).prepend(titles);
+	$(tabs).tabs();
+	
 	$("tfoot").css("display", "none");
 	$("#hide").css("display", "none");
 	
@@ -16,26 +41,6 @@ $(document).ready(function() {
 	});
 	
 	
-	$('input[name="telefone"]').setMask('phone'); // telefone
-	$('input[name="celular"]').setMask('phone'); // telefone
-	
-	$('input[name="cep"]').setMask('99.999-999'); // cep
-	$('input[name="cep_devedor"]').setMask('99.999-999');
-	$('input[name="cep_cedente"]').setMask('99.999-999');
-	$('input[name="cep_apresentante"]').setMask('99.999-999');
-	$('input[name="cep_sacador"]').setMask('99.999-999');
-	$('input[name="inicio"]').setMask('99.999-999');
-	$('input[name="limite"]').setMask('99.999-999');
-	
-	
-	$('input[name="nascimento"]').setMask('date'); // data
-	$('input[name="dataemissaotitulo"]').setMask('date');
-	$('input[name="datavencimentotitulo"]').setMask('date');
-	$('input[name="vigencia"]').setMask('date');
-	$('input[name="date"]').setMask('date');
-	$('input[name="date_1"]').setMask('date');
-	$('input[name="date_2"]').setMask('date');
-	
 	$('#date_1').focus(function(){
 	    $(this).calendario({
 	        target:'#date_1'
@@ -46,46 +51,72 @@ $(document).ready(function() {
 	        target:'#date_2'
 	    });
  	});
-	
-	$('input[name="valor"]').setMask('decimal'); // dinheiro
-	$('input[name="valortitulo"]').setMask('decimal');
-	$('input[name="saldotitulo"]').setMask('decimal');
-	$('input[name="valorcustascartorio"]').setMask('decimal'); 
-	$('input[name="intim_out"]').setMask('decimal');
-	$('input[name="conducao"]').setMask('decimal');
-	$('input[name="certidao"]').setMask('decimal');
-	$('input[name="taxajudiciaria"]').setMask('decimal');
-	$('input[name="emolumento"]').setMask('decimal');
-	$('input[name="valor_inicial"]').setMask('decimal');
-	$('input[name="valor_final"]').setMask('decimal');
-	
-	
-	
-	$('input[name="documento"]').setMask('cnpj');
-	$('input[name="tipo_documento"]').click(function(){
-		if($(this).val() == '2'){	
-			$('input[name="documento"]').setMask('cpf');		
-		}else{
-			$('input[name="documento"]').setMask('cnpj');
-		}
-	})
-	
-	
-	
-	
-	$('input[name="documento"]').setMask('cnpj');
-	$('input[name="tipo"]').change(function(){		
-		if($(this).val() == '2'){	
-			$('input[name="documento"]').setMask('cpf');		
-		}else{
-			$('input[name="documento]').setMask('cnpj');
-		}
-	})
-			
-	$('input[name="cnpj"]').setMask('cnpj');
-		
-	
 
+	$('#Pessoa-cep_citado').setMask('99.999-999');
+	$('#Pessoa-telefone_citado').setMask('(99)9999-9999');
+	$('#datasituacao').setMask('date');
+	$('#valordocumento').setMask('decimal');
+	$('#emolumento').setMask('decimal');
+	$('#valor_correio').setMask('decimal');
+	$('#outrasdespesas').setMask('decimal');
+	$('#taxajudiciaria').setMask('decimal');
+	$('#funcivil').setMask('decimal');
+	$('#total_custas').setMask('decimal');
+	
+	$('#Pessoa-documento_citado').setMask('cnpj');
+	$('input[name="Pessoa[tipo_identificacao_citado]"]').change(function(){
+		if($(this).val() == '2'){	
+			$('#Pessoa-documento_citado').setMask('cpf');		
+		}else{
+			$('#Pessoa-documento_citado').setMask('cnpj');
+		}
+	})
+
+	
+	$('#Requerente-cep_requerente').setMask('99.999-999');
+	$('#Requerente-telefone_requerente').setMask('(99)9999-9999');
+	$('#data_pedido').setMask('date');
+	$('#data_prevista').setMask('date');
+	$('#data_entrega').setMask('date');
+	$('#itempedido-datasituacao').setMask('date');
+	$('#valor_pedido').setMask('decimal');
+	$('#valor_deposito').setMask('decimal');
+	$('#valor_receber').setMask('decimal');
+	$('#itempedido-valordocumento').setMask('decimal');
+	$('#itempedido-emolumento').setMask('decimal');
+	$('#itempedido-valor_correio').setMask('decimal');
+	$('#itempedido-outrasdespesas').setMask('decimal');
+	$('#itempedido-taxajudiciaria').setMask('decimal');
+	$('#itempedido-funcivil').setMask('decimal');
+	$('#itempedido-total_custas').setMask('decimal');
+
+	$('#itempedido-notificado-documento_notificado').setMask('cnpj');
+	$('input[name="itempedido[notificado][tipo_identificacao_notificado]"]').change(function(){
+		if($(this).val() == '2'){	
+			$('#itempedido-notificado-documento_notificado').setMask('cpf');		
+		}else{
+			$('#itempedido-notificado-documento_notificado"]').setMask('cnpj');
+		}
+	})
+
+		
+	$('#itempedido-notificante-documento_notificante').setMask('cnpj');
+	$('input[name="itempedido[notificante][tipo_identificacao_notificante]"]').change(function(){
+		if($(this).val() == '2'){	
+			$('#itempedido-notificante-documento_notificante').setMask('cpf');		
+		}else{
+			$('#itempedido-notificante-documento_notificante"]').setMask('cnpj');
+		}
+	})
+
+	$('#Requerente-documento_requerente').setMask('cnpj');
+	$('input[name="Requerente[tipo_identificacao_requerente]"]').change(function(){
+		if($(this).val() == '2'){	
+			$('#Requerente-documento_requerente').setMask('cpf');		
+		}else{
+			$('#Requerente-documento_requerente').setMask('cnpj');
+		}
+	})
 	
 	oTable = $('#tabela').dataTable({
 		"oLanguage": {

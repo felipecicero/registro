@@ -289,7 +289,7 @@ class TitulodocumentosController extends Zend_Controller_Action
 			$model_pessoa->insert($data);
             return $model_pessoa->getAdapter()->lastInsertId();
 		}
-	}
+	}		
 
     public function cadastrarEndereco($data, $id = '')
     {
@@ -868,16 +868,6 @@ class TitulodocumentosController extends Zend_Controller_Action
 		return $data;
     }
 
-    public function removerpessoascitadasAction()
-    {
-		
-		$remove = (int) $this->_getParam('remove');
-		unset($_SESSION['pessoascitadas'][$remove]);
-		$_SESSION['flag'] = true;
-		$this->_redirect('/titulodocumentos/itenspedido/idItempedido/' . $_SESSION['idItempedido']);
-		
-    }
-
 	public function estadoPedido($id)
     {
 		if($id == 1){
@@ -893,7 +883,84 @@ class TitulodocumentosController extends Zend_Controller_Action
 			return 'Pessoa Citada';
 		}
     }
+	
+    public function removerpessoascitadasAction()
+    {
+		
+		$remove = (int) $this->_getParam('remove');
+		
+		unset($_SESSION['pessoascitadas'][$remove]);
+		
+		foreach ($_SESSION['pessoascitadas'] as $item){
+			
+			$itens['pessoascitadas'][] = $item;
+			
+		}
+		
+		unset($_SESSION['pessoascitadas']);
+		
+		$_SESSION['pessoascitadas'] = $itens['pessoascitadas'];
+		
+		$_SESSION['flag'] = true;
+		
+		$this->_redirect('/titulodocumentos/itenspedido/idItempedido/' . $_SESSION['idItempedido']);
+		
+    }
+
+    public function changepessoacitadaAction()
+    {
+        $id = (int) $this->_getParam('id');
+		
+		$_SESSION['pessoascitadas'][$id]['notificar'] = $this->estadoPedido(0);
+		
+		$_SESSION['flag'] = true;
+		
+		$this->_redirect('/titulodocumentos/itenspedido/idItempedido/' . $_SESSION['idItempedido']);
+    }
+
+    public function changenotificanteAction()
+    {
+        $id = (int) $this->_getParam('id');
+		
+		$_SESSION['pessoascitadas'][$id]['notificar'] = $this->estadoPedido(3);
+		
+		$_SESSION['flag'] = true;
+		
+		$this->_redirect('/titulodocumentos/itenspedido/idItempedido/' . $_SESSION['idItempedido']);
+    }
+
+    public function changenotificadoAction()
+    {
+       $id = (int) $this->_getParam('id');
+		
+		$_SESSION['pessoascitadas'][$id]['notificar'] = $this->estadoPedido(1);
+		
+		$_SESSION['flag'] = true;
+		
+		$this->_redirect('/titulodocumentos/itenspedido/idItempedido/' . $_SESSION['idItempedido']);
+    }
+
+    public function changeapresentanteAction()
+    {
+        $id = (int) $this->_getParam('id');
+		
+		$_SESSION['pessoascitadas'][$id]['notificar'] = $this->estadoPedido(2);
+		
+		$_SESSION['flag'] = true;
+		
+		$this->_redirect('/titulodocumentos/itenspedido/idItempedido/' . $_SESSION['idItempedido']);
+		
+    }
+
 }
+
+
+
+
+
+
+
+
 
 
 

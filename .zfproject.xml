@@ -371,6 +371,10 @@
               <actionMethod actionName="itenspedido"/>
               <actionMethod actionName="pesquisa"/>
               <actionMethod actionName="removerpessoascitadas"/>
+              <actionMethod actionName="changepessoacitada"/>
+              <actionMethod actionName="changenotificante"/>
+              <actionMethod actionName="changenotificado"/>
+              <actionMethod actionName="changeapresentante"/>
             </controllerFile>
           </controllersDirectory>
           <formsDirectory>
@@ -434,6 +438,18 @@
           </viewControllerScriptsDirectory>
           <viewControllerScriptsDirectory forControllerName="Error">
             <viewScriptFile forActionName="error"/>
+          </viewControllerScriptsDirectory>
+          <viewControllerScriptsDirectory forControllerName="Titulodocumentos">
+            <viewScriptFile forActionName="changepessoacitada"/>
+          </viewControllerScriptsDirectory>
+          <viewControllerScriptsDirectory forControllerName="Titulodocumentos">
+            <viewScriptFile forActionName="changenotificante"/>
+          </viewControllerScriptsDirectory>
+          <viewControllerScriptsDirectory forControllerName="Titulodocumentos">
+            <viewScriptFile forActionName="changenotificado"/>
+          </viewControllerScriptsDirectory>
+          <viewControllerScriptsDirectory forControllerName="Titulodocumentos">
+            <viewScriptFile forActionName="changeapresentante"/>
           </viewControllerScriptsDirectory>
         </viewScriptsDirectory>
         <viewHelpersDirectory/>

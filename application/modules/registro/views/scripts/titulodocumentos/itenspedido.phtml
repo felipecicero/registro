@@ -28,8 +28,14 @@ echo $this->formP;
             <td align="center"><?php echo $i; ?></td>
             <td align="center"><?php echo $this->documento($pessoa['numeroidentificacao'], $pessoa['tipo_identificacao']);?></td>
 			<td align="center"><?php echo $this->escape($pessoa['nome']); ?></td>
-            <td align="center" class="slide"><?php echo $this->escape($pessoa['notificar']); ?>
-				<div class="edit"><a href="<?php echo $this->url(array('module' => 'registro', 'controller' => 'titulodocumentos', 'action' => 'removerpessoascitadas', 'remove' => ($i-1)), null, true); ?>" id="editarPessoasCitadas">Remover Pessoa</a>
+            <td align="center" title="Clique para modificar o status da Pessoa." class="slide"><b><?php echo $this->escape($pessoa['notificar']); ?></b>
+				<div class="edit">
+					<a title="Clique para remover a Pessoa."href="<?php echo $this->url(array('module' => 'registro', 'controller' => 'titulodocumentos', 'action' => 'removerpessoascitadas', 'remove' => ($i-1)), null, true); ?>" id="editarpessoascitadas">Remover Pessoa</a><br>
+					<a title="Clique para tornar esta Pessoa apenas Citada."href="<?php echo $this->url(array('module' => 'registro', 'controller' => 'titulodocumentos', 'action' => 'changepessoacitada', 'id' => ($i-1)), null, true); ?>" id="changepessoacitada">Pessoa Citada	</a><br>
+					<a title="Clique para tornar esta Pessoa em Notificante."href="<?php echo $this->url(array('module' => 'registro', 'controller' => 'titulodocumentos', 'action' => 'changenotificante', 'id' => ($i-1)), null, true); ?>" id="changenotificante">Notificante</a><br>
+					<a title="Clique para tornar esta Pessoa em Notificada"href="<?php echo $this->url(array('module' => 'registro', 'controller' => 'titulodocumentos', 'action' => 'changenotificado', 'id' => ($i-1)), null, true); ?>" id="changenotificado">Notificado</a><br>
+					<a title="Clique para tornar esta Pessoa em Apresentante"href="<?php echo $this->url(array('module' => 'registro', 'controller' => 'titulodocumentos', 'action' => 'changeapresentante', 'id' => ($i-1)), null, true); ?>" id="changeapresentante">Apresentante</a><br>
+				</div>
 			</td>
         </tr> 
 <?php
